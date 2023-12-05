@@ -471,5 +471,4 @@ function ManageEmployee() {
     </>
   );
 }
-
-  export default ManageEmployee;
+export default ManageEmployee;
