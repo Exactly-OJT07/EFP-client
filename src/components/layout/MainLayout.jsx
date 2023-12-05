@@ -13,6 +13,9 @@ export const PrivateLayout = () => {
         token: { colorBgContainer },
     } = theme.useToken();
 
+
+    
+
     return (
         <Layout
         style={{

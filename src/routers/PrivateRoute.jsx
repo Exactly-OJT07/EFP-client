@@ -16,18 +16,6 @@ const routes = [
         path: "Dashboard",
         children: [
           { path: "", element: <Dashboard /> },
-          // {
-          // path: 'create',
-          // element: <div>ád</div>,
-          // },
-          // {
-          //   path: 'update/:id',
-          //   element: < />,
-          // },
-          // {
-          //   path: ':id',
-          //   element: < />,
-          // },
         ],
       },
       {

@@ -148,7 +148,7 @@ const ManageProject = () => {
 
   const [formCreate] = Form.useForm();
 
-  //   const handleStatusChange = (newStatus, projectId) => {
+  //   const handleStatusChange = (newStatus, projectId) => { 
   //     const updatedProjects = projects.map((project) =>
   //       project.id === projectId ? { ...project, status: newStatus } : project
   //     );
@@ -306,9 +306,7 @@ const ManageProject = () => {
                       overlay={
                         <Menu>
                           {settings.map((item) => {
-                            if (item.type === "divider") {
-                              return <Menu.Divider key={item.key} />;
-                            }
+                            
                             return (
                               <Menu.Item key={item.key}>
                                 {item.key === "delete" ? (
