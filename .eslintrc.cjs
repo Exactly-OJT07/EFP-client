@@ -1,7 +1,9 @@
 module.exports = {
   root: true,
-  env: { browser: true, es2020: true },
+  env: { browser: true, es2021: true, jest: true },
   extends: [
+    'react-app',
+    'react-app/jest',
     'eslint:recommended',
     'plugin:react/recommended',
     'plugin:react/jsx-runtime',
@@ -16,5 +18,7 @@ module.exports = {
       'warn',
       { allowConstantExport: true },
     ],
+    semi: ["error", "always"],
+    "no-unused-vars": ["error", { "vars": "all" }]
   },
 }

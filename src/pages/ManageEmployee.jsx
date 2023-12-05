@@ -1,6 +1,7 @@
 import { MoreOutlined, EditOutlined, DeleteOutlined, PlusOutlined } from '@ant-design/icons'
 import { Space, Table, Tag, Dropdown, Button, Input, Popconfirm } from 'antd';
 import '../styles/ManageEmployee.css'
+import { useState } from 'react';
 const columns = [
   {
     title: 'Name',
@@ -68,7 +69,7 @@ const columns = [
     ),
   },
 ];
-const EmployeeList = () => <Table columns={columns} dataSource={data} pagination={{ defaultPageSize: 5 }} />;
+
 const { Search } = Input;
 const data = [
   {
@@ -168,6 +169,9 @@ const data = [
     hireDate: '23/10/2023',
   },
 ];
+const EmployeeList = ({ data = [] }) => (
+  <Table columns={columns} dataSource={data} pagination={{ defaultPageSize: 5 }} />
+);
 const items = [
   {
     key: '1',
@@ -196,6 +200,16 @@ const items = [
 
 
 function ManageEmployee() {
+  const [searchText, setSearchText] = useState('');
+
+  const handleSearch = (value) => {
+    setSearchText(value);
+  };
+
+  const filteredData = data.filter((employee) =>
+    employee.name.toLowerCase().includes(searchText.toLowerCase())
+  );
+
   return (
     <>
       <Space className="status-filter" direction="horizontal">
@@ -203,16 +217,17 @@ function ManageEmployee() {
           <Search
             placeholder="input search text"
             allowClear
+            onSearch={handleSearch}
             style={{
               width: 304,
             }}
           />
         </div>
-      <Button type="primary"><PlusOutlined/>Add Employee</Button>
+        <Button type="primary"><PlusOutlined/>Add Employee</Button>
       </Space>
-      <EmployeeList/>
+      <EmployeeList data={filteredData} />
     </>
-  )
+  );
 }
 
 export default ManageEmployee;
