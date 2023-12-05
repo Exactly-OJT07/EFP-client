@@ -345,10 +345,10 @@ function ManageEmployee() {
           <Search
             placeholder="input search text"
             allowClear
+            onSearch={handleSearch}
             style={{
               width: 304,
             }}
-            onSearch={handleSearch}
           />
         </div>
         <Button type="primary" onClick={showModal}>
