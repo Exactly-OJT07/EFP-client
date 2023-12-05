@@ -143,12 +143,12 @@ const ManageProject = () => {
   };
 
   const filteredProjects = projects.filter((project) =>
-    project.projectName.toLowerCase().includes(searchQuery.toLowerCase())
+    project.projectName.toLowerCase().includes(searchQuery.toLowerCase()),
   );
 
   const [formCreate] = Form.useForm();
 
-  //   const handleStatusChange = (newStatus, projectId) => { 
+  //   const handleStatusChange = (newStatus, projectId) => {
   //     const updatedProjects = projects.map((project) =>
   //       project.id === projectId ? { ...project, status: newStatus } : project
   //     );
@@ -166,7 +166,7 @@ const ManageProject = () => {
   const indexOfFirstItem = indexOfLastItem - 3;
   const currentProjects = filteredProjects.slice(
     indexOfFirstItem,
-    indexOfLastItem
+    indexOfLastItem,
   );
 
   return (
@@ -306,7 +306,6 @@ const ManageProject = () => {
                       overlay={
                         <Menu>
                           {settings.map((item) => {
-                            
                             return (
                               <Menu.Item key={item.key}>
                                 {item.key === "delete" ? (
@@ -335,10 +334,10 @@ const ManageProject = () => {
                                       if (item.key === "view") {
                                         console.log(
                                           "Navigating to projectDetail:",
-                                          `/manageProjects/projectDetail/${project.id}`
+                                          `/manageProjects/projectDetail/${project.id}`,
                                         );
                                         navigate(
-                                          `/manageProjects/projectDetail/${project.id}`
+                                          `/manageProjects/projectDetail/${project.id}`,
                                         );
                                       }
                                     }}

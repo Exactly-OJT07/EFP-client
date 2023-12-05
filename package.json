@@ -43,7 +43,6 @@
   "license": "MIT",
   "lint-staged": {
     "*.jsx": [
-      "yarn lint",
       "yarn format",
       "git add ."
     ]

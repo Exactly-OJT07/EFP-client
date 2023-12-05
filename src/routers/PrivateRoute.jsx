@@ -14,9 +14,7 @@ const routes = [
       },
       {
         path: "Dashboard",
-        children: [
-          { path: "", element: <Dashboard /> },
-        ],
+        children: [{ path: "", element: <Dashboard /> }],
       },
       {
         path: "manageUsers",
@@ -27,9 +25,9 @@ const routes = [
         children: [
           {
             path: "",
-            element: <ManageProject />
+            element: <ManageProject />,
           },
-          { path: "projectDetail/:id", element: <ProjectDetail /> }
+          { path: "projectDetail/:id", element: <ProjectDetail /> },
         ],
       },
       {

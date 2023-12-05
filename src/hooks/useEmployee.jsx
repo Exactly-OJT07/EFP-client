@@ -13,5 +13,5 @@ export const useGetClients = (params) =>
       enabled: false,
       keepPreviousData: true,
       cacheTime: 0,
-    }
+    },
   );
