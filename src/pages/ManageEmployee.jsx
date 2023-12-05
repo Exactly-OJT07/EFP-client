@@ -327,6 +327,7 @@ function ManageEmployee() {
           <Search
             placeholder="input search text"
             allowClear
+            onSearch={handleSearch}
             style={{
               width: 304,
             }}
