@@ -23,79 +23,81 @@ import {
   Popconfirm,
   Pagination,
   Select,
+  Spin,
 } from "antd";
 import { useNavigate } from "react-router-dom";
 import "../styles/ManageProject.css";
 import logoIcon from "../assets/image5.png";
+import { useGetClients } from "../hooks/useProject";
 
 const { Content } = Layout;
 const { Search } = Input;
 
 const { RangePicker } = DatePicker;
 
-const projects = [
-  {
-    id: 1,
-    projectNumber: "#P-000441425",
-    projectName: "Redesign Owlio Landing Page Web",
-    personInCharge: "Thành Phản Diện",
-    startDate: "Tuesday, Nov 29th 2023",
-    endDate: "Sunday, Dec 16th 2023",
-    createdOn: "Nov 29th, 2023",
-    status: "Pending",
-  },
-  {
-    id: 2,
-    projectNumber: "#P-000112233",
-    projectName: "Exactly CocoonVietnam Website",
-    personInCharge: "Lê Sỹ Thành Đây",
-    startDate: "Monday, Nov 22th 2023",
-    endDate: "Tuesday, Dev 17th 2024",
-    createdOn: "Dec 1st, 2023",
-    status: "Pending",
-  },
-  {
-    id: 3,
-    projectNumber: "#P-000112233",
-    projectName: "Human Computer Interaction App",
-    personInCharge: "Không Phải Thành",
-    startDate: "Monday, Nov 22th 2023",
-    endDate: "Tuesday, Dev 17th 2024",
-    createdOn: "Dec 1st, 2023",
-    status: "Pending",
-  },
-  {
-    id: 4,
-    projectNumber: "#P-000112233",
-    projectName: "Requirements Management",
-    personInCharge: "Thành Xỉn Bia",
-    startDate: "Monday, Nov 22th 2023",
-    endDate: "Tuesday, Dev 17th 2024",
-    createdOn: "Dec 1st, 2023",
-    status: "Pending",
-  },
-  {
-    id: 5,
-    projectNumber: "#P-000112233",
-    projectName: "DevPlus Final Project Exercise",
-    personInCharge: "Thành Thỏ Hồng",
-    startDate: "Monday, Nov 22th 2023",
-    endDate: "Tuesday, Dev 17th 2024",
-    createdOn: "Dec 1st, 2023",
-    status: "Pending",
-  },
-  // {
-  //     id: 6,
-  //     projectNumber: "#P-000112233",
-  //     projectName: "Exactly CocoonVietnam Website",
-  //     personInCharge: "Thành Hitler",
-  //     startDate: "Monday, Nov 22th 2023",
-  //     endDate: "Tuesday, Dev 17th 2024",
-  //     createdOn: "Dec 1st, 2023",
-  //     status: "Pending",
-  // },
-  // Add more projects as needed
-];
+// const projects = [
+//   {
+//     id: 1,
+//     projectNumber: "#P-000441425",
+//     projectName: "Redesign Owlio Landing Page Web",
+//     personInCharge: "Thành Phản Diện",
+//     startDate: "Tuesday, Nov 29th 2023",
+//     endDate: "Sunday, Dec 16th 2023",
+//     createdOn: "Nov 29th, 2023",
+//     status: "Pending",
+//   },
+//   {
+//     id: 2,
+//     projectNumber: "#P-000112233",
+//     projectName: "Exactly CocoonVietnam Website",
+//     personInCharge: "Lê Sỹ Thành Đây",
+//     startDate: "Monday, Nov 22th 2023",
+//     endDate: "Tuesday, Dev 17th 2024",
+//     createdOn: "Dec 1st, 2023",
+//     status: "Pending",
+//   },
+//   {
+//     id: 3,
+//     projectNumber: "#P-000112233",
+//     projectName: "Human Computer Interaction App",
+//     personInCharge: "Không Phải Thành",
+//     startDate: "Monday, Nov 22th 2023",
+//     endDate: "Tuesday, Dev 17th 2024",
+//     createdOn: "Dec 1st, 2023",
+//     status: "Pending",
+//   },
+//   {
+//     id: 4,
+//     projectNumber: "#P-000112233",
+//     projectName: "Requirements Management",
+//     personInCharge: "Thành Xỉn Bia",
+//     startDate: "Monday, Nov 22th 2023",
+//     endDate: "Tuesday, Dev 17th 2024",
+//     createdOn: "Dec 1st, 2023",
+//     status: "Pending",
+//   },
+//   {
+//     id: 5,
+//     projectNumber: "#P-000112233",
+//     projectName: "DevPlus Final Project Exercise",
+//     personInCharge: "Thành Thỏ Hồng",
+//     startDate: "Monday, Nov 22th 2023",
+//     endDate: "Tuesday, Dev 17th 2024",
+//     createdOn: "Dec 1st, 2023",
+//     status: "Pending",
+//   },
+//   // {
+//   //     id: 6,
+//   //     projectNumber: "#P-000112233",
+//   //     projectName: "Exactly CocoonVietnam Website",
+//   //     personInCharge: "Thành Hitler",
+//   //     startDate: "Monday, Nov 22th 2023",
+//   //     endDate: "Tuesday, Dev 17th 2024",
+//   //     createdOn: "Dec 1st, 2023",
+//   //     status: "Pending",
+//   // },
+//   // Add more projects as needed
+// ];
 
 const settings = [
   {
@@ -109,6 +111,14 @@ const settings = [
 ];
 
 const ManageProject = () => {
+
+  const { data: projects, isLoading, isError } = useGetClients({
+    page: 1,
+    take: 6,
+  });
+  // console.log(projects)
+
+
   const [searchQuery, setSearchQuery] = useState("");
   const navigate = useNavigate();
 
@@ -191,7 +201,14 @@ const ManageProject = () => {
           <PlusOutlined /> New Project
         </Button>
       </Space>
-      {currentProjects.length > 0 ? (
+      {isLoading ? (<Spin size="large" style={{
+        display: 'flex', justifyContent: 'center', alignItems: 'center',
+      }}/>) 
+      : isError ? (
+        <div style={{ textAlign: "center", marginTop: 20 }}>
+          <Typography.Title level={5}>{isError}</Typography.Title>
+        </div>
+      ) : currentProjects.length > 0 ? (
         <Row gutter={10} style={{ marginTop: 10 }}>
           {currentProjects.map((project) => (
             <Col key={project.id} span={24}>
@@ -377,7 +394,7 @@ const ManageProject = () => {
             No matching projects found
           </Typography.Title>
         </div>
-      )}
+      )}      
 
       {/* Create Modal */}
       <Modal
