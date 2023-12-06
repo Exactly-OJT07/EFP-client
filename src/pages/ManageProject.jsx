@@ -4,19 +4,18 @@ import {
   PlusOutlined,
   ScheduleOutlined,
 } from "@ant-design/icons";
+
 import {
   Button,
   Card,
   Col,
   DatePicker,
-  Divider,
   Dropdown,
   Form,
   Input,
   Layout,
   Menu,
   Modal,
-  Pagination,
   Popconfirm,
   Row,
   Select,
@@ -26,7 +25,8 @@ import {
 } from "antd";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import logoIcon from "../assets/image5.png";
+import Pagination from "../components/pagination/pagination";
+import { toMomentDateTimeData } from "../helpers/format";
 import { useGetData } from "../hooks/useProject";
 import "../styles/ManageProject.css";
 
@@ -47,26 +47,28 @@ const settings = [
 ];
 
 const ManageProject = () => {
-  const {
-    data: projects,
-    isLoading,
-    isError,
-  } = useGetData({
-    page: 1,
-    take: 6,
-  });
-  console.log(projects, "---------------------------");
-
-  const [searchQuery, setSearchQuery] = useState("");
   const navigate = useNavigate();
+
+  const [table, setTable] = useState({
+    page: 1,
+    take: 4,
+  });
+  const [filters, setFilters] = useState("");
+  const [status, setStatus] = useState("");
+  const [createModalOpen, setCreateModalOpen] = useState(false);
+  const [confirmLoading, setConfirmLoading] = useState(false);
+
+  const paginateOptions = {
+    search: filters.name,
+    status: status,
+    page: table.page,
+    take: table.take,
+  };
+  const { data: projects, isLoading, isError } = useGetData(paginateOptions);
 
   const handleChange = (value) => {
     console.log(`selected ${value}`);
   };
-
-  const [createModalOpen, setCreateModalOpen] = useState(false);
-
-  const [confirmLoading, setConfirmLoading] = useState(false);
 
   const showCreateModal = () => {
     setCreateModalOpen(true);
@@ -82,50 +84,34 @@ const ManageProject = () => {
   };
 
   const handleCreateCancel = () => {
-    console.log("Create Cancel");
     setCreateModalOpen(false);
   };
 
   const handleSearch = (value) => {
-    setSearchQuery(value);
+    setFilters((prevFilters) => ({
+      ...prevFilters,
+      name: value,
+    }));
   };
-
-  // const filteredProjects = projects?.filter((project) =>
-  //   project.projectName.toLowerCase().includes(searchQuery.toLowerCase())
-  // );
 
   const [formCreate] = Form.useForm();
 
-  //   const handleStatusChange = (newStatus, projectId) => {
-  //     const updatedProjects = projects.map((project) =>
-  //       project.id === projectId ? { ...project, status: newStatus } : project
-  //     );
-
-  //     console.log("Updated Projects:", updatedProjects);
-  //   };
-
-  const [currentPage, setCurrentPage] = useState(1);
-
-  const handlePageChange = (page) => {
-    setCurrentPage(page);
-  };
-
-  const indexOfLastItem = currentPage * 3;
-  const indexOfFirstItem = indexOfLastItem - 3;
-  // const currentProjects = filteredProjects?.slice(
-  //   indexOfFirstItem,
-  //   indexOfLastItem
-  // );
-
   return (
-    <Content className="content">
+    <Content className="content-project">
       <Space direction="horizontal" className="status-filter">
         <div className="status">
-          <Button type="secondary">All Status</Button>
-          <Button type="secondary">Pending</Button>
-          <Button type="secondary">On Progress</Button>
-
-          <Button type="secondary">Done</Button>
+          <Button type="secondary" onClick={() => setStatus("")}>
+            All Status
+          </Button>
+          <Button type="secondary" onClick={() => setStatus("pending")}>
+            Pending
+          </Button>
+          <Button type="secondary" onClick={() => setStatus("on_progress")}>
+            On Progress
+          </Button>
+          <Button type="secondary" onClick={() => setStatus("done")}>
+            Done
+          </Button>
         </div>
         <Search
           placeholder="Search Project"
@@ -135,6 +121,7 @@ const ManageProject = () => {
           }}
           onSearch={handleSearch}
         />
+
         <Button type="primary" onClick={showCreateModal}>
           <PlusOutlined /> New Project
         </Button>
@@ -153,35 +140,17 @@ const ManageProject = () => {
           <Typography.Title level={5}>{isError}</Typography.Title>
         </div>
       ) : projects?.data.length > 0 ? (
-        <Row gutter={10} style={{ marginTop: 10 }}>
+        <Row gutter={10} style={{ marginTop: 30 }}>
           {projects.data.map((project) => (
             <Col key={project.id} span={24}>
               <Card>
                 <Space direction="horizontal">
-                  <small>{project.projectNumber}</small>
+                  <small style={{ color: "violet" }}>
+                    #{project.id.slice(0, 8)}
+                  </small>
                 </Space>
                 <div className="project-items">
-                  <h4>{project.projectName}</h4>
-                  <div className="project-owner">
-                    <img
-                      src={logoIcon}
-                      alt=""
-                      style={{ width: 50, height: 50, borderRadius: 100 }}
-                    />
-                    <div className="project-title">
-                      <Typography.Paragraph
-                        type="secondary"
-                        strong
-                        style={{ margin: 0 }}
-                      >
-                        Person in charge
-                      </Typography.Paragraph>
-                      <Typography.Text strong style={{ margin: 0 }}>
-                        {project.personInCharge}
-                      </Typography.Text>
-                    </div>
-                  </div>
-
+                  <h4 style={{ lineHeight: "45px" }}>{project.name}</h4>
                   <div className="project-owner">
                     <div
                       style={{
@@ -205,7 +174,7 @@ const ManageProject = () => {
                         Start Date
                       </Typography.Paragraph>
                       <Typography.Text strong style={{ margin: 0 }}>
-                        {project.startDate}
+                        {toMomentDateTimeData(project.startDate)}
                       </Typography.Text>
                     </div>
                   </div>
@@ -233,28 +202,32 @@ const ManageProject = () => {
                         End Date
                       </Typography.Paragraph>
                       <Typography.Text strong style={{ margin: 0 }}>
-                        {project.endDate}
+                        {toMomentDateTimeData(project.endDate)}
                       </Typography.Text>
                     </div>
                   </div>
                   <Space wrap>
                     <Select
-                      defaultValue="Pending"
+                      defaultValue={project.status}
                       style={{
                         width: 120,
                       }}
                       onChange={handleChange}
                       options={[
                         {
-                          value: "inprogress",
+                          value: "on_progress",
                           label: "In Progress",
+                        },
+                        {
+                          value: "pending",
+                          label: "Pending",
                         },
                         {
                           value: "done",
                           label: "Done",
                         },
                         {
-                          value: "closed",
+                          value: "done",
                           label: "Closed",
                           disabled: true,
                         },
@@ -274,13 +247,10 @@ const ManageProject = () => {
                                     title="Delete the task"
                                     description="Are you sure to delete this task?"
                                     onConfirm={() => {
-                                      // Thực hiện xử lý khi người dùng nhấp vào nút "Yes" trong Popconfirm
-                                      console.log("Deleting task...");
                                       // Gọi hàm để xử lý delete ở đây
                                     }}
                                     onCancel={() => {
                                       // Thực hiện xử lý khi người dùng nhấp vào nút "No" trong Popconfirm
-                                      console.log("Cancelled deleting task.");
                                     }}
                                     okText="Yes"
                                     cancelText="No"
@@ -324,10 +294,9 @@ const ManageProject = () => {
                 </div>
                 <Space direction="horizontal">
                   <CalendarOutlined />
-                  <small>{project.createdOn}</small>
+                  <small>{toMomentDateTimeData(project.createdAt)}</small>
                 </Space>
               </Card>
-              <Divider />
             </Col>
           ))}
         </Row>
@@ -339,7 +308,6 @@ const ManageProject = () => {
         </div>
       )}
 
-      {/* Create Modal */}
       <Modal
         title="Create Project"
         visible={createModalOpen}
@@ -365,18 +333,7 @@ const ManageProject = () => {
         </Form>
       </Modal>
 
-      <Pagination
-        current={currentPage}
-        pageSize={3}
-        total={projects?.data.length}
-        onChange={handlePageChange}
-        style={{
-          marginTop: 10,
-          textAlign: "center",
-          display: "flex",
-          justifyContent: "flex-end",
-        }}
-      />
+      <Pagination projects={projects} table={table} setTable={setTable} />
     </Content>
   );
 };

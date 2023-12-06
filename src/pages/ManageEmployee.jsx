@@ -1,18 +1,25 @@
-import { MoreOutlined, EditOutlined, DeleteOutlined, PlusOutlined } from '@ant-design/icons'
-import { Space, Table, Tag, Dropdown, Button, Input, Popconfirm } from 'antd';
-import '../styles/ManageEmployee.css'
-import { useState } from 'react';
+/* eslint-disable react/prop-types */
+import {
+  DeleteOutlined,
+  EditOutlined,
+  MoreOutlined,
+  PlusOutlined,
+} from "@ant-design/icons";
+import { Button, Dropdown, Input, Popconfirm, Space, Table } from "antd";
+import { useState } from "react";
+import { useGetClients } from "../hooks/useEmployee";
+import "../styles/ManageEmployee.css";
 const columns = [
   {
-    title: 'Name',
-    dataIndex: 'name',
-    key: 'name',
+    title: "Name",
+    dataIndex: "name",
+    key: "name",
     render: (text) => <a>{text}</a>,
   },
   {
-    title: 'Age',
-    dataIndex: 'age',
-    key: 'age',
+    title: "Age",
+    dataIndex: "age",
+    key: "age",
   },
   {
     title: "Phone Number",
@@ -20,27 +27,9 @@ const columns = [
     key: "phone",
   },
   {
-    title: 'Roles',
-    key: 'roles',
-    dataIndex: 'roles',
-    render: (_,{ roles }) => (
-      <>
-        {roles.map((role) => {
-          let color = 'geekblue';
-          if (role === 'Intern') {
-            color = 'green';
-          }
-          if (role === 'BA') {
-            color = 'volcano';
-          }
-          return (
-            <Tag color={color} key={role}>
-              {role.toUpperCase()}
-            </Tag>
-          );
-        })}
-      </>
-    ),
+    title: "Roles",
+    key: "roles",
+    dataIndex: "roles",
   },
   {
     title: "Hire Date",
@@ -48,20 +37,20 @@ const columns = [
     key: "hireDate",
   },
   {
-    title: 'Action',
-    key: 'action',
+    title: "Action",
+    key: "action",
     render: () => (
       <>
         <Dropdown
           menu={{
             items,
           }}
-          trigger={['click']}
+          trigger={["click"]}
           placement="bottomLeft"
         >
           <a onClick={(e) => e.preventDefault()}>
             <Space>
-              <MoreOutlined/>
+              <MoreOutlined />
             </Space>
           </a>
         </Dropdown>
@@ -73,134 +62,144 @@ const columns = [
 const { Search } = Input;
 const data = [
   {
-    key: '1',
-    name: 'John Brown',
+    key: "1",
+    name: "John Brown",
     age: 32,
-    phone: '0987654321',
-    roles: ['Intern', 'Developer'],
-    hireDate: '23/10/2023',
+    phone: "0987654321",
+    roles: ["Intern", "Developer"],
+    hireDate: "23/10/2023",
   },
   {
-    key: '2',
-    name: 'Jim Green',
+    key: "2",
+    name: "Jim Green",
     age: 42,
-    phone: '0987654321',
-    roles: ['Tester'],
-    hireDate: '23/10/2023',
+    phone: "0987654321",
+    roles: ["Tester"],
+    hireDate: "23/10/2023",
   },
   {
-    key: '3',
-    name: 'Joe Black',
+    key: "3",
+    name: "Joe Black",
     age: 32,
-    phone: '0987654321',
-    roles: ['Middle', 'BA'],
-    hireDate: '23/10/2023',
+    phone: "0987654321",
+    roles: ["Middle", "BA"],
+    hireDate: "23/10/2023",
   },
   {
-    key: '4',
-    name: 'John Brown',
+    key: "4",
+    name: "John Brown",
     age: 32,
-    phone: '0987654321',
-    roles: ['Intern', 'Developer'],
-    hireDate: '23/10/2023',
+    phone: "0987654321",
+    roles: ["Intern", "Developer"],
+    hireDate: "23/10/2023",
   },
   {
-    key: '5',
-    name: 'Jim Green',
+    key: "5",
+    name: "Jim Green",
     age: 42,
-    phone: '0987654321',
-    roles: ['Tester'],
-    hireDate: '23/10/2023',
+    phone: "0987654321",
+    roles: ["Tester"],
+    hireDate: "23/10/2023",
   },
   {
-    key: '6',
-    name: 'Joe Black',
+    key: "6",
+    name: "Joe Black",
     age: 32,
-    phone: '0987654321',
-    roles: ['Middle', 'BA'],
-    hireDate: '23/10/2023',
+    phone: "0987654321",
+    roles: ["Middle", "BA"],
+    hireDate: "23/10/2023",
   },
   {
-    key: '7',
-    name: 'John Brown',
+    key: "7",
+    name: "John Brown",
     age: 32,
-    phone: '0987654321',
-    roles: ['Intern', 'Developer'],
-    hireDate: '23/10/2023',
+    phone: "0987654321",
+    roles: ["Intern", "Developer"],
+    hireDate: "23/10/2023",
   },
   {
-    key: '8',
-    name: 'Jim Green',
+    key: "8",
+    name: "Jim Green",
     age: 42,
-    phone: '0987654321',
-    roles: ['Tester'],
-    hireDate: '23/10/2023',
+    phone: "0987654321",
+    roles: ["Tester"],
+    hireDate: "23/10/2023",
   },
   {
-    key: '9',
-    name: 'Joe Black',
+    key: "9",
+    name: "Joe Black",
     age: 32,
-    phone: '0987654321',
-    roles: ['Middle', 'BA'],
-    hireDate: '23/10/2023',
+    phone: "0987654321",
+    roles: ["Middle", "BA"],
+    hireDate: "23/10/2023",
   },
   {
-    key: '10',
-    name: 'John Brown',
+    key: "10",
+    name: "John Brown",
     age: 32,
-    phone: '0987654321',
-    roles: ['Intern', 'Developer'],
-    hireDate: '23/10/2023',
+    phone: "0987654321",
+    roles: ["Intern", "Developer"],
+    hireDate: "23/10/2023",
   },
   {
-    key: '11',
-    name: 'Jim Green',
+    key: "11",
+    name: "Jim Green",
     age: 42,
-    phone: '0987654321',
-    roles: ['Tester'],
-    hireDate: '23/10/2023',
+    phone: "0987654321",
+    roles: ["Tester"],
+    hireDate: "23/10/2023",
   },
   {
-    key: '12',
-    name: 'Joe Black',
+    key: "12",
+    name: "Joe Black",
     age: 32,
-    phone: '0987654321',
-    roles: ['Middle', 'BA'],
-    hireDate: '23/10/2023',
+    phone: "0987654321",
+    roles: ["Middle", "BA"],
+    hireDate: "23/10/2023",
   },
 ];
-const EmployeeList = ({ data = [] }) => (
-  <Table columns={columns} dataSource={data} pagination={{ defaultPageSize: 5 }} />
+const EmployeeList = ({ data }) => (
+  <Table
+    columns={columns}
+    dataSource={data?.data}
+    pagination={{ defaultPageSize: 5 }}
+  />
 );
 const items = [
   {
-    key: '1',
+    key: "1",
     label: (
-      <p><EditOutlined/>Edit</p>
+      <p>
+        <EditOutlined />
+        Edit
+      </p>
     ),
   },
   {
-    key: '2',
+    key: "2",
     label: (
       <Popconfirm
-    title="Delete the user"
-    description="Are you sure to delete this user?"
-    okText="Yes"
-    cancelText="No"
-  >
-    <p><DeleteOutlined/>Delete</p>
-  </Popconfirm>
+        title="Delete the user"
+        description="Are you sure to delete this user?"
+        okText="Yes"
+        cancelText="No"
+      >
+        <p>
+          <DeleteOutlined />
+          Delete
+        </p>
+      </Popconfirm>
     ),
     danger: true,
   },
 ];
 
-
-
-
-
 function ManageEmployee() {
-  const [searchText, setSearchText] = useState('');
+  const [searchText, setSearchText] = useState("");
+
+  const { data: employees } = useGetClients();
+
+  console.log(employees);
 
   const handleSearch = (value) => {
     setSearchText(value);
@@ -223,9 +222,12 @@ function ManageEmployee() {
             }}
           />
         </div>
-        <Button type="primary"><PlusOutlined/>Add Employee</Button>
+        <Button type="primary">
+          <PlusOutlined />
+          Add Employee
+        </Button>
       </Space>
-      <EmployeeList data={filteredData} />
+      <EmployeeList data={employees} />
     </>
   );
 }
