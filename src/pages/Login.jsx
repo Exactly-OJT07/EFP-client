@@ -1,50 +1,60 @@
-import { useState } from "react";
-import { Button, Form, Input, Alert } from "antd";
-import "../styles/Login.css";
-import { useNavigate } from "react-router-dom";
-import { openNotificationWithIcon } from "../components/notification/notification";
+import React, { useState, useEffect } from 'react';
+import { Button, Form, Input, Alert } from 'antd';
+import '../styles/Login.css';
+import { useNavigate } from 'react-router-dom';
+import { openNotificationWithIcon } from '../components/notification/notification';
+
 const Login = () => {
   const navigate = useNavigate();
   const [showAlert, setShowAlert] = useState(false);
   const [showError, setShowError] = useState(false);
-  const onFinish = (values) => {
-    // Get stored credentials from localStorage
-    const storedCredentials =
-      JSON.parse(localStorage.getItem("credentials")) || {};
 
+  useEffect(() => {
+    checkAuthentication();
+  }, []);
+
+  const checkAuthentication = () => {
+    const isAuthenticated = localStorage.getItem('authenticated') === 'true';
+
+    if (isAuthenticated) {
+      navigate('/dashboard');
+    }
+  };
+
+  const handleSuccessfulLogin = (username) => {
+    setShowAlert(true);
+
+    const updatedCredentials = { username };
+    localStorage.setItem('credentials', JSON.stringify(updatedCredentials));
+    localStorage.setItem('authenticated', 'true');
+
+    openNotificationWithIcon('success', 'Login Successfully');
+    navigate('/dashboard');
+  };
+
+  const handleFailedLogin = () => {
+    setShowError(true);
+    openNotificationWithIcon('error', 'Login Failed');
+  };
+
+  const onFinish = (values) => {
+    const storedCredentials = JSON.parse(localStorage.getItem('credentials')) || {};
     const hardcodedCredentials = {
       username: "linh@gmail.com",
       password: "123",
     };
 
-    if (
-      (values.username === hardcodedCredentials.username &&
-        values.password === hardcodedCredentials.password) ||
-      (values.username === storedCredentials.username &&
-        values.password === storedCredentials.password)
-    ) {
-      setShowAlert(true);
+    const isLoginSuccessful =
+      (values.username === hardcodedCredentials.username && values.password === hardcodedCredentials.password) ||
+      (values.username === storedCredentials.username && values.password === storedCredentials.password);
 
-      const updatedCredentials = {
-        ...storedCredentials,
-        ...values,
-      };
-
-      localStorage.setItem(
-        "username",
-        JSON.stringify(updatedCredentials.username),
-      );
-
-      openNotificationWithIcon("success", "Login Successfully");
-      navigate("/dashboard");
-    } else {
-      openNotificationWithIcon("error", "Login Fail");
-    }
+    isLoginSuccessful ? handleSuccessfulLogin(values.username) : handleFailedLogin();
   };
 
   const onFinishFailed = (errorInfo) => {
     console.log("Failed:", errorInfo);
   };
+
   return (
     <div className="login__container">
       <div className="login">
@@ -54,11 +64,7 @@ const Login = () => {
             alt="Login"
           />
         </div>
-        <Form
-          name="login-form"
-          onFinish={onFinish}
-          onFinishFailed={onFinishFailed}
-        >
+        <Form name="login-form" onFinish={onFinish} onFinishFailed={onFinishFailed}>
           {showAlert && (
             <Alert
               message="Login Successfully"
@@ -76,14 +82,14 @@ const Login = () => {
             />
           )}
           <p className="form-title">Log In</p>
-          <p>Enter your email and password to login to our dashboard.</p>
+          <p className="PPP"> Enter your email and password to login to our dashboard.</p>
           <p className="title">Email</p>
           <Form.Item
             name="username"
             rules={[
               {
                 required: true,
-                message: "Please input your email!",
+                message: 'Please input your email!',
               },
             ]}
           >
@@ -95,18 +101,14 @@ const Login = () => {
             rules={[
               {
                 required: true,
-                message: "Please input your password!",
+                message: 'Please input your password!',
               },
             ]}
           >
             <Input.Password placeholder="Enter your Password" />
           </Form.Item>
           <Form.Item>
-            <Button
-              type="primary"
-              htmlType="submit"
-              className="login-form-button"
-            >
+            <Button type="primary" htmlType="submit" className="login-form-button">
               Sign In
             </Button>
           </Form.Item>
@@ -115,4 +117,5 @@ const Login = () => {
     </div>
   );
 };
+
 export default Login;
