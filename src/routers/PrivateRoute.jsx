@@ -13,10 +13,6 @@ const routes = [
         element: <Dashboard />,
       },
       {
-        path: "Dashboard",
-        children: [{ path: "", element: <Dashboard /> }],
-      },
-      {
         path: "manageUsers",
         element: <ManageEmployee />,
       },
