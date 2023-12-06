@@ -1,103 +1,39 @@
-import { useState } from "react";
 import {
-  MoreOutlined,
   CalendarOutlined,
-  ScheduleOutlined,
+  MoreOutlined,
   PlusOutlined,
+  ScheduleOutlined,
 } from "@ant-design/icons";
 import {
   Button,
-  Typography,
   Card,
-  Space,
-  Divider,
-  Row,
   Col,
+  DatePicker,
+  Divider,
   Dropdown,
-  Modal,
   Form,
   Input,
-  DatePicker,
   Layout,
   Menu,
-  Popconfirm,
+  Modal,
   Pagination,
+  Popconfirm,
+  Row,
   Select,
+  Space,
   Spin,
+  Typography,
 } from "antd";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import "../styles/ManageProject.css";
 import logoIcon from "../assets/image5.png";
-import { useGetClients } from "../hooks/useProject";
+import { useGetData } from "../hooks/useProject";
+import "../styles/ManageProject.css";
 
 const { Content } = Layout;
 const { Search } = Input;
 
 const { RangePicker } = DatePicker;
-
-// const projects = [
-//   {
-//     id: 1,
-//     projectNumber: "#P-000441425",
-//     projectName: "Redesign Owlio Landing Page Web",
-//     personInCharge: "Thành Phản Diện",
-//     startDate: "Tuesday, Nov 29th 2023",
-//     endDate: "Sunday, Dec 16th 2023",
-//     createdOn: "Nov 29th, 2023",
-//     status: "Pending",
-//   },
-//   {
-//     id: 2,
-//     projectNumber: "#P-000112233",
-//     projectName: "Exactly CocoonVietnam Website",
-//     personInCharge: "Lê Sỹ Thành Đây",
-//     startDate: "Monday, Nov 22th 2023",
-//     endDate: "Tuesday, Dev 17th 2024",
-//     createdOn: "Dec 1st, 2023",
-//     status: "Pending",
-//   },
-//   {
-//     id: 3,
-//     projectNumber: "#P-000112233",
-//     projectName: "Human Computer Interaction App",
-//     personInCharge: "Không Phải Thành",
-//     startDate: "Monday, Nov 22th 2023",
-//     endDate: "Tuesday, Dev 17th 2024",
-//     createdOn: "Dec 1st, 2023",
-//     status: "Pending",
-//   },
-//   {
-//     id: 4,
-//     projectNumber: "#P-000112233",
-//     projectName: "Requirements Management",
-//     personInCharge: "Thành Xỉn Bia",
-//     startDate: "Monday, Nov 22th 2023",
-//     endDate: "Tuesday, Dev 17th 2024",
-//     createdOn: "Dec 1st, 2023",
-//     status: "Pending",
-//   },
-//   {
-//     id: 5,
-//     projectNumber: "#P-000112233",
-//     projectName: "DevPlus Final Project Exercise",
-//     personInCharge: "Thành Thỏ Hồng",
-//     startDate: "Monday, Nov 22th 2023",
-//     endDate: "Tuesday, Dev 17th 2024",
-//     createdOn: "Dec 1st, 2023",
-//     status: "Pending",
-//   },
-//   // {
-//   //     id: 6,
-//   //     projectNumber: "#P-000112233",
-//   //     projectName: "Exactly CocoonVietnam Website",
-//   //     personInCharge: "Thành Hitler",
-//   //     startDate: "Monday, Nov 22th 2023",
-//   //     endDate: "Tuesday, Dev 17th 2024",
-//   //     createdOn: "Dec 1st, 2023",
-//   //     status: "Pending",
-//   // },
-//   // Add more projects as needed
-// ];
 
 const settings = [
   {
@@ -111,13 +47,15 @@ const settings = [
 ];
 
 const ManageProject = () => {
-
-  const { data: projects, isLoading, isError } = useGetClients({
+  const {
+    data: projects,
+    isLoading,
+    isError,
+  } = useGetData({
     page: 1,
     take: 6,
   });
-  // console.log(projects)
-
+  console.log(projects, "---------------------------");
 
   const [searchQuery, setSearchQuery] = useState("");
   const navigate = useNavigate();
@@ -152,13 +90,13 @@ const ManageProject = () => {
     setSearchQuery(value);
   };
 
-  const filteredProjects = projects.filter((project) =>
-    project.projectName.toLowerCase().includes(searchQuery.toLowerCase())
-  );
+  // const filteredProjects = projects?.filter((project) =>
+  //   project.projectName.toLowerCase().includes(searchQuery.toLowerCase())
+  // );
 
   const [formCreate] = Form.useForm();
 
-  //   const handleStatusChange = (newStatus, projectId) => { 
+  //   const handleStatusChange = (newStatus, projectId) => {
   //     const updatedProjects = projects.map((project) =>
   //       project.id === projectId ? { ...project, status: newStatus } : project
   //     );
@@ -174,10 +112,10 @@ const ManageProject = () => {
 
   const indexOfLastItem = currentPage * 3;
   const indexOfFirstItem = indexOfLastItem - 3;
-  const currentProjects = filteredProjects.slice(
-    indexOfFirstItem,
-    indexOfLastItem
-  );
+  // const currentProjects = filteredProjects?.slice(
+  //   indexOfFirstItem,
+  //   indexOfLastItem
+  // );
 
   return (
     <Content className="content">
@@ -201,16 +139,22 @@ const ManageProject = () => {
           <PlusOutlined /> New Project
         </Button>
       </Space>
-      {isLoading ? (<Spin size="large" style={{
-        display: 'flex', justifyContent: 'center', alignItems: 'center',
-      }}/>) 
-      : isError ? (
+      {isLoading ? (
+        <Spin
+          size="large"
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        />
+      ) : isError ? (
         <div style={{ textAlign: "center", marginTop: 20 }}>
           <Typography.Title level={5}>{isError}</Typography.Title>
         </div>
-      ) : currentProjects.length > 0 ? (
+      ) : projects?.data.length > 0 ? (
         <Row gutter={10} style={{ marginTop: 10 }}>
-          {currentProjects.map((project) => (
+          {projects.data.map((project) => (
             <Col key={project.id} span={24}>
               <Card>
                 <Space direction="horizontal">
@@ -323,7 +267,6 @@ const ManageProject = () => {
                       overlay={
                         <Menu>
                           {settings.map((item) => {
-                            
                             return (
                               <Menu.Item key={item.key}>
                                 {item.key === "delete" ? (
@@ -394,7 +337,7 @@ const ManageProject = () => {
             No matching projects found
           </Typography.Title>
         </div>
-      )}      
+      )}
 
       {/* Create Modal */}
       <Modal
@@ -425,7 +368,7 @@ const ManageProject = () => {
       <Pagination
         current={currentPage}
         pageSize={3}
-        total={projects.length}
+        total={projects?.data.length}
         onChange={handlePageChange}
         style={{
           marginTop: 10,
