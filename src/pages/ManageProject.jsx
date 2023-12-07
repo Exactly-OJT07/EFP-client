@@ -4,7 +4,6 @@ import {
   PlusOutlined,
   ScheduleOutlined,
 } from "@ant-design/icons";
-
 import {
   Button,
   Card,
@@ -26,10 +25,11 @@ import Pagination from "../components/pagination/pagination";
 import { toMomentDateTimeData } from "../helpers/format";
 import { useGetData } from "../hooks/useProject";
 import "../styles/ManageProject.css";
+import ProjectDetail from "./ProjectDetail";
+import CreateProject from "./projects/components/createProject.jsx";
 
 const { Content } = Layout;
 const { Search } = Input;
-
 
 const settings = [
   {
@@ -49,6 +49,7 @@ const ManageProject = () => {
     page: 1,
     take: 4,
   });
+
   const [filters, setFilters] = useState("");
   const [status, setStatus] = useState("");
 
@@ -58,12 +59,11 @@ const ManageProject = () => {
     page: table.page,
     take: table.take,
   };
+
   const { data: projects, isLoading, isError } = useGetData(paginateOptions);
-  console.log(projects);
   const handleChange = (value) => {
     console.log(`selected ${value}`);
   };
-
 
   const handleSearch = (value) => {
     setFilters((prevFilters) => ({
@@ -72,6 +72,15 @@ const ManageProject = () => {
     }));
   };
 
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const handleOpenModal = () => {
+    setIsModalOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+  };
 
   return (
     <Content className="content-project">
@@ -99,9 +108,17 @@ const ManageProject = () => {
           onSearch={handleSearch}
         />
 
-        <Button type="primary">
-          <PlusOutlined /> New Project
-        </Button>
+        <div>
+          <Button type="primary" onClick={() => setIsModalOpen(true)}>
+            <PlusOutlined /> New Project
+          </Button>
+          <CreateProject
+            isModalOpen={isModalOpen}
+            setIsModalOpen={setIsModalOpen}
+            width="1000px"
+            onCancel={handleCloseModal}
+          />
+        </div>
       </Space>
       {isLoading ? (
         <Spin
@@ -109,7 +126,7 @@ const ManageProject = () => {
           style={{
             display: "flex",
             justifyContent: "center",
-            position: 'absolute',
+            position: "absolute",
             top: "50%",
             left: "50%",
           }}
@@ -136,21 +153,21 @@ const ManageProject = () => {
                   <Col span={5}>
                     <div className="project-owner">
                       <img
-                          src={project.managerProject.avatar}
-                          alt=""
-                          style={{ width: 50, height: 50, borderRadius: 100 }}
+                        src={project.managerProject.avatar}
+                        alt=""
+                        style={{ width: 50, height: 50, borderRadius: 100 }}
                       />
                       <div className="project-title">
-                          <Typography.Paragraph
+                        <Typography.Paragraph
                           type="secondary"
                           strong
                           style={{ margin: 0 }}
-                          >
+                        >
                           Person in charge
-                          </Typography.Paragraph>
-                          <Typography.Text strong style={{ margin: 0 }}>
+                        </Typography.Paragraph>
+                        <Typography.Text strong style={{ margin: 0 }}>
                           {project.managerProject.name}
-                          </Typography.Text>
+                        </Typography.Text>
                       </div>
                     </div>
                   </Col>
@@ -183,7 +200,7 @@ const ManageProject = () => {
                         </Typography.Text>
                       </div>
                     </div>
-                  </Col> 
+                  </Col>
 
                   <Col span={5}>
                     <div className="project-owner">
@@ -213,7 +230,7 @@ const ManageProject = () => {
                         </Typography.Text>
                       </div>
                     </div>
-                  </Col>                 
+                  </Col>
 
                   <Col span={3}>
                     <Space wrap>
@@ -245,7 +262,7 @@ const ManageProject = () => {
                       ></Select>
                     </Space>
                   </Col>
-                  
+
                   <Col span={1}>
                     <Space wrap>
                       <Dropdown
@@ -277,10 +294,10 @@ const ManageProject = () => {
                                         if (item.key === "view") {
                                           console.log(
                                             "Navigating to projectDetail:",
-                                            `/manageProjects/projectDetail/${project.id}`
+                                            `/manageProjects/projectDetail/${project.id}`,
                                           );
                                           navigate(
-                                            `/manageProjects/projectDetail/${project.id}`
+                                            `/manageProjects/projectDetail/${project.id}`,
                                           );
                                         }
                                       }}
@@ -303,8 +320,9 @@ const ManageProject = () => {
                         </a>
                       </Dropdown>
                     </Space>
-                  </Col>                  
+                  </Col>
                 </div>
+
                 <Space direction="horizontal">
                   <CalendarOutlined />
                   <small>{toMomentDateTimeData(project.createdAt)}</small>
@@ -320,7 +338,6 @@ const ManageProject = () => {
           </Typography.Title>
         </div>
       )}
-
       <Pagination projects={projects} table={table} setTable={setTable} />
     </Content>
   );

@@ -3,7 +3,7 @@ import { Button, Layout, Spin, theme } from "antd";
 import { Suspense, useState } from "react";
 import { Outlet } from "react-router-dom";
 import { LayoutSider } from "./LayoutSider";
-import '../layout/MainLayout.css'
+import "../layout/MainLayout.css";
 
 const { Content, Header } = Layout;
 

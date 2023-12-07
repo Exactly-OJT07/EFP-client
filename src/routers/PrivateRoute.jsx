@@ -3,6 +3,7 @@ import Dashboard from "../pages/Dashboard";
 import ManageProject from "../pages/ManageProject";
 import ManageEmployee from "../pages/ManageEmployee";
 import ProjectDetail from "../pages/ProjectDetail";
+import CreateProject from "../pages/projects/components/createProject";
 
 const routes = [
   {
@@ -13,12 +14,21 @@ const routes = [
         element: <Dashboard />,
       },
       {
+        path: "Dashboard",
+        children: [{ path: "", element: <Dashboard /> }],
+      },
+      {
         path: "manageUsers",
         element: <ManageEmployee />,
       },
       {
         path: "manageProjects",
         children: [
+          {
+            path: "",
+            element: <ManageProject />,
+          },
+          { path: "createProject", element: <CreateProject /> },
           {
             path: "",
             element: <ManageProject />,
