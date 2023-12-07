@@ -37,10 +37,6 @@ const routes = [
         ],
       },
       {
-        path: "circle-progress",
-        element: <Circleprogress />,
-      },
-      {
         path: "404",
         element: <div>404</div>,
       },
