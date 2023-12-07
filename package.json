@@ -39,7 +39,7 @@
   "author": "tvpkhangojt07 <khang.truong-ojt07@devplus.edu.vn>",
   "license": "MIT",
   "lint-staged": {
-    "*.ts": [
+    "*.jsx": [
       "yarn lint",
       "yarn format",
       "git add ."
