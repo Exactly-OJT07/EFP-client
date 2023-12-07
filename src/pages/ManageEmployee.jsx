@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   MoreOutlined,
   EditOutlined,
@@ -61,72 +61,48 @@ const columns = [
     key: "action",
     render: () => (
       <>
-        <ActionDropdown />
+        <Dropdown
+          menu={{
+            items,
+          }}
+          trigger={["click"]}
+          placement="bottomLeft"
+        >
+          <a onClick={(e) => e.preventDefault()}>
+            <Space>
+              <MoreOutlined />
+            </Space>
+          </a>
+        </Dropdown>
       </>
     ),
   },
 ];
 
-function ActionDropdown() {
-  const items = [
-    {
-      key: "1",
-      label: <p>View</p>,
-    },
-    {
-      key: "2",
-      label: (
-        <Popconfirm
-          title="Delete the user"
-          description="Are you sure to delete this user?"
-          okText="Yes"
-          cancelText="No"
-        >
-          <p>Delete</p>
-        </Popconfirm>
-      ),
-      danger: true,
-    },
-  ];
+const items = [
+  {
+    key: "1",
+    label: <p>View</p>,
+  },
+  {
+    key: "2",
+    label: (
+      <Popconfirm
+        title="Delete the user"
+        description="Are you sure to delete this user?"
+        okText="Yes"
+        cancelText="No"
+      >
+        <p>Delete</p>
+      </Popconfirm>
+    ),
+    danger: true,
+  },
+];
 
-  const Dropdown = () => (
-    <Dropdown
-      menu={{
-        items,
-      }}
-      trigger={["click"]}
-      placement="bottomLeft"
-    >
-      <a onClick={(e) => e.preventDefault()}>
-        <Space>
-          <MoreOutlined />
-        </Space>
-      </a>
-    </Dropdown>
-  );
-
-  return (
-    <>
-      <Dropdown />
-    </>
-  );
-}
-
-function EmployeeList() {
-  const { data: employees } = useGetClients();
-  console.log(employees);
-
-  return (
-    <Table
-      rowKey="id"
-      columns={columns}
-      dataSource={employees?.data}
-      pagination={{ defaultPageSize: 5 }}
-    />
-  );
-}
-
-function CreateModal() {}
+const EmployeeList = ({ data }) => (
+  <Table rowKey="id" columns={columns} dataSource={data?.data} />
+);
 
 function ManageEmployee() {
   const [formCreate] = useForm();
@@ -223,11 +199,22 @@ function ManageEmployee() {
   };
   const [formView] = Form.useForm();
 
-  // const [searchText, setSearchText] = useState("");
+  const [table] = useState({
+    page: 1,
+    take: 6,
+  });
+  // const [status, setStatus] = useState("");
+  const [searchText, setSearchText] = useState("");
+  const paginateOptions = {
+    search: searchText,
+    page: table.page,
+    take: table.take,
+  };
+  const handleSearch = (value) => {
+    setSearchText(value);
+  };
 
-  // const handleSearch = (value) => {
-  //   setSearchText(value);
-  // };
+  const { data: employees } = useGetClients(paginateOptions);
 
   return (
     <>
@@ -248,7 +235,7 @@ function ManageEmployee() {
           Add Employee
         </Button>
       </Space>
-      <EmployeeList />
+      <EmployeeList data={employees} />
       <Modal
         title="Add Employee"
         open={isModalOpen}
