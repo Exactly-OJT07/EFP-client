@@ -14,3 +14,5 @@ export const deleteProjectApi = (projectId) =>
 
 export const patchStatusApi = (projectId, status) =>
   axios.patch(`${API_URL.PROJECT}/${projectId}`, { status });
+
+export const createProjectAPI = (params) => axios.post(API_URL.PROJECT, params);
