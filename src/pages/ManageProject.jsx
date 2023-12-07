@@ -9,13 +9,10 @@ import {
   Button,
   Card,
   Col,
-  DatePicker,
   Dropdown,
-  Form,
   Input,
   Layout,
   Menu,
-  Modal,
   Popconfirm,
   Row,
   Select,
@@ -33,7 +30,6 @@ import "../styles/ManageProject.css";
 const { Content } = Layout;
 const { Search } = Input;
 
-const { RangePicker } = DatePicker;
 
 const settings = [
   {
@@ -48,7 +44,6 @@ const settings = [
 
 const ManageProject = () => {
   const navigate = useNavigate();
-  const [formCreate] = Form.useForm();
 
   const [table, setTable] = useState({
     page: 1,
@@ -56,8 +51,6 @@ const ManageProject = () => {
   });
   const [filters, setFilters] = useState("");
   const [status, setStatus] = useState("");
-  const [createModalOpen, setCreateModalOpen] = useState(false);
-  const [confirmLoading, setConfirmLoading] = useState(false);
 
   const paginateOptions = {
     search: filters.name,
@@ -71,22 +64,6 @@ const ManageProject = () => {
     console.log(`selected ${value}`);
   };
 
-  const showCreateModal = () => {
-    setCreateModalOpen(true);
-  };
-
-  const handleCreateOk = () => {
-    setConfirmLoading(true);
-
-    setTimeout(() => {
-      setCreateModalOpen(false);
-      setConfirmLoading(false);
-    }, 2000);
-  };
-
-  const handleCreateCancel = () => {
-    setCreateModalOpen(false);
-  };
 
   const handleSearch = (value) => {
     setFilters((prevFilters) => ({
@@ -122,7 +99,7 @@ const ManageProject = () => {
           onSearch={handleSearch}
         />
 
-        <Button type="primary" onClick={showCreateModal}>
+        <Button type="primary">
           <PlusOutlined /> New Project
         </Button>
       </Space>
@@ -133,8 +110,8 @@ const ManageProject = () => {
             display: "flex",
             justifyContent: "center",
             position: 'absolute',
-            top: 150,
-            left: 150,
+            top: "50%",
+            left: "50%",
           }}
         />
       ) : isError ? (
@@ -343,31 +320,6 @@ const ManageProject = () => {
           </Typography.Title>
         </div>
       )}
-
-      <Modal
-        title="Create Project"
-        visible={createModalOpen}
-        onOk={handleCreateOk}
-        confirmLoading={confirmLoading}
-        onCancel={handleCreateCancel}
-      >
-        <Form
-          form={formCreate}
-          name="createProject"
-          layout="vertical"
-          autoComplete="off"
-        >
-          <Form.Item name="projectName" label="Project Name">
-            <Input />
-          </Form.Item>
-          <Form.Item name="personInCharge" label="Person In Charge">
-            <Input />
-          </Form.Item>
-          <Form.Item name="timeLine" label="Timeline">
-            <RangePicker style={{ width: "100%" }} />
-          </Form.Item>
-        </Form>
-      </Modal>
 
       <Pagination projects={projects} table={table} setTable={setTable} />
     </Content>

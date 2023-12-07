@@ -3,6 +3,7 @@ import { Button, Layout, Spin, theme } from "antd";
 import { Suspense, useState } from "react";
 import { Outlet } from "react-router-dom";
 import { LayoutSider } from "./LayoutSider";
+import '../layout/MainLayout.css'
 
 const { Content, Header } = Layout;
 
@@ -23,7 +24,7 @@ export const PrivateLayout = () => {
       }}
     >
       <LayoutSider collapsed={collapsed} />
-      <Layout>
+      <Layout style={{background: "#DCDCDC"}}>
         <Header
           style={{
             height: 60,
@@ -53,6 +54,8 @@ export const PrivateLayout = () => {
             height: "100%",
             background: colorBgContainer,
             overflowY: "auto",
+            borderRadius: "5px",
+            boxShadow: "5px 10px 18px #D3D3D3",
           }}
         >
           <Suspense fallback={<Spin />}>
