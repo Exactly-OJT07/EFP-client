@@ -1,10 +1,8 @@
-import React, { useEffect, useState } from "react";
-import { MoreOutlined, PlusOutlined, UploadOutlined } from "@ant-design/icons";
+import React, { useState } from "react";
+import { PlusOutlined, UploadOutlined } from "@ant-design/icons";
 import {
   Space,
   Table,
-  Tag,
-  Dropdown,
   Button,
   Form,
   Input,
@@ -15,16 +13,19 @@ import {
   Upload,
   Col,
   Row,
-  Popconfirm,
   Modal,
-  message,
+  Image as AntdImage,
 } from "antd";
-import { CloudinaryContext, Image, Transformation } from "cloudinary-react";
+import {
+  CloudinaryContext,
+  Image as CloudImage,
+  Transformation,
+} from "cloudinary-react";
 import { Cloudinary } from "@cloudinary/url-gen";
 import moment from "moment";
-import { useGetClients } from "../hooks/useEmployee";
-import "../styles/ManageEmployee.css";
-import { toMomentDateTimeData } from "../helpers/format";
+import { useGetClients } from "../../hooks/useEmployee";
+import "../../styles/ManageEmployee.css";
+import { Link } from "react-router-dom";
 
 const { useForm } = Form;
 
@@ -32,14 +33,30 @@ const { Search } = Input;
 
 const columns = [
   {
+    title: "Avatar",
+    dataIndex: "avatar",
+    key: "avatar",
+    render: (avatar) => {
+      return <AntdImage width={40} height={40} src={avatar} />;
+    },
+  },
+  {
     title: "Name",
     dataIndex: "name",
     key: "name",
+    render: (name) => {
+      return <Link>{name}</Link>;
+    },
   },
   {
     title: "Email",
     dataIndex: "email",
     key: "email",
+  },
+  {
+    title: "Phone",
+    dataIndex: "phone",
+    key: "phone",
   },
   {
     title: "Position",
@@ -52,52 +69,14 @@ const columns = [
     },
   },
   {
-    title: "Join Date",
-    dataIndex: "joinDate",
-    key: "joinDate",
-    render: (joinDate) => toMomentDateTimeData(joinDate),
-  },
-  {
-    title: "Action",
-    key: "action",
-    render: () => (
-      <>
-        <Dropdown
-          menu={{
-            items,
-          }}
-          trigger={["click"]}
-          placement="bottomLeft"
-        >
-          <a onClick={(e) => e.preventDefault()}>
-            <Space>
-              <MoreOutlined />
-            </Space>
-          </a>
-        </Dropdown>
-      </>
-    ),
-  },
-];
-
-const items = [
-  {
-    key: "1",
-    label: <p>View</p>,
-  },
-  {
-    key: "2",
-    label: (
-      <Popconfirm
-        title="Delete the user"
-        description="Are you sure to delete this user?"
-        okText="Yes"
-        cancelText="No"
-      >
-        <p>Delete</p>
-      </Popconfirm>
-    ),
-    danger: true,
+    title: "Status",
+    dataIndex: "status",
+    key: "status",
+    render: (status) => {
+      if (status === "active") {
+        return "ACTIVE";
+      } else return "InActive";
+    },
   },
 ];
 
@@ -455,9 +434,9 @@ function ManageEmployee() {
                   >
                     <Spin spinning={loading} tip="Uploading...">
                       {imageUrl ? (
-                        <Image publicId={imageUrl} width="95" height="93">
+                        <CloudImage publicId={imageUrl} width="95" height="93">
                           <Transformation crop="fill" />
-                        </Image>
+                        </CloudImage>
                       ) : (
                         <div>
                           <PlusOutlined />
