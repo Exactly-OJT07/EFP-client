@@ -3,10 +3,10 @@ import { getEmployeeAPI } from "../api/apiUrl";
 import { QUERY_KEY } from "../constants/query-key";
 
 export const useGetClients = (params) =>
-  useQuery({
-    queryKey: [QUERY_KEY.EMPLOYEE],
-    queryFn: async () => {
+  useQuery(
+    [QUERY_KEY.EMPLOYEE, params.page, params.take, params.search],
+    async () => {
       const { data } = await getEmployeeAPI(params);
       return data;
     },
-  });
+  );
