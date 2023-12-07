@@ -26,6 +26,7 @@ import moment from "moment";
 import { useGetClients } from "../../hooks/useEmployee";
 import "../../styles/ManageEmployee.css";
 import { Link } from "react-router-dom";
+import EmployeeDetail from "./EmployeeDetail";
 
 const { useForm } = Form;
 
@@ -44,9 +45,9 @@ const columns = [
     title: "Name",
     dataIndex: "name",
     key: "name",
-    render: (name) => {
-      return <Link>{name}</Link>;
-    },
+    render: (name, record) => (
+      <a href={`/manageEmployees/employeeDetail/${record.id}`}>{name}</a>
+    ),
   },
   {
     title: "Email",

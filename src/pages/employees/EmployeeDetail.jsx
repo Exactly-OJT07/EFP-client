@@ -1,5 +1,7 @@
 import React from "react";
 
-export default function EmployeeDetail() {
+const EmployeeDetail = () => {
   return <div>EmployeeDetail</div>;
-}
+};
+
+export default EmployeeDetail;

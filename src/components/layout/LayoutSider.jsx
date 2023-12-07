@@ -23,9 +23,9 @@ export const LayoutSider = ({ collapsed = true }) => {
       label: "Dashboard",
     },
     {
-      key: "manageUsers",
+      key: "manageEmployees",
       icon: <UserOutlined />,
-      label: "Manage Users",
+      label: "Manage Employees",
     },
     {
       key: "manageProjects",

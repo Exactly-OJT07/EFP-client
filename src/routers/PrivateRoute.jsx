@@ -14,7 +14,7 @@ const routes = [
         element: <Dashboard />,
       },
       {
-        path: "manageUsers",
+        path: "manageEmployees",
         element: <ManageEmployee />,
         children: [
           {
