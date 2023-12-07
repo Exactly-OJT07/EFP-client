@@ -1,11 +1,5 @@
 import React, { useEffect, useState } from "react";
-import {
-  MoreOutlined,
-  EditOutlined,
-  DeleteOutlined,
-  PlusOutlined,
-  UploadOutlined,
-} from "@ant-design/icons";
+import { MoreOutlined, PlusOutlined, UploadOutlined } from "@ant-design/icons";
 import {
   Space,
   Table,
@@ -30,6 +24,7 @@ import { Cloudinary } from "@cloudinary/url-gen";
 import moment from "moment";
 import { useGetClients } from "../hooks/useEmployee";
 import "../styles/ManageEmployee.css";
+import { toMomentDateTimeData } from "../helpers/format";
 
 const { useForm } = Form;
 
@@ -50,11 +45,17 @@ const columns = [
     title: "Position",
     dataIndex: "position",
     key: "position",
+    render: (position) => {
+      if (position === "fe") {
+        return "Front-end Dev";
+      } else return "";
+    },
   },
   {
     title: "Join Date",
     dataIndex: "joinDate",
     key: "joinDate",
+    render: (joinDate) => toMomentDateTimeData(joinDate),
   },
   {
     title: "Action",
@@ -214,7 +215,11 @@ function ManageEmployee() {
     setSearchText(value);
   };
 
-  const { data: employees } = useGetClients(paginateOptions);
+  const {
+    data: employees,
+    isLoading,
+    isError,
+  } = useGetClients(paginateOptions);
 
   return (
     <>
@@ -235,7 +240,25 @@ function ManageEmployee() {
           Add Employee
         </Button>
       </Space>
-      <EmployeeList data={employees} />
+      {isLoading ? (
+        <Spin
+          size="large"
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            position: "absolute",
+            top: "50%",
+            left: "50%",
+          }}
+        />
+      ) : isError ? (
+        <div style={{ textAlign: "center", marginTop: 20 }}>
+          <Typography.Title level={5}>{isError}</Typography.Title>
+        </div>
+      ) : (
+        <EmployeeList data={employees} />
+      )}
+
       <Modal
         title="Add Employee"
         open={isModalOpen}
