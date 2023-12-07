@@ -318,7 +318,7 @@ const ManageProject = () => {
         </div>
       )}
 
-      <Pagination projects={projects} table={table} setTable={setTable} />
+      <Pagination items={projects} table={table} setTable={setTable} />
     </Content>
   );
 };

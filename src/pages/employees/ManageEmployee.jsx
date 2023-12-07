@@ -25,8 +25,7 @@ import { Cloudinary } from "@cloudinary/url-gen";
 import moment from "moment";
 import { useGetClients } from "../../hooks/useEmployee";
 import "../../styles/ManageEmployee.css";
-import { Link } from "react-router-dom";
-import EmployeeDetail from "./EmployeeDetail";
+import Pagination from "../../components/pagination/pagination";
 
 const { useForm } = Form;
 
@@ -38,7 +37,7 @@ const columns = [
     dataIndex: "avatar",
     key: "avatar",
     render: (avatar) => {
-      return <AntdImage width={40} height={40} src={avatar} />;
+      return <AntdImage width={70} height={70} src={avatar} />;
     },
   },
   {
@@ -82,7 +81,12 @@ const columns = [
 ];
 
 const EmployeeList = ({ data }) => (
-  <Table rowKey="id" columns={columns} dataSource={data?.data} />
+  <Table
+    rowKey="id"
+    columns={columns}
+    dataSource={data?.data}
+    pagination={false}
+  />
 );
 
 function ManageEmployee() {
@@ -180,19 +184,30 @@ function ManageEmployee() {
   };
   const [formView] = Form.useForm();
 
-  const [table] = useState({
+  const [table, setTable] = useState({
     page: 1,
     take: 6,
   });
   // const [status, setStatus] = useState("");
-  const [searchText, setSearchText] = useState("");
+  const [searchNameText, setSearchNameText] = useState("");
+  const [searchEmailText, setSearchEmailText] = useState("");
   const paginateOptions = {
-    search: searchText,
+    search: searchNameText.name,
     page: table.page,
     take: table.take,
   };
-  const handleSearch = (value) => {
-    setSearchText(value);
+  const handleSearchName = (value) => {
+    setSearchNameText((prevFilters) => ({
+      ...prevFilters,
+      name: value,
+    }));
+  };
+
+  const handleSearchEmail = (value) => {
+    setSearchEmailText((prevFilters) => ({
+      ...prevFilters,
+      name: value,
+    }));
   };
 
   const {
@@ -204,17 +219,24 @@ function ManageEmployee() {
   return (
     <>
       <Space className="status-filter" direction="horizontal">
-        <div>
-          <Search
-            placeholder="input search text"
-            allowClear
-            //    }
-            style={{
-              width: 304,
-            }}
-            onSearch={handleSearch}
-          />
-        </div>
+        <Search
+          placeholder="Name"
+          allowClear
+          //    }
+          style={{
+            width: 304,
+          }}
+          onSearch={handleSearchName}
+        />
+        <Search
+          placeholder="Email"
+          allowClear
+          //    }
+          style={{
+            width: 304,
+          }}
+          onSearch={handleSearchEmail}
+        />
         <Button type="primary" onClick={showModal}>
           <PlusOutlined />
           Add Employee
@@ -236,7 +258,12 @@ function ManageEmployee() {
           <Typography.Title level={5}>{isError}</Typography.Title>
         </div>
       ) : (
-        <EmployeeList data={employees} />
+        <>
+          <EmployeeList data={employees} />
+          <div className="pagination">
+            <Pagination items={employees} table={table} setTable={setTable} />
+          </div>
+        </>
       )}
 
       <Modal

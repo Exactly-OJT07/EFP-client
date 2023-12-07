@@ -15,11 +15,10 @@ const routes = [
       },
       {
         path: "manageEmployees",
-        element: <ManageEmployee />,
         children: [
           {
             path: "",
-            element: <ManageProject />,
+            element: <ManageEmployee />,
           },
           { path: "employeeDetail/:id", element: <EmployeeDetail /> },
         ],

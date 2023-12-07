@@ -2,12 +2,12 @@ module.exports = {
   root: true,
   env: { browser: true, es2021: true, jest: true },
   extends: [
-    'react-app',
-    'react-app/jest',
-    'eslint:recommended',
-    'plugin:react/recommended',
-    'plugin:react/jsx-runtime',
-    'plugin:react-hooks/recommended',
+    "react-app",
+    "react-app/jest",
+    "eslint:recommended",
+    "plugin:react/recommended",
+    "plugin:react/jsx-runtime",
+    "plugin:react-hooks/recommended",
   ],
   ignorePatterns: ["dist", ".eslintrc.cjs"],
   parserOptions: { ecmaVersion: "latest", sourceType: "module" },
@@ -19,6 +19,6 @@ module.exports = {
       { allowConstantExport: true },
     ],
     semi: ["error", "always"],
-    "no-unused-vars": ["error", { "vars": "all" }]
+    "no-unused-vars": ["error", { vars: "all" }],
   },
 };

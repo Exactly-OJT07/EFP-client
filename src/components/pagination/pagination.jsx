@@ -2,7 +2,7 @@
 import { ArrowLeftOutlined, ArrowRightOutlined } from "@ant-design/icons";
 import { Pagination as PaginationAntd } from "antd";
 
-const Pagination = ({ projects, table, setTable }) => {
+const Pagination = ({ items, table, setTable }) => {
   return (
     <PaginationAntd
       style={{
@@ -10,7 +10,7 @@ const Pagination = ({ projects, table, setTable }) => {
       }}
       showSizeChanger={false}
       current={table.page}
-      total={projects?.meta?.itemCount}
+      total={items?.meta?.itemCount}
       pageSize={table.take}
       itemRender={(_, type, originalElement) => {
         switch (type) {

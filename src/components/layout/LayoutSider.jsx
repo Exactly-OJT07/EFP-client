@@ -18,7 +18,7 @@ export const LayoutSider = ({ collapsed = true }) => {
 
   const menu = [
     {
-      key: "dashboard",
+      key: "",
       icon: <DashboardOutlined />,
       label: "Dashboard",
     },
