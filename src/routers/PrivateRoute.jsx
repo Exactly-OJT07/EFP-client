@@ -3,6 +3,7 @@ import Dashboard from "../pages/Dashboard";
 import ManageProject from "../pages/ManageProject";
 import ManageEmployee from "../pages/ManageEmployee";
 import ProjectDetail from "../pages/ProjectDetail";
+import Circleprogress from "../components/circle-progress/Circleprogress"
 
 const routes = [
   {
@@ -31,6 +32,10 @@ const routes = [
           },
           { path: "projectDetail/:id", element: <ProjectDetail /> }
         ],
+      },
+      {
+        path: "circle-progress",
+        element: <Circleprogress />,
       },
       {
         path: "404",
