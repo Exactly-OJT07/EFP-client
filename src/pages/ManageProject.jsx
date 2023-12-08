@@ -2,7 +2,6 @@ import {
   CalendarOutlined,
   MoreOutlined,
   PlusOutlined,
-  ScheduleOutlined,
 } from "@ant-design/icons";
 
 import {
@@ -19,13 +18,16 @@ import {
   Space,
   Spin,
   Typography,
+  Avatar,
+  Tooltip
 } from "antd";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Pagination from "../components/pagination/pagination";
 import { toMomentDateTimeData } from "../helpers/format";
-import { useGetData } from "../hooks/useProject";
+import { useGetData, useProjectStatusUpdate } from "../hooks/useProject";
 import "../styles/ManageProject.css";
+import  Circleprogress  from "../components/circle-progress/Circleprogress"
 
 const { Content } = Layout;
 const { Search } = Input;
@@ -59,8 +61,20 @@ const ManageProject = () => {
   };
   const { data: projects, isLoading, isError } = useGetData(paginateOptions);
   console.log(projects);
-  const handleChange = (value) => {
-    console.log(`selected ${value}`);
+
+
+  const projectStatusUpdateMutation = useProjectStatusUpdate();
+
+  const handleStatusChange = async (projectId, newStatus) => {
+    try {
+      console.log("Mutation is loading:", projectStatusUpdateMutation.isLoading);
+      await projectStatusUpdateMutation.mutateAsync({
+        projectId,
+        status: newStatus,
+      });
+    } catch (error) {
+      console.error("Error updating project status:", error);
+    }
   };
 
   const handleSearch = (value) => {
@@ -119,18 +133,18 @@ const ManageProject = () => {
         <Row gutter={10} style={{ marginTop: 30 }}>
           {projects.data.map((project) => (
             <Col key={project.id} span={24}>
-              <Card>
+              <Card style={{boxShadow: '1px 1px 8px #DCDCDC'}}>
                 <Space direction="horizontal">
-                  <small style={{ color: "grey" }}>
-                    #{project.id.slice(0, 8)}
-                  </small>
+                  <Typography.Title level={5} style={{ color: "#67729D" }}>
+                    #P-{project.id.slice(0, 8)}
+                  </Typography.Title>
                 </Space>
                 <div className="project-items">
-                  <Col span={5}>
-                    <h4 style={{ lineHeight: "45px" }}>{project.name}</h4>
+                  <Col span={8}>
+                    <Typography.Title level={4} style={{ lineHeight: "45px" }}>{project.name}</Typography.Title>
                   </Col>
 
-                  <Col span={5}>
+                  <Col span={4}>
                     <div className="project-owner">
                       <img
                         src={project.managerProject.avatar}
@@ -142,73 +156,46 @@ const ManageProject = () => {
                           type="secondary"
                           strong
                           style={{ margin: 0 }}
-                        >
-                          Person in charge
-                        </Typography.Paragraph>
-                        <Typography.Text strong style={{ margin: 0 }}>
+                          >
+                          Manager
+                          </Typography.Paragraph>
+                          <Typography.Text strong style={{ margin: 0 }}>
                           {project.managerProject.name}
                         </Typography.Text>
                       </div>
                     </div>
                   </Col>
-
-                  <Col span={5}>
-                    <div className="project-owner">
-                      <div
-                        style={{
-                          display: "flex",
-                          alignItems: "center",
-                          justifyContent: "center",
-                          borderRadius: "50%",
-                          width: 50,
-                          height: 50,
-                          background: "#1640D6",
-                        }}
-                      >
-                        <ScheduleOutlined style={{ color: "white" }} />
-                      </div>
+                  
+                  <Col span={4}>
+                    <div className="project-employee-avatar">
                       <div className="project-title">
-                        <Typography.Paragraph
-                          type="secondary"
-                          strong
-                          style={{ margin: 0 }}
+                          <Typography.Paragraph
+                            type="secondary"
+                            strong
+                            style={{ margin: 0 }}
+                          >
+                            Team Member
+                          </Typography.Paragraph>
+                        </div>
+                      <Avatar.Group maxCount={2}>
+                      {project.employee_project.map((employeeData) => (
+                        <Tooltip key={employeeData.id}>
+                        <Avatar
+                          src={employeeData.employee.avatar}
+                          style={{ backgroundColor: '#87D068' }}
                         >
-                          Start Date
-                        </Typography.Paragraph>
-                        <Typography.Text strong style={{ margin: 0 }}>
-                          {toMomentDateTimeData(project.startDate)}
-                        </Typography.Text>
-                      </div>
+                        </Avatar>
+                      </Tooltip>
+                      ))}
+                          
+                      </Avatar.Group>
                     </div>
                   </Col>
 
-                  <Col span={5}>
-                    <div className="project-owner">
-                      <div
-                        style={{
-                          display: "flex",
-                          alignItems: "center",
-                          justifyContent: "center",
-                          borderRadius: "50%",
-                          width: 50,
-                          height: 50,
-                          background: "#1640D6",
-                        }}
-                      >
-                        <ScheduleOutlined style={{ color: "white" }} />
-                      </div>
-                      <div className="project-title">
-                        <Typography.Paragraph
-                          type="secondary"
-                          strong
-                          style={{ margin: 0 }}
-                        >
-                          End Date
-                        </Typography.Paragraph>
-                        <Typography.Text strong style={{ margin: 0 }}>
-                          {toMomentDateTimeData(project.endDate)}
-                        </Typography.Text>
-                      </div>
+                  <Col span={4}>
+                    <div className="cirle-progress" style={{
+                        display: 'flex', justifyContent: 'center', alignItems: 'center'}}>                          
+                      <Circleprogress project={project}/>
                     </div>
                   </Col>
 
@@ -219,7 +206,8 @@ const ManageProject = () => {
                         style={{
                           width: 120,
                         }}
-                        onChange={handleChange}
+                        onChange={(newStatus) => {handleStatusChange(project.id, newStatus);
+                        }}
                         options={[
                           {
                             value: "pending",
@@ -242,7 +230,8 @@ const ManageProject = () => {
                       ></Select>
                     </Space>
                   </Col>
-
+                  
+                  
                   <Col span={1}>
                     <Space wrap>
                       <Dropdown
@@ -304,7 +293,9 @@ const ManageProject = () => {
                 </div>
                 <Space direction="horizontal">
                   <CalendarOutlined />
-                  <small>{toMomentDateTimeData(project.createdAt)}</small>
+                  <small style={{
+                    color: 'grey',
+                  }}>Created On {toMomentDateTimeData(project.createdAt)}</small>
                 </Space>
               </Card>
             </Col>
