@@ -8,5 +8,5 @@ export const useGetData = (params) =>
     async () => {
       const { data } = await getProjectApi(params);
       return data;
-    }
+    },
   );

@@ -1,4 +1,4 @@
 export const QUERY_KEY = {
-    EMPLOYEE: "EMPLOYEE",
-    PROJECT: "PROJECT",
+  EMPLOYEE: "EMPLOYEE",
+  PROJECT: "PROJECT",
 };
