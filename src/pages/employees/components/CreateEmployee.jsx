@@ -24,14 +24,31 @@ import {
 } from "cloudinary-react";
 import { Cloudinary } from "@cloudinary/url-gen";
 import moment from "moment";
-import { useGetClients } from "../../hooks/useEmployee";
-import "../../styles/ManageEmployee.css";
-import Pagination from "../../components/pagination/pagination";
-import ReadEmployee from "./components/ReadEmployee";
 
 const { useForm } = Form;
 
-function ManageEmployee() {
+const description = [
+  {
+    title: "Skill",
+    dataIndex: "skill",
+    key: "skill",
+  },
+  {
+    title: "Experience",
+    dataIndex: "experience",
+    key: "experience",
+  },
+];
+
+const Descriptionlist = ({ data = [] }) => (
+  <Table
+    columns={description}
+    dataSource={data}
+    pagination={{ defaultPageSize: 5 }}
+  />
+);
+
+const CreateEmployee = () => {
   const [formCreate] = useForm();
   const [confirmLoading, setConfirmLoading] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -43,19 +60,54 @@ function ManageEmployee() {
   const [newCid, setNewCid] = useState("");
   const [newGender, setNewGender] = useState("");
   const [newPosition, setNewPosition] = useState("");
-  const [newLineManager, setNewLineManager] = useState("");
-  const [newIsManager, setNewIsManager] = useState("");
-  const [newDescription, setNewDescription] = useState("");
-  const [newLang, setNewLang] = useState("");
-  const [newTechnology, setNewTechnology] = useState("");
+
+  const [newEmail, setNewEmail] = useState("");
   const [newJoinDate, setNewJoinDate] = useState("");
   const [newFireDate, setNewFireDate] = useState("");
   const [newAvatar, setNewAvatar] = useState("");
+
+  const [newSkill, setNewSkill] = useState("");
+  const [newExperience, setNewExperience] = useState("");
+  const [skills, setSkills] = useState([]);
+  const [experiences, setExperiences] = useState([]);
+  const [newDescription, setNewDescription] = useState([]);
+
   const [imageUrl, setImageUrl] = useState(null);
   const [loading, setLoading] = useState(false);
   const cld = new Cloudinary({ cloud: { cloudName: "dvm8fnczy" } });
   const [viewModalOpen, setViewModalOpen] = useState(false);
 
+  const [employeeData, setEmployeeData] = useState(data);
+
+  const [newIsManager, setNewIsManager] = useState(false);
+  const [newLineManager, setNewLineManager] = useState(null);
+
+  const [newExp, setNewExp] = useState("");
+  const newExperienceObject = { skill: newSkill, exp: newExp };
+
+  const existingData = JSON.parse(localStorage.getItem("experienceData")) || [];
+  existingData.push(newExperienceObject);
+  localStorage.setItem("experienceData", JSON.stringify(existingData));
+
+  const addEmployee = (newEmployee) => {
+    setEmployeeData([...employeeData, newEmployee]);
+  };
+
+  const addToDescription = () => {
+    const newEntry = {
+      skill: newSkill,
+      experience: newExperience,
+    };
+
+    setNewDescription([...newDescription, newEntry]);
+    setNewSkill("");
+    setNewExperience("");
+    console.log(newDescription);
+  };
+
+  const handleIsManagerChange = (value) => {
+    setNewIsManager(value);
+  };
   const handleChange = (info) => {
     if (info.file.status === "uploading") {
       setLoading(true);
@@ -72,6 +124,7 @@ function ManageEmployee() {
   const showModal = () => {
     setIsModalOpen(true);
   };
+
   const dataInput = [
     newName,
     newPhone,
@@ -82,11 +135,13 @@ function ManageEmployee() {
     newLineManager,
     newIsManager,
     newDescription,
-    newLang,
-    newTechnology,
+    newEmail,
+    newSkill,
     newJoinDate,
     newFireDate,
     newAvatar,
+    newSkill,
+    newExperience,
   ];
 
   const handleOpenOk = () => {
@@ -97,6 +152,31 @@ function ManageEmployee() {
       setIsModalOpen(false);
       setConfirmLoading(false);
     }, 2000);
+    localStorage.clear();
+
+    const newEmployee = {
+      key: String(employeeData.length + 1), // Tạo một khóa duy nhất (bạn có thể sử dụng một phương pháp mạnh mẽ hơn)
+      name: newName,
+      age: 32, // Bạn có thể đặt tuổi động để phù hợp nhu cầu
+      phone: newPhone,
+      roles: newDescription.map((item) => item.skill),
+      hireDate: moment(newJoinDate).format("DD/MM/YYYY"),
+      // Thêm các thuộc tính khác theo nhu cầu
+    };
+    addEmployee(newEmployee);
+    setNewName("");
+    setNewPhone("");
+    setNewDob("");
+    setNewCid("");
+    setNewGender("");
+    setNewPosition("");
+    setNewIsManager(false);
+    setNewLineManager(null);
+    setNewDescription([]);
+    setNewEmail("");
+    setNewJoinDate("");
+    setNewFireDate("");
+    setNewAvatar("");
   };
 
   const handleCancel = () => {
@@ -128,8 +208,6 @@ function ManageEmployee() {
 
   return (
     <>
-      <ReadEmployee />
-
       <Modal
         title="Add Employee"
         open={isModalOpen}
@@ -145,7 +223,7 @@ function ManageEmployee() {
           layout="vertical"
           autoComplete="off"
         >
-          <Row gutter={16}>
+          <Row gutter={100}>
             <Col xs={24} sm={12} md={12} lg={6} xl={6}>
               <Form.Item name="Name" label="Name" style={{ width: "100%" }}>
                 <Input
@@ -154,11 +232,21 @@ function ManageEmployee() {
                 />
               </Form.Item>
             </Col>
+
             <Col xs={24} sm={12} md={12} lg={6} xl={6}>
               <Form.Item name="Phone" label="Phone" style={{ width: "100%" }}>
                 <Input
                   value={newPhone}
                   onChange={(e) => setNewPhone(e.target.value)}
+                />
+              </Form.Item>
+            </Col>
+
+            <Col xs={24} sm={12} md={12} lg={6} xl={6}>
+              <Form.Item name="Email" label="Email" style={{ width: "100%" }}>
+                <Input
+                  value={newEmail}
+                  onChange={(e) => setNewEmail(e.target.value)}
                 />
               </Form.Item>
             </Col>
@@ -212,29 +300,13 @@ function ManageEmployee() {
 
             <Col xs={24} sm={12} md={12} lg={6} xl={6}>
               <Form.Item
-                name="LineManager"
-                label="LineManager"
-                style={{ width: "100%" }}
-              >
-                <Select
-                  value={newLineManager}
-                  onChange={(value) => setNewLineManager(value)}
-                >
-                  <Select.Option value="listname">listname</Select.Option>
-                  <Select.Option value="test">test</Select.Option>
-                </Select>
-              </Form.Item>
-            </Col>
-
-            <Col xs={24} sm={12} md={12} lg={6} xl={6}>
-              <Form.Item
                 name="IsManager"
                 label="IsManager"
                 style={{ width: "100%" }}
               >
                 <Radio.Group
                   value={newIsManager}
-                  onChange={(e) => setNewIsManager(e.target.value)}
+                  onChange={(e) => handleIsManagerChange(e.target.value)}
                 >
                   <Radio value={true}>True</Radio>
                   <Radio value={false}>False</Radio>
@@ -242,72 +314,86 @@ function ManageEmployee() {
               </Form.Item>
             </Col>
 
+            {newIsManager === false && (
+              <Col xs={24} sm={12} md={12} lg={6} xl={6}>
+                <Form.Item
+                  name="LineManager"
+                  label="LineManager"
+                  style={{ width: "100%" }}
+                >
+                  <Select
+                    value={newLineManager}
+                    onChange={(value) => setNewLineManager(value)}
+                  >
+                    <Select.Option value="listname">listname</Select.Option>
+                    <Select.Option value="test">test</Select.Option>
+                  </Select>
+                </Form.Item>
+              </Col>
+            )}
+
             <Col xs={24} sm={12} md={12} lg={6} xl={6}>
               <Form.Item
                 name="Description"
                 label="Description"
                 style={{ width: "100%" }}
               >
-                <Input
-                  value={newDescription}
-                  onChange={(e) => setNewDescription(e.target.value)}
+                <Table
+                  dataSource={newDescription}
+                  columns={description}
+                  pagination={false}
                 />
               </Form.Item>
             </Col>
 
-            <Col xs={24} sm={12} md={12} lg={6} xl={6}>
-              <Form.Item
-                name="LangFrame"
-                label="Lang And Frame"
-                style={{ width: "100%" }}
-              >
+            <Col
+              xs={24}
+              sm={12}
+              md={12}
+              lg={6}
+              xl={6}
+              span={8}
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "flex-start",
+              }}
+            >
+              <Form.Item label="Skill" style={{ marginBottom: "8px" }}>
                 <Input
-                  value={newLang}
-                  onChange={(e) => setNewLang(e.target.value)}
+                  value={newSkill}
+                  onChange={(e) => setNewSkill(e.target.value)}
                 />
               </Form.Item>
-            </Col>
 
-            <Col xs={24} sm={12} md={12} lg={6} xl={6}>
-              <Form.Item
-                name="Technology"
-                label="Technology"
-                style={{ width: "100%" }}
-              >
-                <Input
-                  value={newTechnology}
-                  onChange={(e) => setNewTechnology(e.target.value)}
-                />
-              </Form.Item>
-            </Col>
-
-            <Col xs={24} sm={12} md={12} lg={12} xl={12}>
-              <Form.Item
-                name="JoinDate"
-                label="JoinDate"
-                style={{ width: "50%" }}
-              >
-                <DatePicker
+              <Form.Item label="Experience" style={{ marginBottom: "8px" }}>
+                <InputNumber
+                  value={newExperience}
+                  onChange={(value) => setNewExperience(value)}
                   style={{ width: "100%" }}
-                  value={moment(newJoinDate)}
-                  onChange={(date) => setNewJoinDate(date)}
+                  placeholder="Enter years"
+                  min={1}
                 />
               </Form.Item>
 
-              <Form.Item
-                name="FireDate"
-                label="FireDate"
-                style={{ width: "50%" }}
-              >
-                <DatePicker
-                  style={{ width: "100%" }}
-                  value={moment(newFireDate)}
-                  onChange={(date) => setNewFireDate(date)}
+              <div>
+                <PlusCircleOutlined
+                  style={{ fontSize: "24px", marginRight: "8px" }}
+                  onClick={() => {
+                    addToDescription();
+                  }}
                 />
-              </Form.Item>
+                <span
+                  onClick={() => {
+                    addToDescription();
+                  }}
+                >
+                  Add
+                </span>
+              </div>
             </Col>
 
-            <Col xs={24} sm={12} md={12} lg={6} xl={6}>
+            <Col>
               <Form.Item
                 label="Avatar"
                 valuePropName="fileList"
@@ -340,6 +426,24 @@ function ManageEmployee() {
                 </CloudinaryContext>
               </Form.Item>
             </Col>
+
+            <Col>
+              <Form.Item name="JoinDate" label="JoinDate">
+                <DatePicker
+                  style={{ width: "100%" }}
+                  value={moment(newJoinDate)}
+                  onChange={(date) => setNewJoinDate(date)}
+                />
+              </Form.Item>
+
+              <Form.Item name="FireDate" label="FireDate">
+                <DatePicker
+                  style={{ width: "100%" }}
+                  value={moment(newFireDate)}
+                  onChange={(date) => setNewFireDate(date)}
+                />
+              </Form.Item>
+            </Col>
           </Row>
         </Form>
       </Modal>
@@ -364,6 +468,6 @@ function ManageEmployee() {
       </Modal>
     </>
   );
-}
+};
 
-export default ManageEmployee;
+export default CreateEmployee;
