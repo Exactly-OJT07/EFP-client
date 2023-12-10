@@ -18,3 +18,11 @@ export const patchStatusApi = (projectId, status) =>
   axios.patch(`${API_URL.PROJECT}/${projectId}`, { status });
 
 export const createProjectAPI = (params) => axios.post(API_URL.PROJECT, params);
+
+export const deleteEmployeeAPI = (params) =>
+  axios.delete(API_URL.EMPLOYEE, { params });
+
+export const createEmployeeAPI = (params) => {
+  console.log("Request Payload:", params);
+  return axios.post(`${API_URL.EMPLOYEE}`, params);
+};
