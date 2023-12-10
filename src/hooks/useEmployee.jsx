@@ -1,5 +1,5 @@
-import { useQuery } from "@tanstack/react-query";
-import { getEmployeeAPI, getEmployeeDetailApi } from "../api/apiUrl";
+import { useQuery, useQueryClient, useMutation } from "@tanstack/react-query";
+import { getEmployeeAPI, getEmployeeDetailApi, createEmployeeAPI } from "../api/apiUrl";
 import { QUERY_KEY } from "../constants/query-key";
 
 export const useGetClients = (params) =>
@@ -16,6 +16,21 @@ export const useGetClients = (params) =>
       return data;
     },
   );
+
+export const useCreateEmployee = () => {
+  const queryClient = useQueryClient();
+
+  const mutation = useMutation(
+    (newEmployee) => createEmployeeAPI(newEmployee),
+    {
+      onSuccess: () => {
+        queryClient.invalidateQueries([QUERY_KEY.EMPLOYEE]);
+      },
+    },
+  );
+
+  return mutation;
+};
 
 export const useGetOneEmployee = (id) => {
   return useQuery([QUERY_KEY.EMPLOYEE, id], async () => {
