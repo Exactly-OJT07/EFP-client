@@ -25,7 +25,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Pagination from "../components/pagination/pagination";
 import { toMomentDateTimeData } from "../helpers/format";
-import { useGetData, useProjectStatusUpdate } from "../hooks/useProject";
+import { useGetData, useProjectStatusUpdate, useDeleteProject } from "../hooks/useProject";
 import "../styles/ManageProject.css";
 import  Circleprogress  from "../components/circle-progress/Circleprogress"
 
@@ -60,14 +60,13 @@ const ManageProject = () => {
     take: table.take,
   };
   const { data: projects, isLoading, isError } = useGetData(paginateOptions);
-  console.log(projects);
 
 
   const projectStatusUpdateMutation = useProjectStatusUpdate();
+  const projectDeleteProjectMutation = useDeleteProject();
 
   const handleStatusChange = async (projectId, newStatus) => {
     try {
-      console.log("Mutation is loading:", projectStatusUpdateMutation.isLoading);
       await projectStatusUpdateMutation.mutateAsync({
         projectId,
         status: newStatus,
@@ -83,6 +82,17 @@ const ManageProject = () => {
       name: value,
     }));
   };
+
+  const handleDeleteProject = async (projectId) => {
+    try{
+      await projectDeleteProjectMutation.mutateAsync({
+        projectId
+      })
+    }catch(error){
+      console.log("Error")
+    }
+  }
+
 
   return (
     <Content className="content-project">
@@ -244,9 +254,9 @@ const ManageProject = () => {
                                     <Popconfirm
                                       title="Delete the task"
                                       description="Are you sure to delete this task?"
-                                      onConfirm={() => {
-                                        // Gọi hàm để xử lý delete ở đây
-                                      }}
+                                      onConfirm={() => 
+                                        handleDeleteProject(project.id)
+                                      }
                                       onCancel={() => {
                                         // Thực hiện xử lý khi người dùng nhấp vào nút "No" trong Popconfirm
                                       }}
@@ -261,13 +271,7 @@ const ManageProject = () => {
                                     <a
                                       onClick={() => {
                                         if (item.key === "view") {
-                                          console.log(
-                                            "Navigating to projectDetail:",
-                                            `/manageProjects/projectDetail/${project.id}`,
-                                          );
-                                          navigate(
-                                            `/manageProjects/projectDetail/${project.id}`,
-                                          );
+                                          navigate(`/manageProjects/projectDetail/${project.id}`);
                                         }
                                       }}
                                     >

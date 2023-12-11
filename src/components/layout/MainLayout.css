@@ -31,4 +31,5 @@ p {
 }
 .outlet-layout {
   width: 100%;
+  height: auto;
 }
