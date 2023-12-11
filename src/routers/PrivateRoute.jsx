@@ -4,7 +4,7 @@ import ManageProject from "../pages/ManageProject";
 import ManageEmployee from "../pages/employees/ManageEmployee";
 import EmployeeDetail from "../pages/employees/EmployeeDetail";
 import ProjectDetail from "../pages/ProjectDetail";
-import Circleprogress from "../components/circle-progress/Circleprogress"
+import Circleprogress from "../components/circle-progress/Circleprogress";
 
 const routes = [
   {

@@ -4,7 +4,7 @@ import {
   ThunderboltOutlined,
   LogoutOutlined,
 } from "@ant-design/icons";
-import { Layout, Menu } from "antd";
+import { Layout, Menu, Modal } from "antd";
 import "./LayoutSider.css";
 import { useLocation, useNavigate } from "react-router-dom";
 import logoIcon from "../../assets/logo.jpg";
@@ -21,7 +21,7 @@ export const LayoutSider = ({ collapsed = true }) => {
       title: "LOG OUT",
       content: "Are you sure Log Out?",
       onOk: onOkCallback,
-      onCancel: () => {}, 
+      onCancel: () => {},
     });
   };
 
@@ -29,14 +29,14 @@ export const LayoutSider = ({ collapsed = true }) => {
     // Thực hiện các hành động khi đăng xuất
     localStorage.removeItem("credentials");
     localStorage.removeItem("authenticated");
-    navigate("/Login", { replace: true });
+    navigate("/login", { replace: true });
   };
 
   // Kiểm tra trạng thái đăng nhập
   const isAuthenticated = localStorage.getItem("authenticated") === "true";
 
   if (!isAuthenticated) {
-    window.location.href = "/Login";
+    window.location.href = "/login";
     return null;
   }
 
@@ -57,10 +57,10 @@ export const LayoutSider = ({ collapsed = true }) => {
       label: "Manage Projects",
     },
     {
-      key: ".", 
+      key: ".",
       icon: <LogoutOutlined />,
-      label: 'Log Out',
-      onClick: () => showConfirmationModal(handleLogout), 
+      label: "Log Out",
+      onClick: () => showConfirmationModal(handleLogout),
     },
   ];
 
