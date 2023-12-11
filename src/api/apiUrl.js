@@ -4,14 +4,13 @@ import { API_URL } from "../constants/constants";
 export const getEmployeeAPI = (params) =>
   axios.get(API_URL.EMPLOYEE, { params });
 
-export const getProjectApi = (params) => 
-  axios.get(API_URL.PROJECT, { params });
+export const getProjectApi = (params) => axios.get(API_URL.PROJECT, { params });
 
-export const getProjectDetailApi = (projectId, params) => 
+export const getProjectDetailApi = (projectId, params) =>
   axios.get(`${API_URL.PROJECT}/${projectId}`, { params });
 
-export const deleteProjectApi = (projectId) => 
+export const deleteProjectApi = (projectId) =>
   axios.delete(`${API_URL.PROJECT}/${projectId}`);
 
-export const patchStatusApi = (projectId, status) => 
+export const patchStatusApi = (projectId, status) =>
   axios.patch(`${API_URL.PROJECT}/${projectId}`, { status });
