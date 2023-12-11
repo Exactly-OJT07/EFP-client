@@ -32,7 +32,7 @@ import {
 import "../styles/ManageProject.css";
 import Circleprogress from "../components/circle-progress/Circleprogress";
 import ProjectDetail from "./ProjectDetail";
-import CreateProject from "./projects/components/createProject.jsx";
+import CreateProject from "./projects/components/createProject";
 
 const { Content } = Layout;
 const { Search } = Input;
@@ -99,10 +99,6 @@ const ManageProject = () => {
     }
   };
   const [isModalOpen, setIsModalOpen] = useState(false);
-
-  const handleOpenModal = () => {
-    setIsModalOpen(true);
-  };
 
   const handleCloseModal = () => {
     setIsModalOpen(false);

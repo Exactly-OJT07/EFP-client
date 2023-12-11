@@ -2,16 +2,12 @@ import React, { useState } from "react";
 import { Modal, Form, Input, Select, Row, Col, DatePicker, Space } from "antd";
 import moment from "moment";
 import { createProjectAPI } from "../../../api/apiUrl";
+import { useGetManager } from "../../../hooks/useManager";
 import { useCreateProject } from "../../../hooks/useProject";
 
 const { Option } = Select;
 
-const CreateProject = ({
-  isModalOpen,
-  setIsModalOpen,
-  onOk,
-  setNewProjectData,
-}) => {
+const CreateProject = ({ isModalOpen, setIsModalOpen }) => {
   const [formCreate] = Form.useForm();
   const [newName, setNewName] = useState("");
   const [newManager, setNewManager] = useState("");
@@ -21,7 +17,7 @@ const CreateProject = ({
   const [newLangFrame, setNewLangFrame] = useState("");
   const [newStartDate, setNewStartDate] = useState(null);
   const [newEndDate, setNewEndDate] = useState(null);
-  const [confirmLoading, setConfirmLoading] = useState(false);
+  const [confirmLoading] = useState(false);
 
   const { mutate: createProject } = useCreateProject();
 
@@ -30,11 +26,11 @@ const CreateProject = ({
     console.log(formData);
     createProject({
       ...formData,
-      startDate: new Date(moment(formCreate.startDate).format("YYYY-MM-DD")),
-      endDate: new Date(moment(formCreate.endDate).format("YYYY-MM-DD")),
     });
     setIsModalOpen(false);
   };
+
+  const { data: managers } = useGetManager();
 
   const handleCreateCancel = () => {
     setIsModalOpen(false);
@@ -67,18 +63,16 @@ const CreateProject = ({
 
             <Form.Item name="managerId" label="Manager">
               <Select
-                value={newManager}
-                onChange={(value) => setNewManager(value)}
+                value={newManager.id}
+                onChange={(value, option) =>
+                  setNewManager({ id: value, name: option.children })
+                }
               >
-                <Option value="0f81a545-1b60-4093-99b8-1d4f30e9a461">
-                  Manager 1
-                </Option>
-                <Option value="0f81a545-1b60-4093-99b8-1d4f30e9a461">
-                  Manager 2
-                </Option>
-                <Option value="0f81a545-1b60-4093-99b8-1d4f30e9a461">
-                  Manager 3
-                </Option>
+                {(managers || []).map((manager) => (
+                  <Select.Option key={manager.id} value={manager.id}>
+                    {manager.name}
+                  </Select.Option>
+                ))}
               </Select>
             </Form.Item>
 
