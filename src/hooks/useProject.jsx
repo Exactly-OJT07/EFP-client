@@ -1,5 +1,5 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { getProjectApi, patchStatusApi  } from "../api/apiUrl";
+import { getProjectApi, getProjectDetailApi, deleteProjectApi , patchStatusApi  } from "../api/apiUrl";
 import { QUERY_KEY } from "../constants/query-key";
 import { openNotificationWithIcon } from '../components/notification/notification';
 
@@ -11,7 +11,8 @@ export const useGetData = (params) =>
       return data;
     },
   );
-  export const useProjectStatusUpdate = () => {
+  
+export const useProjectStatusUpdate = () => {
     const queryClient = useQueryClient();  
   
     const projectStatusUpdate = async ({ projectId, status }) => {
@@ -25,4 +26,26 @@ export const useGetData = (params) =>
       }
     });
   };
+
+  export const useGetProjectData = (id) =>
+  useQuery([QUERY_KEY.PROJECT, id], 
+    async () => {
+      const { data } = await getProjectDetailApi(id);
+    return data;
+  });
   
+  export const useDeleteProject = () => {
+    const queryClient = useQueryClient();
+  
+    const deleteProject = async (projectId) => {
+      await deleteProjectApi(projectId);
+    };
+  
+    return useMutation(deleteProject, {
+      onSuccess: () => {
+
+        queryClient.invalidateQueries(QUERY_KEY.PROJECT);
+        openNotificationWithIcon('success', 'Delete Project Successfully');
+      },
+    });
+  };
