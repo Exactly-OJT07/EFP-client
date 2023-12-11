@@ -78,7 +78,7 @@ const columns = [
         value: "inactive",
       },
     ],
-    onFilter: (value, record) => record.position.indexOf(value) === 0,
+    onFilter: (value, record) => record.status.indexOf(value) === 0,
     render: (status) => {
       if (status === "active") {
         return "Active";
@@ -99,7 +99,7 @@ const EmployeeList = ({ data }) => (
 const ReadEmployee = () => {
   const [table, setTable] = useState({
     page: 1,
-    take: 6,
+    take: 5,
   });
 
   const [searchText, setSearchText] = useState("");

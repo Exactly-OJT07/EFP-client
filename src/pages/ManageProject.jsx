@@ -52,7 +52,7 @@ const ManageProject = () => {
 
   const [table, setTable] = useState({
     page: 1,
-    take: 4,
+    take: 2,
   });
   const [filters, setFilters] = useState("");
   const [status, setStatus] = useState("");
