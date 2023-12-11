@@ -1,9 +1,8 @@
 import React, { useState } from "react";
 import { useGetClients } from "../../../hooks/useEmployee";
-import { Space, Input, Spin, Table, Image as AntdImage } from "antd";
+import { SearchOutlined } from "@ant-design/icons";
+import { Space, Input, Spin, Table, Image as AntdImage, Button } from "antd";
 import Pagination from "../../../components/pagination/pagination";
-
-const { Search } = Input;
 
 const columns = [
   {
@@ -102,25 +101,22 @@ const ReadEmployee = () => {
     page: 1,
     take: 6,
   });
-  // const [status, setStatus] = useState("");
+
+  const [searchText, setSearchText] = useState("");
   const [searchNameText, setSearchNameText] = useState("");
   const [searchEmailText, setSearchEmailText] = useState("");
+
   const paginateOptions = {
-    search: searchNameText.name,
+    searchByName: searchText.name,
+    searchByEmail: searchText.email,
     page: table.page,
     take: table.take,
   };
-  const handleSearchName = (value) => {
-    setSearchNameText((prevFilters) => ({
-      ...prevFilters,
-      name: value,
-    }));
-  };
 
-  const handleSearchEmail = (value) => {
-    setSearchEmailText((prevFilters) => ({
-      ...prevFilters,
-      name: value,
+  const handleSearch = () => {
+    setSearchText(() => ({
+      name: searchNameText,
+      email: searchEmailText,
     }));
   };
 
@@ -131,26 +127,29 @@ const ReadEmployee = () => {
   } = useGetClients(paginateOptions);
   return (
     <>
-      <Space className="status-filter" direction="horizontal">
-        <Search
+      <Space.Compact className="employee-search" size="large">
+        <Input
           placeholder="Name"
           allowClear
-          //    }
+          value={searchNameText}
           style={{
             width: 304,
           }}
-          onSearch={handleSearchName}
+          onChange={(e) => setSearchNameText(e.target.value)}
         />
-        <Search
+        <Input
           placeholder="Email"
           allowClear
-          //    }
+          value={searchEmailText}
           style={{
             width: 304,
           }}
-          onSearch={handleSearchEmail}
+          onChange={(e) => setSearchEmailText(e.target.value)}
         />
-      </Space>
+        <Button onClick={handleSearch}>
+          <SearchOutlined />
+        </Button>
+      </Space.Compact>
       {isLoading ? (
         <Spin
           size="large"
