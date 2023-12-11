@@ -7,24 +7,20 @@ Welcome to the Exactly Final Project (EFP), the culmination of the efforts of Te
 ## Features
 
 1. **Employee Management:**
-
    - Add, edit, and delete employee profiles.
    - Store essential employee information.
    - Associate each employee with specific projects.
 
 2. **Project Management:**
-
    - Create, modify, and delete project details.
    - Assign employees to projects and specify their roles.
    - Track project timelines and milestones.
 
 3. **History Tracking:**
-
    - Record and display the history of an employee's involvement in different projects.
    - Include project start and end dates, roles, and contributions.
 
 4. **CV Export:**
-
    - Allow users to export a Google Docs CV for each employee.
    - The CV should contain employee details (name, contact), a list of projects they participated in, and a section highlighting their skills.
 

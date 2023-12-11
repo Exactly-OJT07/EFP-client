@@ -1,49 +1,48 @@
 import { PrivateLayout } from "../components/layout/MainLayout";
-import Dashboard from "../pages/Dashboard";
+import Dashboard from '../pages/Dashboard'
 import ManageProject from "../pages/ManageProject";
-import ManageEmployee from "../pages/employees/ManageEmployee";
-import EmployeeDetail from "../pages/employees/EmployeeDetail";
-import ProjectDetail from "../pages/ProjectDetail";
-import Circleprogress from "../components/circle-progress/Circleprogress";
+import ManageEmployee from "../pages/ManageEmployee";
 
 const routes = [
-  {
-    element: <PrivateLayout />,
-    children: [
-      {
-        path: "",
-        element: <Dashboard />,
-      },
-      {
-        path: "manageEmployees",
+    {
+        element: <PrivateLayout />,
         children: [
-          {
+        {
             path: "",
-            element: <ManageEmployee />,
-          },
-          { path: "employeeDetail/:id", element: <EmployeeDetail /> },
+            element: <Dashboard/>,
+        },
+        {
+            path: "Dashboard",
+            children: [
+            { path: "", element: <Dashboard/> },
+                // {
+                // path: 'create',
+                // element: <div>ád</div>,
+                // },
+                // {
+                //   path: 'update/:id',
+                //   element: < />,
+                // },
+                // {
+                //   path: ':id',
+                //   element: < />,
+                // },
+                ],
+        },
+        {
+            path: "manageUsers",
+            element: <ManageEmployee/>,
+        },
+        {
+            path: "manageProjects",
+            element: <ManageProject/>,
+        },
+        {
+            path: "404",
+            element: <div>404</div>,
+        },
         ],
-      },
-      {
-        path: "manageProjects",
-        children: [
-          {
-            path: "",
-            element: <ManageProject />,
-          },
-          { path: "projectDetail/:id", element: <ProjectDetail /> },
-        ],
-      },
-      {
-        path: "circle-progress",
-        element: <Circleprogress />,
-      },
-      {
-        path: "404",
-        element: <div>404</div>,
-      },
-    ],
-  },
+    },
 ];
 
 export default routes;
