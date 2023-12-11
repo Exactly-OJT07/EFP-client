@@ -60,7 +60,7 @@ const Login = () => {
       <div className="login">
         <div className="image">
           <img
-            src="https://cdn.dribbble.com/users/535615/screenshots/17649043/media/e4c03808fa04fa65e0c58d6d61f2fd54.png"
+            src="src/assets/logo.jpg"
             alt="Login"
           />
         </div>
