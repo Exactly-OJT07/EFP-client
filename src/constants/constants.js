@@ -8,6 +8,7 @@ export const NotificationType = {
 export const API_URL = {
   EMPLOYEE: "/employee",
   PROJECT: "/project",
+  MANAGER: "/employee/managers",
 };
 
 export const DATE_TIME = {
