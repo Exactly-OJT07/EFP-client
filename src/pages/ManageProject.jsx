@@ -20,6 +20,7 @@ import {
   Typography,
   Avatar,
   Tooltip,
+  Modal,
 } from "antd";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
@@ -66,7 +67,6 @@ const ManageProject = () => {
   const { data: projects, isLoading, isError } = useGetData(paginateOptions);
 
   const projectStatusUpdateMutation = useProjectStatusUpdate();
-  const projectDeleteProjectMutation = useDeleteProject();
 
   const handleStatusChange = async (projectId, newStatus) => {
     try {
@@ -86,11 +86,22 @@ const ManageProject = () => {
     }));
   };
 
+  const showDeleteConfirm = (projectId) => {
+    console.log(projectId, "abc");
+    Modal.confirm({
+      title: "Delete The Project",
+      content: "Are you sure to delete this project?",
+      onOk: () => handleDeleteProject(projectId),
+      onCancel: () => {},
+      okText: "Yes",
+      cancelText: "No",
+    });
+  };
+  const projectDeleteProjectMutation = useDeleteProject();
+
   const handleDeleteProject = async (projectId) => {
     try {
-      await projectDeleteProjectMutation.mutateAsync({
-        projectId,
-      });
+      await projectDeleteProjectMutation.mutateAsync(projectId);
     } catch (error) {
       console.log("Error");
     }
@@ -255,42 +266,31 @@ const ManageProject = () => {
                       <Dropdown
                         overlay={
                           <Menu>
-                            {settings.map((item) => {
-                              return (
-                                <Menu.Item key={item.key}>
-                                  {item.key === "delete" ? (
-                                    <Popconfirm
-                                      title="Delete the task"
-                                      description="Are you sure to delete this task?"
-                                      onConfirm={() =>
-                                        handleDeleteProject(project.id)
+                            {settings.map((item) => (
+                              <Menu.Item key={item.key}>
+                                {item.key === "delete" ? (
+                                  <a
+                                    onClick={() =>
+                                      showDeleteConfirm(project.id)
+                                    }
+                                  >
+                                    {item.label}
+                                  </a>
+                                ) : (
+                                  <a
+                                    onClick={() => {
+                                      if (item.key === "view") {
+                                        navigate(
+                                          `/manageProjects/projectDetail/${project.id}`,
+                                        );
                                       }
-                                      onCancel={() => {
-                                        // Thực hiện xử lý khi người dùng nhấp vào nút "No" trong Popconfirm
-                                      }}
-                                      okText="Yes"
-                                      cancelText="No"
-                                    >
-                                      <a onClick={(e) => e.preventDefault()}>
-                                        {item.label}
-                                      </a>
-                                    </Popconfirm>
-                                  ) : (
-                                    <a
-                                      onClick={() => {
-                                        if (item.key === "view") {
-                                          navigate(
-                                            `/manageProjects/projectDetail/${project.id}`,
-                                          );
-                                        }
-                                      }}
-                                    >
-                                      {item.label}
-                                    </a>
-                                  )}
-                                </Menu.Item>
-                              );
-                            })}
+                                    }}
+                                  >
+                                    {item.label}
+                                  </a>
+                                )}
+                              </Menu.Item>
+                            ))}
                           </Menu>
                         }
                         trigger={["click"]}
@@ -305,6 +305,7 @@ const ManageProject = () => {
                     </Space>
                   </Col>
                 </div>
+
                 <Space direction="horizontal">
                   <CalendarOutlined />
                   <small
