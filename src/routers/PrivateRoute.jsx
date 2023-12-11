@@ -4,6 +4,7 @@ import ManageProject from "../pages/ManageProject";
 import ManageEmployee from "../pages/employees/ManageEmployee";
 import EmployeeDetail from "../pages/employees/EmployeeDetail";
 import ProjectDetail from "../pages/ProjectDetail";
+import Circleprogress from "../components/circle-progress/Circleprogress"
 
 const routes = [
   {
@@ -32,6 +33,10 @@ const routes = [
           },
           { path: "projectDetail/:id", element: <ProjectDetail /> },
         ],
+      },
+      {
+        path: "circle-progress",
+        element: <Circleprogress />,
       },
       {
         path: "404",
