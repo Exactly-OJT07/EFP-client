@@ -1,3 +1,13 @@
-.status-filter {
-    margin-bottom: 10px;
+.employee-search {
+  margin-bottom: 10px;
+  gap: 20px;
+}
+
+.pagination {
+  bottom: 0;
+  right: 0;
+  margin-top: 10px;
+  display: flex;
+  justify-content: flex-end;
+  align-items: flex-end;
 }

@@ -10,8 +10,8 @@ const router = createBrowserRouter([
     children: [...privateRoute],
   },
   {
-    path: "/login", 
-    element: <Login/>,
+    path: "/login",
+    element: <Login />,
   },
 ]);
 
