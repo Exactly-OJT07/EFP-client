@@ -18,7 +18,7 @@ export const PrivateLayout = () => {
     <Layout
       style={{
         overflow: "hidden",
-        height: "120vh",
+        height: "100vh",
         padding: 0,
         margin: 0,
       }}
@@ -49,10 +49,12 @@ export const PrivateLayout = () => {
         </Header>
         <Content
           style={{
+            overflowY: "auto",
             margin: "24px 16px",
             padding: 24,
             height: "100%",
             background: colorBgContainer,
+            borderRadius: 5,
           }}
         >
           <Suspense fallback={<Spin />}>

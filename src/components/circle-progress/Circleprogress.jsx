@@ -1,13 +1,13 @@
-import { useState, useEffect } from 'react';
-import { Progress } from 'antd';
-import PropTypes from 'prop-types';
-import { CheckOutlined } from '@ant-design/icons';
+import { useState, useEffect } from "react";
+import { Progress } from "antd";
+import PropTypes from "prop-types";
+import { CheckOutlined } from "@ant-design/icons";
 
 const Circleprogress = ({ project }) => {
   const [percent, setPercent] = useState(0);
   const conicColors = {
-    '0%': '#108ee9',
-    '100%': '#87d068',
+    "0%": "#108ee9",
+    "100%": "#87d068",
   };
 
   useEffect(() => {
@@ -16,7 +16,7 @@ const Circleprogress = ({ project }) => {
       const startDate = new Date(project.startDate);
       const endDate = new Date(project.endDate);
 
-      if (project.status === 'done') {
+      if (project.status === "done") {
         // Nếu trạng thái là "done", thiết lập percent là 100
         setPercent(100);
       } else if (currentDate >= startDate && currentDate <= endDate) {
@@ -47,7 +47,7 @@ const Circleprogress = ({ project }) => {
         strokeColor={percent !== 100 ? conicColors : undefined}
         format={() => {
           if (percent === 100) {
-            return <CheckOutlined style={{ fontSize: 16, color: '#87d068' }} />;
+            return <CheckOutlined style={{ fontSize: 16, color: "#87d068" }} />;
           }
           return `${percent.toFixed(2)}%`;
         }}
@@ -65,4 +65,3 @@ Circleprogress.propTypes = {
 };
 
 export default Circleprogress;
-

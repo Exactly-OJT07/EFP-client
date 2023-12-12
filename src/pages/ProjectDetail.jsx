@@ -1,6 +1,6 @@
 import { useParams } from "react-router-dom";
-import { useGetProjectData } from '../hooks/useProject';
-import { Button, DatePicker, Form, Input, Avatar, Tooltip } from 'antd';
+import { useGetProjectData } from "../hooks/useProject";
+import { Button, DatePicker, Form, Input, Avatar, Tooltip } from "antd";
 import dayjs from "dayjs";
 
 const { RangePicker } = DatePicker;
@@ -8,7 +8,7 @@ const { RangePicker } = DatePicker;
 const ProjectDetail = () => {
   const { id } = useParams();
   const { data: project, isLoading, isError } = useGetProjectData(id);
-  console.log(project)
+  console.log(project);
 
   if (isLoading) {
     return <div>Loading...</div>;
@@ -26,11 +26,10 @@ const ProjectDetail = () => {
     startDate,
     endDate,
   } = project;
-  console.log(project)
-
+  console.log(project);
 
   return (
-    <div className='projectDetail-Content'>
+    <div className="projectDetail-Content">
       <Form
         labelCol={{
           span: 5,
@@ -50,20 +49,23 @@ const ProjectDetail = () => {
           <Input value={description} readOnly />
         </Form.Item>
         <Form.Item label="Manager">
-          <img src={managerProject.avatar} alt={managerProject.name} style={{ width: 50, height: 50, borderRadius: 100 }}/>
+          <img
+            src={managerProject.avatar}
+            alt={managerProject.name}
+            style={{ width: 50, height: 50, borderRadius: 100 }}
+          />
         </Form.Item>
         <Form.Item label="Members Assigned">
           <Avatar.Group maxCount={2}>
             {employee_project.map((member) => (
               <Tooltip key={member.id}>
                 <Avatar
-                src={member.employee.avatar}
-                style={{ backgroundColor: '#87D068' }}>
-                </Avatar>
+                  src={member.employee.avatar}
+                  style={{ backgroundColor: "#87D068" }}
+                ></Avatar>
               </Tooltip>
-              ))}
+            ))}
           </Avatar.Group>
-          
         </Form.Item>
         <Form.Item label="Deadline">
           <RangePicker

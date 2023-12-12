@@ -19,15 +19,20 @@ import {
   Spin,
   Typography,
   Avatar,
-  Tooltip
+  Tooltip,
+  Modal,
 } from "antd";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Pagination from "../components/pagination/pagination";
 import { toMomentDateTimeData } from "../helpers/format";
-import { useGetData, useProjectStatusUpdate, useDeleteProject } from "../hooks/useProject";
+import {
+  useGetData,
+  useProjectStatusUpdate,
+  useDeleteProject,
+} from "../hooks/useProject";
 import "../styles/ManageProject.css";
-import  Circleprogress  from "../components/circle-progress/Circleprogress"
+import Circleprogress from "../components/circle-progress/Circleprogress";
 
 const { Content } = Layout;
 const { Search } = Input;
@@ -48,7 +53,7 @@ const ManageProject = () => {
 
   const [table, setTable] = useState({
     page: 1,
-    take: 4,
+    take: 2,
   });
   const [filters, setFilters] = useState("");
   const [status, setStatus] = useState("");
@@ -61,9 +66,7 @@ const ManageProject = () => {
   };
   const { data: projects, isLoading, isError } = useGetData(paginateOptions);
 
-
   const projectStatusUpdateMutation = useProjectStatusUpdate();
-  const projectDeleteProjectMutation = useDeleteProject();
 
   const handleStatusChange = async (projectId, newStatus) => {
     try {
@@ -83,16 +86,26 @@ const ManageProject = () => {
     }));
   };
 
-  const handleDeleteProject = async (projectId) => {
-    try{
-      await projectDeleteProjectMutation.mutateAsync({
-        projectId
-      })
-    }catch(error){
-      console.log("Error")
-    }
-  }
+  const showDeleteConfirm = (projectId) => {
+    console.log(projectId, "abc");
+    Modal.confirm({
+      title: "Delete The Project",
+      content: "Are you sure to delete this project?",
+      onOk: () => handleDeleteProject(projectId),
+      onCancel: () => {},
+      okText: "Yes",
+      cancelText: "No",
+    });
+  };
+  const projectDeleteProjectMutation = useDeleteProject();
 
+  const handleDeleteProject = async (projectId) => {
+    try {
+      await projectDeleteProjectMutation.mutateAsync(projectId);
+    } catch (error) {
+      console.log("Error");
+    }
+  };
 
   return (
     <Content className="content-project">
@@ -143,7 +156,7 @@ const ManageProject = () => {
         <Row gutter={10} style={{ marginTop: 30 }}>
           {projects.data.map((project) => (
             <Col key={project.id} span={24}>
-              <Card style={{boxShadow: '1px 1px 8px #DCDCDC'}}>
+              <Card style={{ boxShadow: "1px 1px 8px #DCDCDC" }}>
                 <Space direction="horizontal">
                   <Typography.Title level={5} style={{ color: "#67729D" }}>
                     #P-{project.id.slice(0, 8)}
@@ -151,7 +164,9 @@ const ManageProject = () => {
                 </Space>
                 <div className="project-items">
                   <Col span={8}>
-                    <Typography.Title level={4} style={{ lineHeight: "45px" }}>{project.name}</Typography.Title>
+                    <Typography.Title level={4} style={{ lineHeight: "45px" }}>
+                      {project.name}
+                    </Typography.Title>
                   </Col>
 
                   <Col span={4}>
@@ -166,46 +181,50 @@ const ManageProject = () => {
                           type="secondary"
                           strong
                           style={{ margin: 0 }}
-                          >
+                        >
                           Manager
-                          </Typography.Paragraph>
-                          <Typography.Text strong style={{ margin: 0 }}>
+                        </Typography.Paragraph>
+                        <Typography.Text strong style={{ margin: 0 }}>
                           {project.managerProject.name}
                         </Typography.Text>
                       </div>
                     </div>
                   </Col>
-                  
+
                   <Col span={4}>
                     <div className="project-employee-avatar">
                       <div className="project-title">
-                          <Typography.Paragraph
-                            type="secondary"
-                            strong
-                            style={{ margin: 0 }}
-                          >
-                            Team Member
-                          </Typography.Paragraph>
-                        </div>
-                      <Avatar.Group maxCount={2}>
-                      {project.employee_project.map((employeeData) => (
-                        <Tooltip key={employeeData.id}>
-                        <Avatar
-                          src={employeeData.employee.avatar}
-                          style={{ backgroundColor: '#87D068' }}
+                        <Typography.Paragraph
+                          type="secondary"
+                          strong
+                          style={{ margin: 0 }}
                         >
-                        </Avatar>
-                      </Tooltip>
-                      ))}
-                          
+                          Team Member
+                        </Typography.Paragraph>
+                      </div>
+                      <Avatar.Group maxCount={2}>
+                        {project.employee_project.map((employeeData) => (
+                          <Tooltip key={employeeData.id}>
+                            <Avatar
+                              src={employeeData.employee.avatar}
+                              style={{ backgroundColor: "#87D068" }}
+                            ></Avatar>
+                          </Tooltip>
+                        ))}
                       </Avatar.Group>
                     </div>
                   </Col>
 
                   <Col span={4}>
-                    <div className="cirle-progress" style={{
-                        display: 'flex', justifyContent: 'center', alignItems: 'center'}}>                          
-                      <Circleprogress project={project}/>
+                    <div
+                      className="cirle-progress"
+                      style={{
+                        display: "flex",
+                        justifyContent: "center",
+                        alignItems: "center",
+                      }}
+                    >
+                      <Circleprogress project={project} />
                     </div>
                   </Col>
 
@@ -216,7 +235,8 @@ const ManageProject = () => {
                         style={{
                           width: 120,
                         }}
-                        onChange={(newStatus) => {handleStatusChange(project.id, newStatus);
+                        onChange={(newStatus) => {
+                          handleStatusChange(project.id, newStatus);
                         }}
                         options={[
                           {
@@ -240,47 +260,37 @@ const ManageProject = () => {
                       ></Select>
                     </Space>
                   </Col>
-                  
-                  
+
                   <Col span={1}>
                     <Space wrap>
                       <Dropdown
                         overlay={
                           <Menu>
-                            {settings.map((item) => {
-                              return (
-                                <Menu.Item key={item.key}>
-                                  {item.key === "delete" ? (
-                                    <Popconfirm
-                                      title="Delete the task"
-                                      description="Are you sure to delete this task?"
-                                      onConfirm={() => 
-                                        handleDeleteProject(project.id)
+                            {settings.map((item) => (
+                              <Menu.Item key={item.key}>
+                                {item.key === "delete" ? (
+                                  <a
+                                    onClick={() =>
+                                      showDeleteConfirm(project.id)
+                                    }
+                                  >
+                                    {item.label}
+                                  </a>
+                                ) : (
+                                  <a
+                                    onClick={() => {
+                                      if (item.key === "view") {
+                                        navigate(
+                                          `/manageProjects/projectDetail/${project.id}`,
+                                        );
                                       }
-                                      onCancel={() => {
-                                        // Thực hiện xử lý khi người dùng nhấp vào nút "No" trong Popconfirm
-                                      }}
-                                      okText="Yes"
-                                      cancelText="No"
-                                    >
-                                      <a onClick={(e) => e.preventDefault()}>
-                                        {item.label}
-                                      </a>
-                                    </Popconfirm>
-                                  ) : (
-                                    <a
-                                      onClick={() => {
-                                        if (item.key === "view") {
-                                          navigate(`/manageProjects/projectDetail/${project.id}`);
-                                        }
-                                      }}
-                                    >
-                                      {item.label}
-                                    </a>
-                                  )}
-                                </Menu.Item>
-                              );
-                            })}
+                                    }}
+                                  >
+                                    {item.label}
+                                  </a>
+                                )}
+                              </Menu.Item>
+                            ))}
                           </Menu>
                         }
                         trigger={["click"]}
@@ -295,11 +305,16 @@ const ManageProject = () => {
                     </Space>
                   </Col>
                 </div>
+
                 <Space direction="horizontal">
                   <CalendarOutlined />
-                  <small style={{
-                    color: 'grey',
-                  }}>Created On {toMomentDateTimeData(project.createdAt)}</small>
+                  <small
+                    style={{
+                      color: "grey",
+                    }}
+                  >
+                    Created On {toMomentDateTimeData(project.createdAt)}
+                  </small>
                 </Space>
               </Card>
             </Col>
