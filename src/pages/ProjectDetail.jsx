@@ -11,7 +11,7 @@ import {
   Col,
   Typography,
 } from "antd";
-import { MailOutlined } from "@ant-design/icons";
+import { MailOutlined, UserAddOutlined } from "@ant-design/icons";
 import dayjs from "dayjs";
 import "../styles/ProjectDetail.css";
 
@@ -39,6 +39,11 @@ const ProjectDetail = () => {
     endDate,
   } = project;
   console.log(project);
+
+  const handleAssignClick = () => {
+    // Xử lý sự kiện khi người dùng nhấn vào nút assign
+    console.log("Assign button clicked");
+  };
 
   return (
     <div className="projectDetail-Content">
@@ -82,6 +87,15 @@ const ProjectDetail = () => {
                       ></Avatar>
                     </Tooltip>
                   ))}
+                </Avatar.Group>
+
+                <Avatar.Group>
+                  <Avatar
+                    onClick={handleAssignClick}
+                    style={{ backgroundColor: "#87D068" }}
+                  >
+                    <UserAddOutlined />
+                  </Avatar>
                 </Avatar.Group>
               </Form.Item>
               <Form.Item label="Deadline">
