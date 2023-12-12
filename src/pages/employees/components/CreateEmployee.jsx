@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { PlusOutlined, PlusCircleOutlined } from "@ant-design/icons";
 import {
   Table,
@@ -15,6 +15,7 @@ import {
   Col,
   Row,
   Image as AntdImage,
+  message,
 } from "antd";
 import {
   CloudinaryContext,
@@ -23,7 +24,14 @@ import {
 } from "cloudinary-react";
 import { Cloudinary } from "@cloudinary/url-gen";
 import moment from "moment";
-import { createEmployeeAPI } from "../../../api/apiUrl";
+import {
+  createEmployeeAPI,
+  getManagers,
+  checkDuplicateEmployeeAPI,
+} from "../../../api/apiUrl";
+
+import axios from "axios";
+
 const { useForm } = Form;
 
 const description = [
@@ -49,7 +57,7 @@ const CreateEmployee = ({ data }) => {
   const [newName, setNewName] = useState("");
   const [newPhone, setNewPhone] = useState("");
   const [newDob, setNewDob] = useState("");
-  const [newCid, setNewCid] = useState("");
+  const [newIdentityCard, setNewIdentityCard] = useState("");
   const [newGender, setNewGender] = useState("");
   const [newPosition, setNewPosition] = useState("");
   const [employeeData, setEmployeeData] = useState(data || []);
@@ -68,7 +76,7 @@ const CreateEmployee = ({ data }) => {
   const [imageUrl, setImageUrl] = useState(null);
   const [loading, setLoading] = useState(false);
   const cld = new Cloudinary({ cloud: { cloudName: "dvm8fnczy" } });
-
+  const [managers, setManagers] = useState([]);
   const [newIsManager, setNewIsManager] = useState(false);
   const [newLineManager, setNewLineManager] = useState(null);
 
@@ -79,36 +87,162 @@ const CreateEmployee = ({ data }) => {
   existingData.push(newExperienceObject);
   localStorage.setItem("experienceData", JSON.stringify(existingData));
 
+  const fetchManagers = async () => {
+    try {
+      const managersData = await getManagers();
+      console.log("Managers data:", managersData);
+      setManagers(managersData);
+    } catch (error) {
+      console.error("Error fetching managers:", error);
+      console.log("Request config:", error.config); // Log request config
+      console.log("Response data:", error.response.data); // Log response data
+      console.log("Response status:", error.response.status); // Log response status
+      console.log("Response headers:", error.response.headers); // Log response headers
+
+      // Display a user-friendly error message
+      message.error(
+        "An error occurred while fetching managers. Please try again later.",
+      );
+    }
+  };
+  useEffect(() => {
+    fetchManagers().catch((error) => {
+      console.error("Unhandled promise rejection:", error);
+    });
+  }, []);
+
   const handleSubmit = async () => {
     try {
+      const values = await formCreate.validateFields();
       setConfirmLoading(true);
-      console.log("createEmployeeAPI:", createEmployeeAPI);
+      const requiredFields = [
+        { name: "code", label: "Code" },
+        { name: "name", label: "Name" },
+        { name: "phone", label: "Phone" },
+        { name: "email", label: "Email" },
+        { name: "dateOfBirth", label: "Date of Birth" },
+        { name: "identityCard", label: "Identity Card" },
+        { name: "gender", label: "Gender" },
+        { name: "status", label: "Status" },
+        { name: "position", label: "Position" },
+        { name: "isManager", label: "IsManager" },
+        { name: "JoinDate", label: "Join Date" },
+        { name: "FireDate", label: "Fire Date" },
+      ];
+
+      requiredFields.forEach((field) => {
+        if (!values[field.name]) {
+          throw new Error(`${field.label} is required`);
+        }
+      });
+      const invalidFields = Object.keys(values).filter((fieldName) => {
+        const fieldError = formCreate.getFieldError(fieldName);
+        return fieldError.length > 0;
+      });
+
+      if (invalidFields.length > 0) {
+        throw new Error(
+          "Some fields are invalid. Please check the form and try again.",
+        );
+      }
+
       const employeeData = {
-        email: newEmail,
-        code: newCode,
-        name: newName,
-        phone: newPhone,
+        email: values.email,
+        code: values.code,
+        name: values.name,
+        phone: values.phone,
         dateOfBirth: newDob.toISOString(),
-        identityCard: newCid,
+        identityCard: values.identityCard,
         gender: newGender,
         status: newStatus,
         position: newPosition,
         isManager: newIsManager,
-        lineManager: newLineManager,
+        lineManager: values.isManager === false ? values.lineManager : null,
         description: newDescription,
         avatar: newAvatar,
         joinDate: newJoinDate.toISOString(),
         fireDate: newFireDate.toISOString(),
       };
+      if (!/^[0-9]{10}$/.test(values.phone)) {
+        throw new Error("Phone must be a 10-digit number.");
+      }
+
+      if (!/^[0-9]{9}$/.test(values.identityCard)) {
+        throw new Error("Identity Card must be a 9-digit number.");
+      }
+
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(values.email)) {
+        throw new Error("Invalid email format.");
+      }
+      const isDuplicate = await checkDuplicateEmployeeAPI(
+        "code",
+        values.code,
+        "email",
+        values.email,
+        "phone",
+        values.phone,
+        "identityCard",
+        values.identityCard,
+      );
+      console.log("Is Duplicate:", isDuplicate);
+
+      if (isDuplicate) {
+        throw new Error("Duplicate values found. Please check your input.");
+      }
 
       const createdEmployee = await createEmployeeAPI(employeeData);
       console.log("Employee created:", createdEmployee);
-      setConfirmLoading(false);
+      setConfirmLoading(true);
       setIsModalOpen(false);
+
+      message.success("Employee created successfully!");
+      setTimeout(() => {
+        formCreate.resetFields();
+
+        setNewCode("");
+        setNewName("");
+        setNewPhone("");
+        setNewDob("");
+        setNewIdentityCard("");
+        setNewGender("");
+        setNewPosition("");
+        setNewSkill("");
+        setNewExperience("");
+        setImageUrl(null);
+        setLoading(false);
+        setNewDescription([]);
+        setNewIsManager(false);
+        setNewLineManager(null);
+        setNewExp("");
+        setNewEmail("");
+        setNewJoinDate("");
+        setNewFireDate("");
+        setNewAvatar("");
+
+        setIsModalOpen(false);
+        setConfirmLoading(false);
+      }, 2000);
     } catch (error) {
       console.error("Error creating employee:", error);
-      console.error("Detailed error response:", error.response);
+
+      message.error(error.message);
+
       setConfirmLoading(false);
+    }
+  };
+
+  const checkDuplicateEmployeeAPI = async (fields) => {
+    try {
+      console.log("Checking duplicate:", fields);
+      const response = await axios.post(
+        `${API_URL.EMPLOYEE}/check-duplicate`,
+        fields,
+      );
+      console.log("Duplicate check response:", response.data);
+      return response.data.isDuplicate;
+    } catch (error) {
+      console.error("Error checking duplicate in database:", error);
+      return false;
     }
   };
 
@@ -126,7 +260,20 @@ const CreateEmployee = ({ data }) => {
 
   const handleIsManagerChange = (value) => {
     setNewIsManager(value);
+    if (!value) {
+      setNewLineManager(null);
+    }
   };
+
+  const disabledFireDate = (current) => {
+    return current && current.isBefore(newJoinDate, "day");
+  };
+
+  const handleJoinDateChange = (date) => {
+    setNewJoinDate(date);
+    setNewFireDate(moment(date).add(1, "day"));
+  };
+
   const handleChange = (info) => {
     if (info.file.status === "uploading") {
       setLoading(true);
@@ -154,7 +301,50 @@ const CreateEmployee = ({ data }) => {
         name="createEmployee"
         layout="vertical"
         autoComplete="off"
+        validateMessages={{
+          required: "Please enter ${label}!",
+          types: {
+            email: "Please enter a valid ${label}!",
+          },
+          pattern: {
+            mismatch: "Please enter a valid ${label}!",
+          },
+        }}
       >
+        <Col>
+          <Form.Item
+            label="Avatar"
+            valuePropName="avatar"
+            getValueFromEvent={normFile}
+            value={newAvatar}
+            onChange={(e) => setNewAvatar(e.target.value)}
+          >
+            <CloudinaryContext cloudName="dvm8fnczy" cld={cld}>
+              <Upload
+                listType="picture-card"
+                maxCount={1}
+                action={`https://api.cloudinary.com/v1_1/dvm8fnczy/image/upload`}
+                data={{ upload_preset: "ackgbz0m" }}
+                showUploadList={false}
+                onChange={handleChange}
+              >
+                <Spin spinning={loading} tip="Uploading...">
+                  {imageUrl ? (
+                    <CloudImage publicId={imageUrl} width="108" height="108">
+                      <Transformation crop="fill" />
+                    </CloudImage>
+                  ) : (
+                    <div>
+                      <PlusOutlined />
+                      <div style={{ marginTop: 8 }}>Upload</div>
+                    </div>
+                  )}
+                </Spin>
+              </Upload>
+            </CloudinaryContext>
+          </Form.Item>
+        </Col>
+
         <Row gutter={10}>
           <Col xs={24} sm={12} md={12} lg={6} xl={6}>
             <Form.Item name="code" label="Code" style={{ width: "100%" }}>
@@ -205,12 +395,12 @@ const CreateEmployee = ({ data }) => {
           <Col xs={24} sm={12} md={12} lg={6} xl={6}>
             <Form.Item
               name="identityCard"
-              label="CID"
+              label="IdentityCard"
               style={{ width: "100%" }}
             >
               <Input
-                value={newCid}
-                onChange={(e) => setNewCid(e.target.value)}
+                value={newIdentityCard}
+                onChange={(e) => setNewIdentityCard(e.target.value)}
               />
             </Form.Item>
           </Col>
@@ -233,7 +423,8 @@ const CreateEmployee = ({ data }) => {
                 value={newStatus}
                 onChange={(value) => setNewStatus(value)}
               >
-                <Select.Option value="inactive">inactive</Select.Option>
+                <Select.Option value="inactive">Inactive</Select.Option>
+                <Select.Option value="active">Active</Select.Option>
               </Select>
             </Form.Item>
           </Col>
@@ -248,50 +439,35 @@ const CreateEmployee = ({ data }) => {
                 value={newPosition}
                 onChange={(value) => setNewPosition(value)}
               >
-                <Select.Option value="fe">Developer</Select.Option>
-                <Select.Option value="be">Manager</Select.Option>
-                <Select.Option value="fullstack">Developer</Select.Option>
-                <Select.Option value="ba">Manager</Select.Option>
-                <Select.Option value="qa">Developer</Select.Option>
-                <Select.Option value="devops">Manager</Select.Option>
-                <Select.Option value="ux_ui">Developer</Select.Option>
+                <Select.Option value="fe">Front-end Dev</Select.Option>
+                <Select.Option value="be">Back-end Dev</Select.Option>
+                <Select.Option value="fullstack">FullStack</Select.Option>
+                <Select.Option value="ba">Business Analysis</Select.Option>
+                <Select.Option value="qa">Quality Assurance</Select.Option>
+                <Select.Option value="devops">DevOps Engineer</Select.Option>
+                <Select.Option value="ux_ui">User Experience</Select.Option>
               </Select>
             </Form.Item>
           </Col>
 
           <Col xs={24} sm={12} md={12} lg={6} xl={6}>
-            <Form.Item
-              name="isManager"
-              label="IsManager"
-              style={{ width: "100%" }}
-            >
-              <Radio.Group
-                value={newIsManager}
-                onChange={(e) => handleIsManagerChange(e.target.value)}
-              >
-                <Radio value={true}>True</Radio>
-                <Radio value={false}>False</Radio>
-              </Radio.Group>
+            <Form.Item name="JoinDate" label="JoinDate">
+              <DatePicker
+                style={{ width: "100%" }}
+                value={newJoinDate}
+                onChange={handleJoinDateChange}
+              />
+            </Form.Item>
+
+            <Form.Item name="FireDate" label="FireDate">
+              <DatePicker
+                style={{ width: "100%" }}
+                value={newFireDate}
+                onChange={(date) => setNewFireDate(date)}
+                disabledDate={disabledFireDate}
+              />
             </Form.Item>
           </Col>
-
-          {newIsManager === false && (
-            <Col xs={24} sm={12} md={12} lg={6} xl={6}>
-              <Form.Item
-                name="manager"
-                label="LineManager"
-                style={{ width: "100%" }}
-              >
-                <Select
-                  value={newLineManager}
-                  onChange={(value) => setNewLineManager(value)}
-                >
-                  <Select.Option value="listname">listname</Select.Option>
-                  <Select.Option value="test">test</Select.Option>
-                </Select>
-              </Form.Item>
-            </Col>
-          )}
 
           <Col xs={24} sm={12} md={12} lg={6} xl={6}>
             <Form.Item
@@ -307,19 +483,7 @@ const CreateEmployee = ({ data }) => {
             </Form.Item>
           </Col>
 
-          <Col
-            xs={24}
-            sm={12}
-            md={12}
-            lg={6}
-            xl={6}
-            span={8}
-            style={{
-              display: "flex",
-              flexDirection: "column",
-              alignItems: "flex-start",
-            }}
-          >
+          <Col xs={24} sm={12} md={12} lg={6} xl={6}>
             <Form.Item label="Skill" style={{ marginBottom: "8px" }}>
               <Input
                 value={newSkill}
@@ -353,62 +517,51 @@ const CreateEmployee = ({ data }) => {
               </span>
             </div>
           </Col>
-
-          <Col>
+          <Col xs={24} sm={12} md={12} lg={6} xl={6}>
             <Form.Item
-              label="Avatar"
-              valuePropName="avatar"
-              getValueFromEvent={normFile}
-              value={newAvatar}
-              onChange={(e) => setNewAvatar(e.target.value)}
+              name="isManager"
+              label="IsManager"
+              style={{ width: "100%" }}
             >
-              <CloudinaryContext cloudName="dvm8fnczy" cld={cld}>
-                <Upload
-                  listType="picture-card"
-                  maxCount={1}
-                  action={`https://api.cloudinary.com/v1_1/dvm8fnczy/image/upload`}
-                  data={{ upload_preset: "ackgbz0m" }}
-                  showUploadList={false}
-                  onChange={handleChange}
-                >
-                  <Spin spinning={loading} tip="Uploading...">
-                    {imageUrl ? (
-                      <CloudImage publicId={imageUrl} width="95" height="93">
-                        <Transformation crop="fill" />
-                      </CloudImage>
-                    ) : (
-                      <div>
-                        <PlusOutlined />
-                        <div style={{ marginTop: 8 }}>Upload</div>
-                      </div>
-                    )}
-                  </Spin>
-                </Upload>
-              </CloudinaryContext>
+              <Radio.Group
+                value={newIsManager}
+                onChange={(e) => setNewIsManager(e.target.value)}
+              >
+                <Radio value={true}>True</Radio>
+                <Radio value={false}>False</Radio>
+              </Radio.Group>
             </Form.Item>
           </Col>
 
-          <Col>
-            <Form.Item name="JoinDate" label="JoinDate">
-              <DatePicker
-                style={{ width: "100%" }}
-                value={moment(newJoinDate)}
-                onChange={(date) => setNewJoinDate(date)}
-              />
-            </Form.Item>
-
-            <Form.Item name="FireDate" label="FireDate">
-              <DatePicker
-                style={{ width: "100%" }}
-                value={moment(newFireDate)}
-                onChange={(date) => setNewFireDate(date)}
-              />
+          <Col xs={24} sm={12} md={12} lg={6} xl={6}>
+            <Form.Item
+              name="manager"
+              label="LineManager"
+              style={{ width: "100%" }}
+            >
+              {console.log("Managers:", managers)}
+              <Select
+                value={newLineManager}
+                onChange={(value) => setNewLineManager(value)}
+              >
+                {Array.isArray(managers) && managers.length > 0 ? (
+                  managers.map((manager) => (
+                    <Select.Option key={manager.id} value={manager.id}>
+                      {manager.name}
+                    </Select.Option>
+                  ))
+                ) : (
+                  <Select.Option value={null} disabled>
+                    No managers available
+                  </Select.Option>
+                )}
+              </Select>
             </Form.Item>
           </Col>
-          <Button type="primary" onClick={handleSubmit}>
-            Submit
-          </Button>
         </Row>
+        <Button type="primary" onClick={handleSubmit}>
+          Submit
+        </Button>
       </Form>
     </>
   );

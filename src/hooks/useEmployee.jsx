@@ -3,6 +3,7 @@ import { getEmployeeAPI } from "../api/apiUrl";
 import { createEmployeeAPI } from "../api/apiUrl";
 import { QUERY_KEY } from "../constants/query-key";
 import { useQueryClient, useMutation } from "@tanstack/react-query";
+import { checkDuplicateEmployeeAPI } from "../api/apiUrl";
 
 export const useGetClients = (params) =>
   useQuery(
@@ -21,7 +22,6 @@ export const useGetClients = (params) =>
 
 export const useCreateEmployee = () => {
   const queryClient = useQueryClient();
-
   const mutation = useMutation(
     (newEmployee) => createEmployeeAPI(newEmployee),
     {
@@ -31,5 +31,19 @@ export const useCreateEmployee = () => {
     },
   );
 
-  return mutation;
+  const handleCreateEmployee = async (newEmployee) => {
+    const isDuplicate = await checkDuplicateEmployeeAPI(
+      "fieldName",
+      newEmployee.fieldName,
+    );
+    console.log("Is Duplicate:", isDuplicate);
+
+    if (!isDuplicate) {
+      mutation.mutate(newEmployee);
+    } else {
+      console.log("Duplicate found. Not creating employee.");
+    }
+  };
+
+  return { ...mutation, handleCreateEmployee };
 };
