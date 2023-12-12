@@ -12,3 +12,17 @@
   justify-content: flex-end;
   align-items: flex-end;
 }
+
+.avatar-container {
+  width: 108px; /* Set the width and height to the desired size */
+  height: 108px;
+  border-radius: 50%; /* Make it a circle */
+  overflow: hidden; /* Hide overflow for perfect circle */
+  position: relative;
+}
+
+.avatar-container img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover; /* Maintain aspect ratio and cover the container */
+}

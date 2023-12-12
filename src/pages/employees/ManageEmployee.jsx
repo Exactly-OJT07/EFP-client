@@ -4,9 +4,8 @@ import "../../styles/ManageEmployee.css";
 import ReadEmployee from "./components/ReadEmployee";
 import CreateEmployee from "./components/CreateEmployee";
 import { useCreateEmployee } from "../../hooks/useEmployee";
-import { createEmployeeAPI } from "../../api/apiUrl";
 import { Cloudinary } from "@cloudinary/url-gen";
-import moment from "moment";
+import handleSubmit from "./components/CreateEmployee";
 
 function ManageEmployee() {
   const [confirmLoading, setConfirmLoading] = useState(false);
@@ -47,11 +46,17 @@ function ManageEmployee() {
     try {
       console.log("Create OK");
       setConfirmLoading(true);
+      try {
+        handleSubmit();
+        console.log("Create OK");
+      } catch (error) {
+        console.log(error);
+      }
+
       setTimeout(() => {
         setIsModalOpen(false);
         setConfirmLoading(false);
       }, 2000);
-      localStorage.clear();
     } catch (error) {
       console.log(error);
     }
@@ -64,21 +69,6 @@ function ManageEmployee() {
   const handleCancel = () => {
     console.log("Create Cancel");
     setIsModalOpen(false);
-  };
-
-  const handleViewOk = () => {
-    console.log("View OK");
-    setConfirmLoading(true);
-
-    setTimeout(() => {
-      setViewModalOpen(false);
-      setConfirmLoading(false);
-    }, 2000);
-  };
-
-  const handleViewCancel = () => {
-    console.log("View Cancel");
-    setViewModalOpen(false);
   };
 
   const [formView] = Form.useForm();
@@ -102,24 +92,6 @@ function ManageEmployee() {
       </Modal>
 
       <ReadEmployee />
-      <Modal
-        title="New"
-        open={viewModalOpen}
-        onOk={handleViewOk}
-        confirmLoading={confirmLoading}
-        onCancel={handleViewCancel}
-      >
-        <Form
-          form={formView}
-          name="viewProject"
-          layout="vertical"
-          autoComplete="off"
-        >
-          <Form.Item name="timeLine" label="Timeline">
-            <RangePicker style={{ width: "100%" }} />
-          </Form.Item>
-        </Form>
-      </Modal>
     </>
   );
 }
