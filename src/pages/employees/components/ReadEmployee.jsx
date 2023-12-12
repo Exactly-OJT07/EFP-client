@@ -1,16 +1,32 @@
 import React, { useState } from "react";
 import { useGetClients } from "../../../hooks/useEmployee";
-import { SearchOutlined } from "@ant-design/icons";
+import { SearchOutlined, PlusOutlined } from "@ant-design/icons";
 import { Space, Input, Spin, Table, Image as AntdImage, Button } from "antd";
 import Pagination from "../../../components/pagination/pagination";
 
 const columns = [
   {
-    title: "",
+    title: "Avatar",
     dataIndex: "avatar",
     key: "avatar",
     render: (avatar) => {
-      return <AntdImage width={50} height={50} src={avatar} />;
+      return (
+        <AntdImage
+          width={50}
+          height={50}
+          style={{ borderRadius: "50px" }}
+          src={avatar}
+        />
+      );
+    },
+  },
+  {
+    title: "Code",
+    dataIndex: "code",
+    key: "code",
+    sorter: {
+      compare: (a, b) => a.code.localeCompare(b.code),
+      multiple: 2,
     },
   },
   {
@@ -19,7 +35,7 @@ const columns = [
     key: "name",
     sorter: {
       compare: (a, b) => a.name.localeCompare(b.name),
-      multiple: 2,
+      multiple: 3,
     },
     defaultSortOrder: "ascend",
     sortDirections: ["ascend", "descend"],
@@ -54,6 +70,26 @@ const columns = [
         text: "Back-end Dev",
         value: "be",
       },
+      {
+        text: "Fullstack Dev",
+        value: "fullstack",
+      },
+      {
+        text: "Business Analyst",
+        value: "ba",
+      },
+      {
+        text: "Q&A",
+        value: "qa",
+      },
+      {
+        text: "DevOps",
+        value: "devops",
+      },
+      {
+        text: "UX-UI Dev",
+        value: "ux-ui",
+      },
     ],
     onFilter: (value, record) => record.position.indexOf(value) === 0,
     render: (position) => {
@@ -62,6 +98,16 @@ const columns = [
       } else if (position === "be") {
         return "Back-end Dev";
       } else return "";
+    },
+  },
+  {
+    title: "Manager",
+    dataIndex: "manager",
+    key: "manager",
+    render: (manager) => {
+      if (manager) {
+        return manager.name;
+      } else return "No Manager";
     },
   },
   {
@@ -150,6 +196,7 @@ const ReadEmployee = () => {
           <SearchOutlined />
         </Button>
       </Space.Compact>
+
       {isLoading ? (
         <Spin
           size="large"
