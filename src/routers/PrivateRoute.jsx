@@ -1,11 +1,10 @@
 import { PrivateLayout } from "../components/layout/MainLayout";
-import Dashboard from "../pages/Dashboard";
+import Dashboard from "../pages/dashboard/Dashboard";
 import ManageProject from "../pages/ManageProject";
 import ManageEmployee from "../pages/employees/ManageEmployee";
 import EmployeeDetail from "../pages/employees/EmployeeDetail";
 import ProjectDetail from "../pages/ProjectDetail";
 import CreateProject from "../pages/projects/components/createProject";
-import Circleprogress from "../components/circle-progress/Circleprogress";
 
 const routes = [
   {

@@ -68,15 +68,17 @@ const ProjectDetail = () => {
               }}
               layout="horizontal"
               style={{
-                maxWidth: 600,
+                maxWidth: 700,
               }}
             >
               <Form.Item label="Project Name">
                 <Input value={name} readOnly />
               </Form.Item>
+
               <Form.Item label="Description">
                 <Input value={description} readOnly />
               </Form.Item>
+
               <Form.Item label="Members Assigned">
                 <Avatar.Group maxCount={2}>
                   {employee_project.map((member) => (
@@ -98,6 +100,7 @@ const ProjectDetail = () => {
                   </Avatar>
                 </Avatar.Group>
               </Form.Item>
+
               <Form.Item label="Deadline">
                 <RangePicker
                   defaultValue={[dayjs(startDate), dayjs(endDate)]}

@@ -1,0 +1,14 @@
+#chart {
+  border-radius: 8px;
+  background-color: #f5f5f5;
+  padding: 10px;
+  width: 785px;
+  height: auto;
+}
+#circleChart {
+  border-radius: 8px;
+  background-color: #f5f5f5;
+  padding: 30px;
+  width: 370px;
+  height: auto;
+}
