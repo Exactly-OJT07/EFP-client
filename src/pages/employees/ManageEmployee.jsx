@@ -2,8 +2,8 @@ import React, { useState } from "react";
 import { Button } from "antd";
 import { PlusOutlined } from "@ant-design/icons";
 import "../../styles/ManageEmployee.css";
-import ReadEmployee from "./components/ReadEmployee";
-import CreateEmployee from "./components/CreateEmployee";
+import ReadEmployee from "./manageEmployee/ReadEmployee";
+import CreateEmployee from "./manageEmployee/CreateEmployee";
 
 function ManageEmployee() {
   const [isModalOpen, setIsModalOpen] = useState(false);

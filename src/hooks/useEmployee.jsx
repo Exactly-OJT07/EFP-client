@@ -1,7 +1,10 @@
 import { useQuery, useQueryClient, useMutation } from "@tanstack/react-query";
-import { getEmployeeAPI, getEmployeeDetailApi, createEmployeeAPI } from "../api/apiUrl";
+import {
+  getEmployeeAPI,
+  getEmployeeDetailApi,
+  createEmployeeAPI,
+} from "../api/apiUrl";
 import { QUERY_KEY } from "../constants/query-key";
-import { useQueryClient, useMutation } from "@tanstack/react-query";
 
 export const useGetClients = (params) =>
   useQuery(
