@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useGetClients } from "../../../hooks/useEmployee";
-import { SearchOutlined, PlusOutlined } from "@ant-design/icons";
+import { SearchOutlined } from "@ant-design/icons";
 import { Space, Input, Spin, Table, Image as AntdImage, Button } from "antd";
 import Pagination from "../../../components/pagination/pagination";
 
@@ -110,7 +110,8 @@ const columns = [
           return "User Experience";
         default:
           return "";
-      }},
+      }
+    },
   },
   {
     title: "Manager",
