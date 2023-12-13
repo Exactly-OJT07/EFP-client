@@ -1,11 +1,12 @@
 import React, { useState } from "react";
-import { PlusOutlined, UploadOutlined } from "@ant-design/icons";
+import { PlusOutlined, PlusCircleOutlined } from "@ant-design/icons";
 import {
-  Space,
   Table,
+  InputNumber,
   Button,
   Form,
   Input,
+  Modal,
   DatePicker,
   Select,
   Spin,
@@ -13,9 +14,8 @@ import {
   Upload,
   Col,
   Row,
-  Modal,
-  Typography,
   Image as AntdImage,
+  message,
 } from "antd";
 import {
   CloudinaryContext,
@@ -24,90 +24,69 @@ import {
 } from "cloudinary-react";
 import { Cloudinary } from "@cloudinary/url-gen";
 import moment from "moment";
+import { useGetManager } from "../../../hooks/useManager";
+import { useCreateEmployee } from "../../../hooks/useEmployee";
 
 const { useForm } = Form;
 
-const description = [
+const skills = [
   {
-    title: "Skill",
-    dataIndex: "skill",
-    key: "skill",
+    title: "Name",
+    dataIndex: "name",
+    key: "name",
   },
   {
-    title: "Experience",
-    dataIndex: "experience",
-    key: "experience",
+    title: "Exp",
+    dataIndex: "exp",
+    key: "exp",
   },
 ];
 
-const Descriptionlist = ({ data = [] }) => (
-  <Table
-    columns={description}
-    dataSource={data}
-    pagination={{ defaultPageSize: 5 }}
-  />
-);
-
-const CreateEmployee = () => {
+const CreateEmployee = ({ isModalOpen, setIsModalOpen }) => {
   const [formCreate] = useForm();
-  const [confirmLoading, setConfirmLoading] = useState(false);
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const { RangePicker } = DatePicker;
 
+  const [newCode, setNewCode] = useState("");
   const [newName, setNewName] = useState("");
   const [newPhone, setNewPhone] = useState("");
   const [newDob, setNewDob] = useState("");
-  const [newCid, setNewCid] = useState("");
+  const [newIdentityCard, setNewIdentityCard] = useState("");
   const [newGender, setNewGender] = useState("");
   const [newPosition, setNewPosition] = useState("");
-
+  const [newStatus, setNewStatus] = useState("");
   const [newEmail, setNewEmail] = useState("");
   const [newJoinDate, setNewJoinDate] = useState("");
   const [newFireDate, setNewFireDate] = useState("");
   const [newAvatar, setNewAvatar] = useState("");
+  const [newDescription, setNewDescription] = useState("");
+  const [newIsManager, setNewIsManager] = useState(false);
+  const [newManager, setNewManager] = useState("");
 
+  const [newSkills, setNewSkills] = useState([]);
   const [newSkill, setNewSkill] = useState("");
   const [newExperience, setNewExperience] = useState("");
-  const [skills, setSkills] = useState([]);
-  const [experiences, setExperiences] = useState([]);
-  const [newDescription, setNewDescription] = useState([]);
 
   const [imageUrl, setImageUrl] = useState(null);
   const [loading, setLoading] = useState(false);
   const cld = new Cloudinary({ cloud: { cloudName: "dvm8fnczy" } });
-  const [viewModalOpen, setViewModalOpen] = useState(false);
 
-  const [employeeData, setEmployeeData] = useState(data);
+  const [confirmLoading, setConfirmLoading] = useState(false);
 
-  const [newIsManager, setNewIsManager] = useState(false);
-  const [newLineManager, setNewLineManager] = useState(null);
+  const { data: managers } = useGetManager();
 
-  const [newExp, setNewExp] = useState("");
-  const newExperienceObject = { skill: newSkill, exp: newExp };
+  const { mutate: createEmployee } = useCreateEmployee();
 
-  const existingData = JSON.parse(localStorage.getItem("experienceData")) || [];
-  existingData.push(newExperienceObject);
-  localStorage.setItem("experienceData", JSON.stringify(existingData));
-
-  const addEmployee = (newEmployee) => {
-    setEmployeeData([...employeeData, newEmployee]);
-  };
-
-  const addToDescription = () => {
+  const addToSkills = () => {
     const newEntry = {
-      skill: newSkill,
-      experience: newExperience,
+      name: newSkill,
+      exp: newExperience,
     };
+    console.log(newEntry);
 
-    setNewDescription([...newDescription, newEntry]);
+    setNewSkills([...newSkills, newEntry]);
     setNewSkill("");
     setNewExperience("");
-    console.log(newDescription);
   };
 
-  const handleIsManagerChange = (value) => {
-    setNewIsManager(value);
-  };
   const handleChange = (info) => {
     if (info.file.status === "uploading") {
       setLoading(true);
@@ -121,157 +100,169 @@ const CreateEmployee = () => {
     }
   };
 
-  const showModal = () => {
-    setIsModalOpen(true);
-  };
+  const handleCreateOk = async () => {
+    const formData = await formCreate.validateFields();
+    formData.skills = newSkills;
+    formData.avatar = imageUrl;
 
-  const dataInput = [
-    newName,
-    newPhone,
-    newDob,
-    newCid,
-    newGender,
-    newPosition,
-    newLineManager,
-    newIsManager,
-    newDescription,
-    newEmail,
-    newSkill,
-    newJoinDate,
-    newFireDate,
-    newAvatar,
-    newSkill,
-    newExperience,
-  ];
-
-  const handleOpenOk = () => {
-    console.log("data:", dataInput);
-    console.log("Create OK");
     setConfirmLoading(true);
-    setTimeout(() => {
-      setIsModalOpen(false);
-      setConfirmLoading(false);
-    }, 2000);
-    localStorage.clear();
-
-    const newEmployee = {
-      key: String(employeeData.length + 1), // Tạo một khóa duy nhất (bạn có thể sử dụng một phương pháp mạnh mẽ hơn)
-      name: newName,
-      age: 32, // Bạn có thể đặt tuổi động để phù hợp nhu cầu
-      phone: newPhone,
-      roles: newDescription.map((item) => item.skill),
-      hireDate: moment(newJoinDate).format("DD/MM/YYYY"),
-      // Thêm các thuộc tính khác theo nhu cầu
-    };
-    addEmployee(newEmployee);
-    setNewName("");
-    setNewPhone("");
-    setNewDob("");
-    setNewCid("");
-    setNewGender("");
-    setNewPosition("");
-    setNewIsManager(false);
-    setNewLineManager(null);
-    setNewDescription([]);
-    setNewEmail("");
-    setNewJoinDate("");
-    setNewFireDate("");
-    setNewAvatar("");
-  };
-
-  const handleCancel = () => {
-    console.log("Create Cancel");
+    createEmployee({
+      ...formData,
+    });
+    formCreate.resetFields();
+    setNewSkills([]);
+    setConfirmLoading(false);
     setIsModalOpen(false);
   };
-  const handleViewOk = () => {
-    console.log("View OK");
-    setConfirmLoading(true);
 
-    setTimeout(() => {
-      setViewModalOpen(false);
-      setConfirmLoading(false);
-    }, 2000);
+  const handleCreateCancel = () => {
+    setIsModalOpen(false);
   };
-
-  const handleViewCancel = () => {
-    console.log("View Cancel");
-    setViewModalOpen(false);
-  };
-
-  const normFile = (e) => {
-    if (Array.isArray(e)) {
-      return e;
-    }
-    return e && e.fileList;
-  };
-  const [formView] = Form.useForm();
 
   return (
     <>
       <Modal
-        title="Add Employee"
+        title="Create"
         open={isModalOpen}
-        onOk={handleOpenOk}
+        onOk={handleCreateOk}
+        onCancel={handleCreateCancel}
         confirmLoading={confirmLoading}
-        onCancel={handleCancel}
-        width={1000}
-        height={1000}
+        width="1000px"
       >
         <Form
           form={formCreate}
           name="createEmployee"
           layout="vertical"
           autoComplete="off"
+          validateMessages={{
+            required: "Please input ${label}!",
+            types: {
+              email: "${label} is not a valid email!",
+              number: "${label} is not a valid number!",
+            },
+          }}
         >
-          <Row gutter={100}>
+          <Col>
+            <Form.Item
+              label="Avatar"
+              valuePropName="avatar"
+              value={newAvatar}
+              onChange={(e) => setNewAvatar(e.target.value)}
+            >
+              <CloudinaryContext cloudName="dvm8fnczy" cld={cld}>
+                <Upload
+                  listType="picture-card"
+                  maxCount={1}
+                  action={`https://api.cloudinary.com/v1_1/dvm8fnczy/image/upload`}
+                  data={{ upload_preset: "ackgbz0m" }}
+                  showUploadList={false}
+                  onChange={handleChange}
+                >
+                  <Spin spinning={loading} tip="Uploading...">
+                    {imageUrl ? (
+                      <CloudImage publicId={imageUrl} width="108" height="108">
+                        <Transformation crop="fill" />
+                      </CloudImage>
+                    ) : (
+                      <div>
+                        <PlusOutlined />
+                        <div style={{ marginTop: 8 }}>Upload</div>
+                      </div>
+                    )}
+                  </Spin>
+                </Upload>
+              </CloudinaryContext>
+            </Form.Item>
+          </Col>
+          <Row gutter={10}>
             <Col xs={24} sm={12} md={12} lg={6} xl={6}>
-              <Form.Item name="Name" label="Name" style={{ width: "100%" }}>
+              <Form.Item name="code" label="Code" style={{ width: "100%" }}>
+                <Input
+                  value={newCode}
+                  onChange={(e) => setNewCode(e.target.value)}
+                />
+              </Form.Item>
+            </Col>
+            <Col xs={24} sm={12} md={12} lg={6} xl={6}>
+              <Form.Item name="name" label="Name" style={{ width: "100%" }}>
                 <Input
                   value={newName}
                   onChange={(e) => setNewName(e.target.value)}
                 />
               </Form.Item>
             </Col>
-
             <Col xs={24} sm={12} md={12} lg={6} xl={6}>
-              <Form.Item name="Phone" label="Phone" style={{ width: "100%" }}>
+              <Form.Item name="phone" label="Phone" style={{ width: "100%" }}>
                 <Input
                   value={newPhone}
                   onChange={(e) => setNewPhone(e.target.value)}
                 />
               </Form.Item>
             </Col>
-
             <Col xs={24} sm={12} md={12} lg={6} xl={6}>
-              <Form.Item name="Email" label="Email" style={{ width: "100%" }}>
+              <Form.Item
+                name="email"
+                label="Email"
+                style={{ width: "100%" }}
+                rules={[{ required: true }]}
+              >
                 <Input
                   value={newEmail}
                   onChange={(e) => setNewEmail(e.target.value)}
                 />
               </Form.Item>
             </Col>
-
             <Col xs={24} sm={12} md={12} lg={6} xl={6}>
-              <Form.Item name="Dob" label="Dob" style={{ width: "100%" }}>
+              <Form.Item
+                name="description"
+                label="Description"
+                style={{ width: "100%" }}
+              >
+                <Input
+                  value={newDescription}
+                  onChange={(e) => setNewDescription(e.target.value)}
+                />
+              </Form.Item>
+            </Col>
+            <Col xs={24} sm={12} md={12} lg={6} xl={6}>
+              <Form.Item
+                name="dateOfBirth"
+                label="Dob"
+                style={{ width: "100%" }}
+              >
                 <DatePicker
                   style={{ width: "100%" }}
                   value={moment(newDob)}
-                  onChange={(date) => setNewDob(date)}
+                  onChange={(date) => {
+                    setNewDob(date.format("YYYY-MM-DD"));
+                    console.log(date);
+                  }}
+                  format="DD/MM/YYYY"
                 />
               </Form.Item>
             </Col>
-
             <Col xs={24} sm={12} md={12} lg={6} xl={6}>
-              <Form.Item name="Cid" label="CID" style={{ width: "100%" }}>
+              <Form.Item
+                name="identityCard"
+                label="IdentityCard"
+                style={{ width: "100%" }}
+                rules={[
+                  {
+                    required: true,
+                    pattern: /^[0-9]{10}$/,
+                    message: "Phone must be 10 digits",
+                  },
+                ]}
+              >
                 <Input
-                  value={newCid}
-                  onChange={(e) => setNewCid(e.target.value)}
+                  value={newIdentityCard}
+                  onChange={(e) => setNewIdentityCard(e.target.value)}
                 />
               </Form.Item>
             </Col>
 
             <Col xs={24} sm={12} md={12} lg={6} xl={6}>
-              <Form.Item name="Gender" label="Gender" style={{ width: "100%" }}>
+              <Form.Item name="gender" label="Gender" style={{ width: "100%" }}>
                 <Select
                   value={newGender}
                   onChange={(value) => setNewGender(value)}
@@ -283,8 +274,19 @@ const CreateEmployee = () => {
             </Col>
 
             <Col xs={24} sm={12} md={12} lg={6} xl={6}>
+              <Form.Item name="status" label="Status" style={{ width: "100%" }}>
+                <Select
+                  value={newStatus}
+                  onChange={(value) => setNewStatus(value)}
+                >
+                  <Select.Option value="inactive">Inactive</Select.Option>
+                  <Select.Option value="active">Active</Select.Option>
+                </Select>
+              </Form.Item>
+            </Col>
+            <Col xs={24} sm={12} md={12} lg={6} xl={6}>
               <Form.Item
-                name="Position"
+                name="position"
                 label="Position"
                 style={{ width: "100%" }}
               >
@@ -292,81 +294,106 @@ const CreateEmployee = () => {
                   value={newPosition}
                   onChange={(value) => setNewPosition(value)}
                 >
-                  <Select.Option value="developer">Developer</Select.Option>
-                  <Select.Option value="manager">Manager</Select.Option>
+                  <Select.Option value="fe">Front-end Dev</Select.Option>
+                  <Select.Option value="be">Back-end Dev</Select.Option>
+                  <Select.Option value="fullstack">FullStack</Select.Option>
+                  <Select.Option value="ba">Business Analysis</Select.Option>
+                  <Select.Option value="qa">Quality Assurance</Select.Option>
+                  <Select.Option value="devops">DevOps Engineer</Select.Option>
+                  <Select.Option value="ux_ui">User Experience</Select.Option>
                 </Select>
               </Form.Item>
             </Col>
 
             <Col xs={24} sm={12} md={12} lg={6} xl={6}>
               <Form.Item
-                name="IsManager"
+                name="isManager"
                 label="IsManager"
                 style={{ width: "100%" }}
               >
                 <Radio.Group
                   value={newIsManager}
-                  onChange={(e) => handleIsManagerChange(e.target.value)}
+                  onChange={(e) => setNewIsManager(e.target.value)}
                 >
                   <Radio value={true}>True</Radio>
                   <Radio value={false}>False</Radio>
                 </Radio.Group>
               </Form.Item>
             </Col>
-
-            {newIsManager === false && (
-              <Col xs={24} sm={12} md={12} lg={6} xl={6}>
-                <Form.Item
-                  name="LineManager"
-                  label="LineManager"
-                  style={{ width: "100%" }}
+            <Col xs={24} sm={12} md={12} lg={6} xl={6}>
+              <Form.Item name="managerId" label="Manager">
+                <Select
+                  value={newManager.id}
+                  onChange={(value, option) =>
+                    setNewManager({ id: value, name: option.children })
+                  }
                 >
-                  <Select
-                    value={newLineManager}
-                    onChange={(value) => setNewLineManager(value)}
-                  >
-                    <Select.Option value="listname">listname</Select.Option>
-                    <Select.Option value="test">test</Select.Option>
-                  </Select>
-                </Form.Item>
-              </Col>
-            )}
+                  {(managers || []).map((manager) => (
+                    <Select.Option key={manager.id} value={manager.id}>
+                      {manager.name}
+                    </Select.Option>
+                  ))}
+                </Select>
+              </Form.Item>
+            </Col>
 
             <Col xs={24} sm={12} md={12} lg={6} xl={6}>
-              <Form.Item
-                name="Description"
-                label="Description"
-                style={{ width: "100%" }}
-              >
+              <Form.Item name="joinDate" label="Join Date">
+                <DatePicker
+                  style={{ width: "100%" }}
+                  value={moment(newJoinDate)}
+                  onChange={(e) => {
+                    setNewJoinDate(e ? e.format("YYYY-MM-DD") : null);
+                    console.log(e);
+                  }}
+                  format="DD/MM/YYYY"
+                />
+              </Form.Item>
+              <Form.Item name="fireDate" label="Fire Date">
+                <DatePicker
+                  style={{ width: "100%" }}
+                  value={newFireDate ? moment(newFireDate) : null}
+                  onChange={(e) =>
+                    setNewFireDate(e ? e.format("YYYY-MM-DD") : null)
+                  }
+                  format="DD/MM/YYYY"
+                  disabledDate={(current) => {
+                    return current && current < moment(newJoinDate);
+                  }}
+                />
+              </Form.Item>
+            </Col>
+            <Col>
+              <Form.Item name="skills" label="Skills" style={{ width: "100%" }}>
                 <Table
-                  dataSource={newDescription}
-                  columns={description}
+                  rowKey="name"
+                  dataSource={newSkills.map((skill) => ({
+                    ...skill,
+                    key: skill.skill,
+                  }))}
+                  columns={[
+                    ...skills,
+                    {
+                      title: "Action",
+                      render: (record) => (
+                        <Button onClick={() => removeSkill(record.key)}>
+                          Remove
+                        </Button>
+                      ),
+                    },
+                  ]}
                   pagination={false}
                 />
               </Form.Item>
             </Col>
-
-            <Col
-              xs={24}
-              sm={12}
-              md={12}
-              lg={6}
-              xl={6}
-              span={8}
-              style={{
-                display: "flex",
-                flexDirection: "column",
-                alignItems: "flex-start",
-              }}
-            >
-              <Form.Item label="Skill" style={{ marginBottom: "8px" }}>
+            <Col xs={24} sm={12} md={12} lg={6} xl={6}>
+              <Form.Item label="Name" style={{ marginBottom: "8px" }}>
                 <Input
                   value={newSkill}
                   onChange={(e) => setNewSkill(e.target.value)}
                 />
               </Form.Item>
-
-              <Form.Item label="Experience" style={{ marginBottom: "8px" }}>
+              <Form.Item label="Exp" style={{ marginBottom: "8px" }}>
                 <InputNumber
                   value={newExperience}
                   onChange={(value) => setNewExperience(value)}
@@ -375,99 +402,19 @@ const CreateEmployee = () => {
                   min={1}
                 />
               </Form.Item>
-
               <div>
                 <PlusCircleOutlined
                   style={{ fontSize: "24px", marginRight: "8px" }}
                   onClick={() => {
-                    addToDescription();
+                    addToSkills();
                   }}
                 />
-                <span
-                  onClick={() => {
-                    addToDescription();
-                  }}
-                >
-                  Add
-                </span>
               </div>
             </Col>
-
-            <Col>
-              <Form.Item
-                label="Avatar"
-                valuePropName="fileList"
-                getValueFromEvent={normFile}
-                value={newAvatar}
-                onChange={(e) => setNewAvatar(e.target.value)}
-              >
-                <CloudinaryContext cloudName="dvm8fnczy" cld={cld}>
-                  <Upload
-                    listType="picture-card"
-                    maxCount={1}
-                    action={`https://api.cloudinary.com/v1_1/dvm8fnczy/image/upload`}
-                    data={{ upload_preset: "ackgbz0m" }}
-                    showUploadList={false}
-                    onChange={handleChange}
-                  >
-                    <Spin spinning={loading} tip="Uploading...">
-                      {imageUrl ? (
-                        <CloudImage publicId={imageUrl} width="95" height="93">
-                          <Transformation crop="fill" />
-                        </CloudImage>
-                      ) : (
-                        <div>
-                          <PlusOutlined />
-                          <div style={{ marginTop: 8 }}>Upload</div>
-                        </div>
-                      )}
-                    </Spin>
-                  </Upload>
-                </CloudinaryContext>
-              </Form.Item>
-            </Col>
-
-            <Col>
-              <Form.Item name="JoinDate" label="JoinDate">
-                <DatePicker
-                  style={{ width: "100%" }}
-                  value={moment(newJoinDate)}
-                  onChange={(date) => setNewJoinDate(date)}
-                />
-              </Form.Item>
-
-              <Form.Item name="FireDate" label="FireDate">
-                <DatePicker
-                  style={{ width: "100%" }}
-                  value={moment(newFireDate)}
-                  onChange={(date) => setNewFireDate(date)}
-                />
-              </Form.Item>
-            </Col>
           </Row>
-        </Form>
-      </Modal>
-
-      <Modal
-        title="New"
-        open={viewModalOpen}
-        onOk={handleViewOk}
-        confirmLoading={confirmLoading}
-        onCancel={handleViewCancel}
-      >
-        <Form
-          form={formView}
-          name="viewProject"
-          layout="vertical"
-          autoComplete="off"
-        >
-          <Form.Item name="timeLine" label="Timeline">
-            <RangePicker style={{ width: "100%" }} />
-          </Form.Item>
         </Form>
       </Modal>
     </>
   );
 };
-
 export default CreateEmployee;
