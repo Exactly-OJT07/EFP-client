@@ -4,6 +4,9 @@ import { API_URL } from "../constants/constants";
 export const getEmployeeAPI = (params) =>
   axios.get(API_URL.EMPLOYEE, { params });
 
+export const getEmployeeDetailApi = (employeeId, params) =>
+  axios.get(`${API_URL.EMPLOYEE}/${employeeId}`, { params });
+
 export const getManagerAPI = (params) => axios.get(API_URL.MANAGER, { params });
 
 export const getProjectApi = (params) => axios.get(API_URL.PROJECT, { params });
