@@ -13,7 +13,6 @@ import moment from "moment";
 const { TextArea } = Input;
 const EmployeeDetail = () => {
   const { id } = useParams();
-  console.log(id);
   const { data: employee, isLoading, isError } = useGetOneEmployee(id);
   if (isLoading) {
     return <div>Loading...</div>;
