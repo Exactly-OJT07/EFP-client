@@ -79,25 +79,38 @@ const columns = [
         value: "ba",
       },
       {
-        text: "Q&A",
+        text: "Quality Assurance",
         value: "qa",
       },
       {
-        text: "DevOps",
+        text: "DevOps Engineer",
         value: "devops",
       },
       {
-        text: "UX-UI Dev",
+        text: "User Experience",
         value: "ux-ui",
       },
     ],
     onFilter: (value, record) => record.position.indexOf(value) === 0,
     render: (position) => {
-      if (position === "fe") {
-        return "Front-end Dev";
-      } else if (position === "be") {
-        return "Back-end Dev";
-      } else return "";
+      switch (position) {
+        case "fe":
+          return "Front-end Dev";
+        case "be":
+          return "Back-end Dev";
+        case "fullstack":
+          return "FullStack Dev";
+        case "ba":
+          return "Business Analyst";
+        case "qa":
+          return "Quality Assurance";
+        case "devops":
+          return "DevOps Engineer";
+        case "ux_ui":
+          return "User Experience";
+        default:
+          return "";
+      }
     },
   },
   {
