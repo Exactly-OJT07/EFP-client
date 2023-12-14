@@ -1,10 +1,10 @@
 import { PrivateLayout } from "../components/layout/MainLayout";
-import Dashboard from "../pages/Dashboard";
+import Dashboard from "../pages/dashboard/Dashboard";
 import ManageProject from "../pages/ManageProject";
 import ManageEmployee from "../pages/employees/ManageEmployee";
 import EmployeeDetail from "../pages/employees/EmployeeDetail";
 import ProjectDetail from "../pages/ProjectDetail";
-import Circleprogress from "../components/circle-progress/Circleprogress";
+import CreateProject from "../pages/projects/components/createProject";
 
 const routes = [
   {
@@ -31,12 +31,9 @@ const routes = [
             path: "",
             element: <ManageProject />,
           },
+          { path: "createProject", element: <CreateProject /> },
           { path: "projectDetail/:id", element: <ProjectDetail /> },
         ],
-      },
-      {
-        path: "circle-progress",
-        element: <Circleprogress />,
       },
       {
         path: "404",

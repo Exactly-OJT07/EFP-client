@@ -6,11 +6,27 @@ import Pagination from "../../../components/pagination/pagination";
 
 const columns = [
   {
-    title: "",
+    title: "Avatar",
     dataIndex: "avatar",
     key: "avatar",
     render: (avatar) => {
-      return <AntdImage width={50} height={50} src={avatar} />;
+      return (
+        <AntdImage
+          width={50}
+          height={50}
+          style={{ borderRadius: "50px" }}
+          src={avatar}
+        />
+      );
+    },
+  },
+  {
+    title: "Code",
+    dataIndex: "code",
+    key: "code",
+    sorter: {
+      compare: (a, b) => a.code.localeCompare(b.code),
+      multiple: 2,
     },
   },
   {
@@ -19,7 +35,7 @@ const columns = [
     key: "name",
     sorter: {
       compare: (a, b) => a.name.localeCompare(b.name),
-      multiple: 2,
+      multiple: 3,
     },
     defaultSortOrder: "ascend",
     sortDirections: ["ascend", "descend"],
@@ -54,14 +70,57 @@ const columns = [
         text: "Back-end Dev",
         value: "be",
       },
+      {
+        text: "Fullstack Dev",
+        value: "fullstack",
+      },
+      {
+        text: "Business Analyst",
+        value: "ba",
+      },
+      {
+        text: "Quality Assurance",
+        value: "qa",
+      },
+      {
+        text: "DevOps Engineer",
+        value: "devops",
+      },
+      {
+        text: "User Experience",
+        value: "ux-ui",
+      },
     ],
     onFilter: (value, record) => record.position.indexOf(value) === 0,
     render: (position) => {
-      if (position === "fe") {
-        return "Front-end Dev";
-      } else if (position === "be") {
-        return "Back-end Dev";
-      } else return "";
+      switch (position) {
+        case "fe":
+          return "Front-end Dev";
+        case "be":
+          return "Back-end Dev";
+        case "fullstack":
+          return "FullStack Dev";
+        case "ba":
+          return "Business Analyst";
+        case "qa":
+          return "Quality Assurance";
+        case "devops":
+          return "DevOps Engineer";
+        case "ux_ui":
+          return "User Experience";
+        default:
+          return "";
+      }
+    },
+  },
+  {
+    title: "Manager",
+    dataIndex: "manager",
+    key: "manager",
+    render: (manager) => {
+      if (manager) {
+        return manager.name;
+      } else return "No Manager";
     },
   },
   {
@@ -78,7 +137,7 @@ const columns = [
         value: "inactive",
       },
     ],
-    onFilter: (value, record) => record.position.indexOf(value) === 0,
+    onFilter: (value, record) => record.status.indexOf(value) === 0,
     render: (status) => {
       if (status === "active") {
         return "Active";
@@ -99,7 +158,7 @@ const EmployeeList = ({ data }) => (
 const ReadEmployee = () => {
   const [table, setTable] = useState({
     page: 1,
-    take: 6,
+    take: 5,
   });
 
   const [searchText, setSearchText] = useState("");
@@ -150,6 +209,7 @@ const ReadEmployee = () => {
           <SearchOutlined />
         </Button>
       </Space.Compact>
+
       {isLoading ? (
         <Spin
           size="large"

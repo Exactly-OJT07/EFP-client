@@ -1,0 +1,59 @@
+.manager-detail {
+  padding: 20px;
+  text-align: center;
+}
+
+.manager-detail img {
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  margin-bottom: 10px;
+  border: 5px solid #6db9ef;
+}
+
+.manager-detail h5 {
+  width: 150px;
+}
+
+.projectDetail-Content .ant-form-item {
+  margin-bottom: 16px;
+}
+
+.projectDetail-Content .ant-row {
+  margin-bottom: 16px;
+  justify-content: center;
+}
+
+.projectDetail-Content .ant-col {
+  padding: 0 8px;
+}
+
+.projectDetail-Content .ant-form {
+  max-width: 100%;
+}
+
+.project-detail {
+  padding: 20px;
+}
+
+.manager-infor {
+  margin: 20px;
+  display: flex;
+  justify-content: center;
+  text-align: center;
+  background-color: whitesmoke;
+  padding: 20px;
+  border-radius: 8px;
+}
+
+.project-infor {
+  margin: 20px;
+  background-color: whitesmoke;
+  padding: 20px;
+  border-radius: 8px;
+}
+.button-container {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 16px; /* Khoảng cách từ cột thông tin dự án đến nút Button */
+}
