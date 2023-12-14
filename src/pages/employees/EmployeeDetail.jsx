@@ -41,7 +41,8 @@ const EmployeeDetail = () => {
     joinDate,
     fireDate,
     manager,
-  } = employee;
+  } = employee?.employee;
+  console.log(employee);
 
   const handleCloseDeleteModal = () => {
     setIsDeleteModalOpen(false);
@@ -78,7 +79,11 @@ const EmployeeDetail = () => {
             <Row gutter={8}>
               <Col span={12}>
                 <Form.Item label="Employee Code">
-                  <Input value={code} style={{ maxWidth: "300px" }} disabled />
+                  <Input
+                    value={code ? code : ""}
+                    style={{ maxWidth: "300px" }}
+                    disabled
+                  />
                 </Form.Item>
               </Col>
               <Col span={12}>
@@ -201,7 +206,7 @@ const EmployeeDetail = () => {
                 <Form.List label="Skills" name="skills" initialValue={skills}>
                   {() => (
                     <>
-                      {!!skills.length && (
+                      {!!skills?.length && (
                         <Row>
                           <Col span={12}>
                             <Typography.Text level={4}>Skill</Typography.Text>
@@ -213,7 +218,7 @@ const EmployeeDetail = () => {
                           </Col>
                         </Row>
                       )}
-                      {skills.map(({ name, exp }) => (
+                      {skills?.map(({ name, exp }) => (
                         <Row key={name}>
                           <Col span={12}>
                             <Form.Item>
