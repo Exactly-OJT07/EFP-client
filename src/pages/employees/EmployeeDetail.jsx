@@ -1,3 +1,4 @@
+import React, { useState } from "react";
 import { useParams } from "react-router-dom";
 import { useGetOneEmployee } from "../../hooks/useEmployee";
 import {
@@ -10,8 +11,10 @@ import {
   Button,
 } from "antd";
 import moment from "moment";
+import DeleteEmployee from "./employeeDetail/DeleteEmployee";
 const { TextArea } = Input;
 const EmployeeDetail = () => {
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const { id } = useParams();
   const { data: employee, isLoading, isError } = useGetOneEmployee(id);
   if (isLoading) {
@@ -39,6 +42,10 @@ const EmployeeDetail = () => {
     fireDate,
     manager,
   } = employee;
+
+  const handleCloseDeleteModal = () => {
+    setIsDeleteModalOpen(false);
+  };
 
   return (
     <>
@@ -71,7 +78,7 @@ const EmployeeDetail = () => {
             <Row gutter={8}>
               <Col span={12}>
                 <Form.Item label="Employee Code">
-                  <Input value={code} style={{ maxWidth: "300px" }} readOnly />
+                  <Input value={code} style={{ maxWidth: "300px" }} disabled />
                 </Form.Item>
               </Col>
               <Col span={12}>
@@ -85,26 +92,22 @@ const EmployeeDetail = () => {
               </Col>
               <Col span={12}>
                 <Form.Item label="Name">
-                  <Input value={name} style={{ maxWidth: "300px" }} readOnly />
+                  <Input value={name} style={{ maxWidth: "300px" }} />
                 </Form.Item>
               </Col>
               <Col span={12}>
                 <Form.Item label="Email">
-                  <Input value={email} style={{ maxWidth: "300px" }} readOnly />
+                  <Input value={email} style={{ maxWidth: "300px" }} />
                 </Form.Item>
               </Col>
               <Col span={12}>
                 <Form.Item label="Phone Number">
-                  <Input value={phone} style={{ maxWidth: "300px" }} readOnly />
+                  <Input value={phone} style={{ maxWidth: "300px" }} />
                 </Form.Item>
               </Col>
               <Col span={12}>
                 <Form.Item label="Identity Card">
-                  <Input
-                    value={identityCard}
-                    style={{ maxWidth: "300px" }}
-                    readOnly
-                  />
+                  <Input value={identityCard} style={{ maxWidth: "300px" }} />
                 </Form.Item>
               </Col>
               <Col span={12}>
@@ -243,9 +246,15 @@ const EmployeeDetail = () => {
       <Button type="primary" style={{ margin: "5px" }}>
         Edit
       </Button>
-      <Button type="primary" danger>
+      <Button type="primary" danger onClick={() => setIsDeleteModalOpen(true)}>
         Delete
       </Button>
+      <DeleteEmployee
+        isDeleteModalOpen={isDeleteModalOpen}
+        setIsDeleteModalOpen={setIsDeleteModalOpen}
+        width="500px"
+        onCancel={handleCloseDeleteModal}
+      />
     </>
   );
 };

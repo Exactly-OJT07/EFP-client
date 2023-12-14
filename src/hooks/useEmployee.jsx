@@ -3,6 +3,7 @@ import {
   getEmployeeAPI,
   getEmployeeDetailApi,
   createEmployeeAPI,
+  deleteEmployeeApi,
 } from "../api/apiUrl";
 import { QUERY_KEY } from "../constants/query-key";
 
@@ -39,5 +40,20 @@ export const useGetOneEmployee = (id) => {
   return useQuery([QUERY_KEY.EMPLOYEE, id], async () => {
     const { data } = await getEmployeeDetailApi(id);
     return data;
+  });
+};
+
+export const useDeleteEmployee = () => {
+  const queryClient = useQueryClient();
+
+  const deleteEmployee = async (employeeId) => {
+    console.log(employeeId);
+    await deleteEmployeeApi(employeeId);
+  };
+  return useMutation(deleteEmployee, {
+    onSuccess: () => {
+      queryClient.invalidateQueries(QUERY_KEY.EMPLOYEE);
+      openNotificationWithIcon("success", "Delete Employee Successfully");
+    },
   });
 };
