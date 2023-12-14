@@ -37,7 +37,7 @@ const ProjectDetail = () => {
     employee_project,
     startDate,
     endDate,
-  } = project;
+  } = project?.project;
   console.log(project);
 
   const handleAssignClick = () => {
