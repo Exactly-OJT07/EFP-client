@@ -64,7 +64,10 @@ const Login = () => {
     <div className="login__container">
       <div className="login">
         <div className="image">
-          <img src="src/assets/logo.jpg" alt="Login" />
+          <img
+            src="https://res.cloudinary.com/dtrwgtzzd/image/upload/v1702539462/vpk4eycgnsfk8mlfbvdu.jpg"
+            alt="Login"
+          />
         </div>
         <Form
           name="login-form"
