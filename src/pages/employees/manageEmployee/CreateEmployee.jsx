@@ -1,9 +1,12 @@
 import React, { useState } from "react";
-import { PlusOutlined, PlusCircleOutlined } from "@ant-design/icons";
+import {
+  PlusOutlined,
+  PlusCircleOutlined,
+  CloseCircleOutlined,
+} from "@ant-design/icons";
 import {
   Table,
   InputNumber,
-  Button,
   Form,
   Input,
   Modal,
@@ -17,16 +20,12 @@ import {
   Image as AntdImage,
   message,
 } from "antd";
-import {
-  CloudinaryContext,
-  Image as CloudImage,
-  Transformation,
-} from "cloudinary-react";
+import { CloudinaryContext, Image as CloudImage } from "cloudinary-react";
 import { Cloudinary } from "@cloudinary/url-gen";
 import moment from "moment";
 import { useGetManager } from "../../../hooks/useManager";
 import { useCreateEmployee } from "../../../hooks/useEmployee";
-
+import "../../../styles/ManageEmployee.css";
 const { useForm } = Form;
 
 const skills = [
@@ -65,7 +64,9 @@ const CreateEmployee = ({ isModalOpen, setIsModalOpen }) => {
   const [newSkill, setNewSkill] = useState("");
   const [newExperience, setNewExperience] = useState("");
 
-  const [imageUrl, setImageUrl] = useState(null);
+  const [imageUrl, setImageUrl] = useState(
+    "https://cdn.iconscout.com/icon/free/png-256/free-avatar-370-456322.png?f=webp",
+  );
   const [loading, setLoading] = useState(false);
   const cld = new Cloudinary({ cloud: { cloudName: "dvm8fnczy" } });
 
@@ -76,43 +77,60 @@ const CreateEmployee = ({ isModalOpen, setIsModalOpen }) => {
   const { mutate: createEmployee } = useCreateEmployee();
 
   const addToSkills = () => {
+    if (!newSkill || !newExperience) {
+      message.error("Please enter skill name and years of experience.");
+      return;
+    }
     const newEntry = {
       name: newSkill,
       exp: newExperience,
     };
-    console.log(newEntry);
-
-    setNewSkills([...newSkills, newEntry]);
+    setNewSkills([...newSkills, { ...newEntry, key: newSkills.length + 1 }]);
     setNewSkill("");
     setNewExperience("");
   };
+  const removeSkill = (key) => {
+    const updatedSkills = newSkills.filter((skill) => skill.key !== key);
+    setNewSkills(updatedSkills);
+  };
+
+  const defaultImageUrl =
+    "https://cdn.iconscout.com/icon/free/png-256/free-avatar-370-456322.png?f=webp";
 
   const handleChange = (info) => {
     if (info.file.status === "uploading") {
       setLoading(true);
       return;
     }
-
     if (info.file.status === "done") {
       setImageUrl(info.file.response.secure_url);
       setNewAvatar(info.file.response.secure_url);
+      message.success(`uploaded successfully`);
+      setLoading(false);
+    } else {
+      setImageUrl(defaultImageUrl);
+      setNewAvatar(null);
       setLoading(false);
     }
   };
 
   const handleCreateOk = async () => {
-    const formData = await formCreate.validateFields();
-    formData.skills = newSkills;
-    formData.avatar = imageUrl;
-
-    setConfirmLoading(true);
-    createEmployee({
-      ...formData,
-    });
-    formCreate.resetFields();
-    setNewSkills([]);
-    setConfirmLoading(false);
-    setIsModalOpen(false);
+    try {
+      const formData = await formCreate.validateFields();
+      formData.skills = newSkills;
+      formData.avatar = imageUrl;
+      setConfirmLoading(true);
+      createEmployee({
+        ...formData,
+      });
+      message.success("Employee created successfully!");
+      formCreate.resetFields();
+      setNewSkills([]);
+      setConfirmLoading(false);
+      setIsModalOpen(false);
+    } catch (error) {
+      message.error("Error creating employee. Please check the form.");
+    }
   };
 
   const handleCreateCancel = () => {
@@ -151,7 +169,7 @@ const CreateEmployee = ({ isModalOpen, setIsModalOpen }) => {
             >
               <CloudinaryContext cloudName="dvm8fnczy" cld={cld}>
                 <Upload
-                  listType="picture-card"
+                  listType="picture-circle"
                   maxCount={1}
                   action={`https://api.cloudinary.com/v1_1/dvm8fnczy/image/upload`}
                   data={{ upload_preset: "ackgbz0m" }}
@@ -160,9 +178,16 @@ const CreateEmployee = ({ isModalOpen, setIsModalOpen }) => {
                 >
                   <Spin spinning={loading} tip="Uploading...">
                     {imageUrl ? (
-                      <CloudImage publicId={imageUrl} width="108" height="108">
-                        <Transformation crop="fill" />
-                      </CloudImage>
+                      <div className="rounded-image-container">
+                        <CloudImage
+                          publicId={imageUrl}
+                          style={{
+                            width: "100px",
+                            height: "100px",
+                            borderRadius: "100%",
+                          }}
+                        />
+                      </div>
                     ) : (
                       <div>
                         <PlusOutlined />
@@ -176,7 +201,12 @@ const CreateEmployee = ({ isModalOpen, setIsModalOpen }) => {
           </Col>
           <Row gutter={10}>
             <Col xs={24} sm={12} md={12} lg={6} xl={6}>
-              <Form.Item name="code" label="Code" style={{ width: "100%" }}>
+              <Form.Item
+                name="code"
+                label="Code"
+                style={{ width: "100%" }}
+                rules={[{ required: true, message: "Please enter a Code!" }]}
+              >
                 <Input
                   value={newCode}
                   onChange={(e) => setNewCode(e.target.value)}
@@ -184,7 +214,12 @@ const CreateEmployee = ({ isModalOpen, setIsModalOpen }) => {
               </Form.Item>
             </Col>
             <Col xs={24} sm={12} md={12} lg={6} xl={6}>
-              <Form.Item name="name" label="Name" style={{ width: "100%" }}>
+              <Form.Item
+                name="name"
+                label="Name"
+                style={{ width: "100%" }}
+                rules={[{ required: true, message: "Please enter a Name!" }]}
+              >
                 <Input
                   value={newName}
                   onChange={(e) => setNewName(e.target.value)}
@@ -192,7 +227,18 @@ const CreateEmployee = ({ isModalOpen, setIsModalOpen }) => {
               </Form.Item>
             </Col>
             <Col xs={24} sm={12} md={12} lg={6} xl={6}>
-              <Form.Item name="phone" label="Phone" style={{ width: "100%" }}>
+              <Form.Item
+                name="phone"
+                label="Phone"
+                style={{ width: "100%" }}
+                rules={[
+                  {
+                    required: true,
+                    pattern: /^[0-9]{10}$/,
+                    message: "Phone must be 10 digits",
+                  },
+                ]}
+              >
                 <Input
                   value={newPhone}
                   onChange={(e) => setNewPhone(e.target.value)}
@@ -204,7 +250,13 @@ const CreateEmployee = ({ isModalOpen, setIsModalOpen }) => {
                 name="email"
                 label="Email"
                 style={{ width: "100%" }}
-                rules={[{ required: true }]}
+                rules={[
+                  { required: true, message: "Please input your email!" },
+                  {
+                    type: "email",
+                    message: "Please enter a valid email address!",
+                  },
+                ]}
               >
                 <Input
                   value={newEmail}
@@ -217,6 +269,9 @@ const CreateEmployee = ({ isModalOpen, setIsModalOpen }) => {
                 name="description"
                 label="Description"
                 style={{ width: "100%" }}
+                rules={[
+                  { required: true, message: "Please enter a description!" },
+                ]}
               >
                 <Input
                   value={newDescription}
@@ -229,12 +284,18 @@ const CreateEmployee = ({ isModalOpen, setIsModalOpen }) => {
                 name="dateOfBirth"
                 label="Dob"
                 style={{ width: "100%" }}
+                rules={[
+                  {
+                    required: true,
+                    message: "Please select the date of birth!",
+                  },
+                ]}
               >
                 <DatePicker
                   style={{ width: "100%" }}
                   value={moment(newDob)}
                   onChange={(date) => {
-                    setNewDob(date.format("YYYY-MM-DD"));
+                    setNewDob(date.format("DD/MM/YYYY"));
                     console.log(date);
                   }}
                   format="DD/MM/YYYY"
@@ -249,8 +310,8 @@ const CreateEmployee = ({ isModalOpen, setIsModalOpen }) => {
                 rules={[
                   {
                     required: true,
-                    pattern: /^[0-9]{10}$/,
-                    message: "Phone must be 10 digits",
+                    pattern: /^[0-9]{9}$/,
+                    message: "IdentityCard must be 9 digits",
                   },
                 ]}
               >
@@ -262,7 +323,12 @@ const CreateEmployee = ({ isModalOpen, setIsModalOpen }) => {
             </Col>
 
             <Col xs={24} sm={12} md={12} lg={6} xl={6}>
-              <Form.Item name="gender" label="Gender" style={{ width: "100%" }}>
+              <Form.Item
+                name="gender"
+                label="Gender"
+                style={{ width: "100%" }}
+                rules={[{ required: true, message: "Please select a Gender!" }]}
+              >
                 <Select
                   value={newGender}
                   onChange={(value) => setNewGender(value)}
@@ -274,7 +340,12 @@ const CreateEmployee = ({ isModalOpen, setIsModalOpen }) => {
             </Col>
 
             <Col xs={24} sm={12} md={12} lg={6} xl={6}>
-              <Form.Item name="status" label="Status" style={{ width: "100%" }}>
+              <Form.Item
+                name="status"
+                label="Status"
+                style={{ width: "100%" }}
+                rules={[{ required: true, message: "Please select a Status!" }]}
+              >
                 <Select
                   value={newStatus}
                   onChange={(value) => setNewStatus(value)}
@@ -289,6 +360,9 @@ const CreateEmployee = ({ isModalOpen, setIsModalOpen }) => {
                 name="position"
                 label="Position"
                 style={{ width: "100%" }}
+                rules={[
+                  { required: true, message: "Please select a Position!" },
+                ]}
               >
                 <Select
                   value={newPosition}
@@ -310,6 +384,12 @@ const CreateEmployee = ({ isModalOpen, setIsModalOpen }) => {
                 name="isManager"
                 label="IsManager"
                 style={{ width: "100%" }}
+                rules={[
+                  {
+                    required: true,
+                    message: "Please select whether the employee is a manager!",
+                  },
+                ]}
               >
                 <Radio.Group
                   value={newIsManager}
@@ -336,14 +416,19 @@ const CreateEmployee = ({ isModalOpen, setIsModalOpen }) => {
                 </Select>
               </Form.Item>
             </Col>
-
             <Col xs={24} sm={12} md={12} lg={6} xl={6}>
-              <Form.Item name="joinDate" label="Join Date">
+              <Form.Item
+                name="joinDate"
+                label="Join Date"
+                rules={[
+                  { required: true, message: "Please select a Join Date!" },
+                ]}
+              >
                 <DatePicker
                   style={{ width: "100%" }}
                   value={moment(newJoinDate)}
                   onChange={(e) => {
-                    setNewJoinDate(e ? e.format("YYYY-MM-DD") : null);
+                    setNewJoinDate(e ? e.format("DD/MM/YYYY") : null);
                     console.log(e);
                   }}
                   format="DD/MM/YYYY"
@@ -352,33 +437,41 @@ const CreateEmployee = ({ isModalOpen, setIsModalOpen }) => {
               <Form.Item name="fireDate" label="Fire Date">
                 <DatePicker
                   style={{ width: "100%" }}
+                  disabledDate={(current) => {
+                    if (newJoinDate) {
+                      return (
+                        current && current < moment(newJoinDate, "DD/MM/YYYY")
+                      );
+                    }
+                  }}
                   value={newFireDate ? moment(newFireDate) : null}
                   onChange={(e) =>
-                    setNewFireDate(e ? e.format("YYYY-MM-DD") : null)
+                    setNewFireDate(e ? e.format("DD/MM/YYYY") : null)
                   }
                   format="DD/MM/YYYY"
-                  disabledDate={(current) => {
-                    return current && current < moment(newJoinDate);
-                  }}
                 />
               </Form.Item>
             </Col>
-            <Col>
+            <Col xl={12}>
               <Form.Item name="skills" label="Skills" style={{ width: "100%" }}>
                 <Table
                   rowKey="name"
                   dataSource={newSkills.map((skill) => ({
                     ...skill,
-                    key: skill.skill,
+                    key: skill.key,
                   }))}
                   columns={[
                     ...skills,
                     {
                       title: "Action",
                       render: (record) => (
-                        <Button onClick={() => removeSkill(record.key)}>
-                          Remove
-                        </Button>
+                        <CloseCircleOutlined
+                          type="link"
+                          onClick={() => {
+                            console.log("Removing skill with key:", record.key);
+                            removeSkill(record.key);
+                          }}
+                        />
                       ),
                     },
                   ]}
@@ -387,13 +480,28 @@ const CreateEmployee = ({ isModalOpen, setIsModalOpen }) => {
               </Form.Item>
             </Col>
             <Col xs={24} sm={12} md={12} lg={6} xl={6}>
-              <Form.Item label="Name" style={{ marginBottom: "8px" }}>
+              <Form.Item
+                label="Name"
+                style={{ marginBottom: "8px" }}
+                rules={[
+                  { required: true, message: "Please enter a skill name!" },
+                ]}
+              >
                 <Input
                   value={newSkill}
                   onChange={(e) => setNewSkill(e.target.value)}
                 />
               </Form.Item>
-              <Form.Item label="Exp" style={{ marginBottom: "8px" }}>
+              <Form.Item
+                label="Exp"
+                style={{ marginBottom: "8px" }}
+                rules={[
+                  {
+                    required: true,
+                    message: "Please enter the years of experience!",
+                  },
+                ]}
+              >
                 <InputNumber
                   value={newExperience}
                   onChange={(value) => setNewExperience(value)}
