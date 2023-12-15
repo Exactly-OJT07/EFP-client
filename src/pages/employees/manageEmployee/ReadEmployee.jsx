@@ -2,7 +2,7 @@ import React from "react";
 import { Table, Image as AntdImage, Typography } from "antd";
 import { useNavigate } from "react-router-dom";
 
-const EmployeeName = ({ record }) => {
+const EmployeeName = ({ name, record }) => {
   const navigate = useNavigate();
 
   return (
@@ -10,8 +10,9 @@ const EmployeeName = ({ record }) => {
       onClick={() => {
         navigate(`/manageEmployees/employeeDetail/${record.id}`);
       }}
+      style={{ color: "blue" }}
     >
-      {record.name}
+      {name}
     </Typography.Text>
   );
 };
@@ -50,7 +51,7 @@ const columns = [
       multiple: 3,
     },
     sortDirections: ["ascend", "descend"],
-    render: (name, record) => <EmployeeName record={record} />,
+    render: (name, record) => <EmployeeName record={record} name={name} />,
   },
   {
     title: "Email",
