@@ -29,3 +29,9 @@ export const createEmployeeAPI = (params) => {
   console.log("Request Payload:", params);
   return axios.post(`${API_URL.EMPLOYEE}`, params);
 };
+
+export const getEmployeeTotalAPI = (params) =>
+  axios.get(API_URL.EMPLOYEE_TOTAL, { params });
+
+export const getProjectTotalAPI = (params) =>
+  axios.get(API_URL.PROJECT_TOTAL, { params });

@@ -18,19 +18,6 @@ export const PrivateLayout = () => {
     token: { colorBgContainer },
   } = theme.useToken();
 
-  const menu = (
-    <Menu>
-      <Menu.SubMenu key="1" title="Change Theme">
-        <Menu.Item key="dark">Dark Theme</Menu.Item>
-        <Menu.Item key="night">Night Mode</Menu.Item>
-      </Menu.SubMenu>
-      <Menu.SubMenu key="2" title="Change Language">
-        <Menu.Item key="us">US English</Menu.Item>
-        <Menu.Item key="vni">Vietnamese (VNI)</Menu.Item>
-      </Menu.SubMenu>
-    </Menu>
-  );
-
   return (
     <Layout
       style={{
@@ -63,17 +50,6 @@ export const PrivateLayout = () => {
               height: 64,
             }}
           />
-          <Dropdown overlay={menu} placement="bottomRight">
-            <Button
-              type="text"
-              icon={<SettingOutlined />}
-              style={{
-                fontSize: "16px",
-                width: 64,
-                height: 64,
-              }}
-            />
-          </Dropdown>
         </Header>
         <Content
           style={{

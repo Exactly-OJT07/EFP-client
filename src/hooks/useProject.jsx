@@ -8,7 +8,6 @@ import {
 } from "../api/apiUrl";
 import { QUERY_KEY } from "../constants/query-key";
 import { openNotificationWithIcon } from "../components/notification/notification";
-import { NotificationType } from "../constants/constants";
 
 export const useGetData = (params) =>
   useQuery(
