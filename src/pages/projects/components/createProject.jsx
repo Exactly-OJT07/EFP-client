@@ -1,13 +1,24 @@
 import React, { useState } from "react";
-import { Modal, Form, Input, Select, Row, Col, DatePicker, Space } from "antd";
+import { PlusCircleOutlined, CloseCircleOutlined } from "@ant-design/icons";
+import {
+  Modal,
+  Form,
+  Input,
+  Select,
+  Row,
+  Col,
+  DatePicker,
+  Table,
+  Tag,
+} from "antd";
 import moment from "moment";
-import { createProjectAPI } from "../../../api/apiUrl";
 import { useGetManager } from "../../../hooks/useManager";
 import { useCreateProject } from "../../../hooks/useProject";
+import { useGetClients } from "../../../hooks/useEmployee";
 
 const { Option } = Select;
 
-const CreateProject = ({ isModalOpen, setIsModalOpen }) => {
+const CreateProject = ({ isModalOpen, setIsModalOpen, setIsAssign }) => {
   const [formCreate] = Form.useForm();
   const [newName, setNewName] = useState("");
   const [newManager, setNewManager] = useState("");
@@ -15,6 +26,9 @@ const CreateProject = ({ isModalOpen, setIsModalOpen }) => {
   const [newSpecification, setNewSpecification] = useState("");
   const [newDescription, setNewDescription] = useState("");
   const [newLangFrame, setNewLangFrame] = useState("");
+  const [newAssign, setNewAssign] = useState("");
+  const [newRoles, setNewRoles] = useState([]);
+  const [newAssigns, setNewAssigns] = useState([]);
   const [newStartDate, setNewStartDate] = useState(null);
   const [newEndDate, setNewEndDate] = useState(null);
   const [confirmLoading] = useState(false);
@@ -23,17 +37,73 @@ const CreateProject = ({ isModalOpen, setIsModalOpen }) => {
 
   const handleCreateOk = async () => {
     const formData = await formCreate.validateFields();
-    console.log(formData);
+    formData.employee_project = newAssigns;
+    console.log(formData, "formData");
     createProject({
       ...formData,
     });
+    formCreate.resetFields();
+    setNewAssigns([]);
     setIsModalOpen(false);
+    setIsAssign(true);
+  };
+
+  const { data: assignedMembers } = useGetClients({
+    page: 1,
+    take: 100,
+  });
+
+  const roles = [
+    {
+      title: "Member",
+      dataIndex: "employeeId",
+      key: "employeeId",
+      // render: (dataIndex) => {
+      //   console.log(dataIndex);
+      //   const { data : oneEmployee } = useGetOneEmployee(dataIndex);
+      //   console.log(oneEmployee);
+      //   // return oneEmployee.employee.name;
+      //   return "1111";
+      // },
+    },
+    {
+      title: "Roles",
+      dataIndex: "roles",
+      key: "roles",
+    },
+  ];
+
+  const addToAssign = () => {
+    const a = assignedMembers.data.find((member) => {
+      if (member.id === newAssign) return member;
+    });
+    console.log(newAssigns, "abs");
+
+    const newEntry = {
+      employeeId: newAssign,
+      roles: newRoles,
+    };
+    console.log(newEntry);
+    setNewAssigns([
+      ...newAssigns,
+      { ...newEntry, employeeName: a.name, key: newAssigns.length + 1 },
+    ]);
+    setNewAssign("");
+    setNewRoles([]);
+  };
+
+  const removeAssign = (member) => {
+    const updatedAssigns = newAssigns.filter(
+      (assign) => assign.member !== member,
+    );
+    setNewAssigns(updatedAssigns);
   };
 
   const { data: managers } = useGetManager();
 
   const handleCreateCancel = () => {
     setIsModalOpen(false);
+    formCreate.resetFields();
   };
 
   return (
@@ -43,7 +113,7 @@ const CreateProject = ({ isModalOpen, setIsModalOpen }) => {
       onOk={handleCreateOk}
       onCancel={handleCreateCancel}
       confirmLoading={confirmLoading}
-      width="1000px"
+      width="1200px"
     >
       <Form
         form={formCreate}
@@ -53,15 +123,23 @@ const CreateProject = ({ isModalOpen, setIsModalOpen }) => {
         onFinish={handleCreateOk}
       >
         <Row gutter={16}>
-          <Col xs={24} lg={12}>
-            <Form.Item name="name" label="Name">
+          <Col xs={24} sm={24} md={8}>
+            <Form.Item
+              name="name"
+              label="Name"
+              rules={[{ required: true, message: "Please enter your data!" }]}
+            >
               <Input
                 value={newName}
                 onChange={(e) => setNewName(e.target.value)}
               />
             </Form.Item>
 
-            <Form.Item name="managerId" label="Manager">
+            <Form.Item
+              name="managerId"
+              label="Manager"
+              rules={[{ required: true, message: "Please enter your data!" }]}
+            >
               <Select
                 value={newManager.id}
                 onChange={(value, option) =>
@@ -76,7 +154,11 @@ const CreateProject = ({ isModalOpen, setIsModalOpen }) => {
               </Select>
             </Form.Item>
 
-            <Form.Item name="technology" label="Technology">
+            <Form.Item
+              name="technology"
+              label="Technology"
+              rules={[{ required: true, message: "Please enter your data!" }]}
+            >
               <Select
                 mode="multiple"
                 placeholder="Please select"
@@ -104,7 +186,11 @@ const CreateProject = ({ isModalOpen, setIsModalOpen }) => {
               </Select>
             </Form.Item>
 
-            <Form.Item name="specification" label="Specification">
+            <Form.Item
+              name="specification"
+              label="Specification"
+              rules={[{ required: true, message: "Please enter your data!" }]}
+            >
               <Input
                 value={newSpecification}
                 onChange={(e) => setNewSpecification(e.target.value)}
@@ -112,15 +198,23 @@ const CreateProject = ({ isModalOpen, setIsModalOpen }) => {
             </Form.Item>
           </Col>
 
-          <Col xs={24} lg={12}>
-            <Form.Item name="description" label="Description">
+          <Col xs={24} sm={24} md={8}>
+            <Form.Item
+              name="description"
+              label="Description"
+              rules={[{ required: true, message: "Please enter your data!" }]}
+            >
               <Input
                 value={newDescription}
                 onChange={(e) => setNewDescription(e.target.value)}
               />
             </Form.Item>
 
-            <Form.Item name="langFrame" label="LangFrame">
+            <Form.Item
+              name="langFrame"
+              label="LangFrame"
+              rules={[{ required: true, message: "Please enter your data!" }]}
+            >
               <Select
                 mode="multiple"
                 placeholder="Please select"
@@ -151,7 +245,13 @@ const CreateProject = ({ isModalOpen, setIsModalOpen }) => {
 
             <Row>
               <Col xs={24} sm={12} md={12} lg={12} xl={12}>
-                <Form.Item name="startDate" label="StartDate">
+                <Form.Item
+                  name="startDate"
+                  label="StartDate"
+                  rules={[
+                    { required: true, message: "Please enter your data!" },
+                  ]}
+                >
                   <DatePicker
                     value={newStartDate ? moment(newStartDate) : null}
                     onChange={(e) =>
@@ -164,8 +264,15 @@ const CreateProject = ({ isModalOpen, setIsModalOpen }) => {
                   />
                 </Form.Item>
               </Col>
+
               <Col xs={24} sm={12} md={12} lg={12} xl={12}>
-                <Form.Item name="endDate" label="EndDate">
+                <Form.Item
+                  name="endDate"
+                  label="EndDate"
+                  rules={[
+                    { required: true, message: "Please enter your data!" },
+                  ]}
+                >
                   <DatePicker
                     value={newEndDate ? moment(newEndDate) : null}
                     onChange={(e) =>
@@ -176,6 +283,108 @@ const CreateProject = ({ isModalOpen, setIsModalOpen }) => {
                     disabledDate={(current) => {
                       return current && current < moment(newStartDate);
                     }}
+                  />
+                </Form.Item>
+              </Col>
+            </Row>
+          </Col>
+
+          <Col xs={24} sm={24} md={8}>
+            <Row>
+              <Col span={11}>
+                <Form.Item
+                  label="Member"
+                  style={{ marginBottom: "8px" }}
+                  rules={[
+                    { required: true, message: "Please enter your data!" },
+                  ]}
+                >
+                  <Select
+                    value={newAssign}
+                    onChange={(value) => setNewAssign(value)}
+                    placeholder="Please select"
+                    style={{
+                      width: "100%",
+                    }}
+                  >
+                    {assignedMembers?.data.map((member) => (
+                      <Select.Option key={member.id} value={member.id}>
+                        {member.name}
+                      </Select.Option>
+                    ))}
+                  </Select>
+                </Form.Item>
+              </Col>
+
+              <Col span={11}>
+                <Form.Item
+                  label="Roles"
+                  style={{ marginBottom: "8px" }}
+                  rules={[
+                    { required: true, message: "Please enter your data!" },
+                  ]}
+                >
+                  <Select
+                    mode="multiple"
+                    value={newRoles}
+                    onChange={(values) => setNewRoles(values)}
+                    placeholder="Please select"
+                    style={{ width: "100%" }}
+                  >
+                    {[
+                      "fe",
+                      "be",
+                      "ba",
+                      "qa",
+                      "ux_ui",
+                      "devops",
+                      "fullstack",
+                    ].map((option) => (
+                      <Select.Option key={option} value={option}>
+                        {option}
+                      </Select.Option>
+                    ))}
+                  </Select>
+                </Form.Item>
+              </Col>
+
+              <PlusCircleOutlined
+                style={{
+                  fontSize: "24px",
+                  paddingTop: "24px",
+                  marginLeft: "7px",
+                }}
+                onClick={() => {
+                  addToAssign();
+                }}
+              />
+
+              <Col span={24}>
+                <Form.Item
+                  name="employee_project"
+                  label="AssignMember"
+                  style={{ width: "100%" }}
+                >
+                  <Table
+                    rowKey="employeeId"
+                    dataSource={newAssigns.map((assign) => ({
+                      ...assign,
+                      employeeId: assign.employeeName,
+                      key: assign.assign,
+                    }))}
+                    columns={[
+                      ...roles,
+                      {
+                        title: "Action",
+                        render: (record) => (
+                          <CloseCircleOutlined
+                            style={{ color: "red" }}
+                            onClick={() => removeAssign(record.member)}
+                          />
+                        ),
+                      },
+                    ]}
+                    pagination={false}
                   />
                 </Form.Item>
               </Col>

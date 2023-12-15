@@ -68,6 +68,7 @@ const ManageProject = () => {
   };
 
   const { data: projects, isLoading, isError } = useGetData(paginateOptions);
+  console.log(projects);
 
   const projectStatusUpdateMutation = useProjectStatusUpdate();
 
