@@ -1,146 +1,92 @@
-::-webkit-scrollbar {
-  width: 8px;
-}
-::-webkit-scrollbar-track {
-  background-color: black;
-}
-::-webkit-scrollbar-thumb {
-  background-color: #335ddc;
-  border-radius: 8px;
-}
 .login {
-  width: 1300px;
-  height: 540px;
+  width: 500px;
+  height: 505px;
   box-sizing: border-box;
   display: flex;
   justify-content: space-between;
   align-items: center;
   background-color: white;
-  /* box-shadow: 0 0 40px rgba(0, 0, 0, 0.16); */
   overflow: hidden;
   margin: 0 auto;
-  border-radius: 12px;
+  background: transparent;
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  border-radius: 15px;
+  backdrop-filter: blur(30px);
+  margin-top: 160px;
 }
 #login-form {
-  flex: 1 0 100%;
-  max-width: 580px;
-  width: 100%;
-  padding-top: 70px;
+  padding-left: 70px;
   padding-right: 70px;
-  padding-bottom: 70px;
-  padding-left: 0px;
+  padding-top: 20px;
+  padding-bottom: 20px;
+  margin-bottom: 0px;
 }
-#login-form p.form-title {
-  color: #333333;
-  font-family: "Josefin Sans", sans-serif;
+p.form-title {
+  color: white;
   font-size: 45px;
-  font-weight: bold;
   line-height: 1;
-  margin-bottom: 0;
-  margin: 33px 0px 0px;
 }
-#login-form .ant-form-item-label > label.ant-form-item-required::before {
-  display: none;
-}
-.ant-form-item-control-input-content {
-  text-align: left;
-}
+
+/* input chỗ password */
 #login-form .ant-input-affix-wrapper {
   padding: 12px 15px;
+  background: transparent;
+  border-radius: 10px;
 }
+#login-form_password {
+  background: transparent;
+}
+
+:where(.css-dev-only-do-not-override-6j9yrn).ant-input {
+  color: white;
+  font-size: 15px;
+}
+/* input chỗ email */
 #login-form_username {
   height: 48px;
+  background: transparent;
+  border-radius: 10px;
 }
-#login-form .ant-btn {
-  height: 42px;
-  letter-spacing: 1px;
-  border-radius: 6px;
-}
+
 .login-form-button {
   width: 100%;
   font-size: 22px;
   padding-bottom: 43px;
+  border-radius: 26px;
+  color: #454545;
+  background: transparent;
+  border-color: white;
 }
-.image {
-  display: flex;
-  align-items: flex-end;
-  max-width: 800px;
-  min-height: 10%;
+
+.login-email::placeholder {
+  color: white;
 }
-.image img {
-  display: block;
-  width: 100%;
-}
-@media screen and (max-width: 1023px) {
-  .login-box {
-    flex-direction: column;
-    box-shadow: none;
-  }
-  .image {
-    max-width: 100%;
-    min-height: auto;
-  }
-  #login-form {
-    max-width: 100%;
-  }
-}
-p {
-  font-size: 15px;
-}
+
 .PPP {
   font-size: 15px;
   padding-top: 3px;
-  padding-bottom: 15px;
+  padding-bottom: 10px;
+  color: white;
+  text-align: center;
 }
 .title {
   font-size: 20px;
   font-weight: bold;
   margin-bottom: 5px;
+  color: white;
+  text-align: left;
 }
-body {
-  margin: 0;
-  padding: 0;
-  font-family: sans-serif;
-  background: linear-gradient(#101828, #315884);
-  /* background-color: white; */
-}
-@media screen and (min-width: 1024px) and (max-width: 1439px) {
-  .login {
-    width: 1000px;
-    height: 410px;
-  }
-  #login-form {
-    max-width: 450px;
-    padding: 50px;
-    padding-right: 30px;
-  }
-}
-@media screen and (min-width: 768px) and (max-width: 1023px) {
-  .login {
-    width: 650px;
-    height: 1000px;
-    flex-direction: column;
-  }
-  #login-form {
-    max-width: 600px;
-    padding: 40px;
-    padding-right: 30px;
-  }
-  .image {
-    max-width: 800px;
-    min-height: 10%;
-    margin-top: 387px;
-  }
-  .image img {
-    display: block;
-    width: 100%;
-  }
-}
-
-.login__container {
-  width: 100vw;
+/* .login__container {
   height: 100vh;
   display: flex;
   justify-content: center;
   align-items: center;
+
+} */
+
+body {
+  background: url("https://res.cloudinary.com/dvm8fnczy/image/upload/v1702632142/gwncnyuje3r2uvopbp64.png")
+    no-repeat;
+  background-size: 98.3% 77vh;
+  background-position: center top;
 }
