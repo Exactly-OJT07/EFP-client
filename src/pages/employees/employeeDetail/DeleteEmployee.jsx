@@ -5,7 +5,6 @@ import { useParams } from "react-router-dom";
 
 const DeleteEmployee = ({ isDeleteModalOpen, setIsDeleteModalOpen }) => {
   const { id } = useParams();
-  console.log(id);
   const deleteEmployeeMutation = useDeleteEmployee();
   const handleDeleteOk = async (employeeId) => {
     try {

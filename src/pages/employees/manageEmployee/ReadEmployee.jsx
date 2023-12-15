@@ -51,6 +51,7 @@ const columns = [
       compare: (a, b) => a.email.localeCompare(b.email),
       multiple: 1,
     },
+    responsive: ["lg"],
   },
   {
     title: "Phone",
@@ -122,6 +123,7 @@ const columns = [
         return manager.name;
       } else return "No Manager";
     },
+    responsive: ["lg"],
   },
   {
     title: "Status",
@@ -143,6 +145,7 @@ const columns = [
         return "Active";
       } else return "Inactive";
     },
+    responsive: ["lg"],
   },
 ];
 
