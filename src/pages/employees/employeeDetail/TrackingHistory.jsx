@@ -6,45 +6,30 @@ import { useGetOneEmployee } from "../../../hooks/useEmployee";
 import moment from "moment";
 import ReactApexChart from "react-apexcharts";
 
-const TrackingTable = () => {
-  const [state, setState] = useState({
-    series: [
-      {
-        data: [
-          {
-            x: "Code",
-            y: [
-              new Date("2019-03-02").getTime(),
-              new Date("2019-03-04").getTime(),
-            ],
-          },
-          {
-            x: "Test",
-            y: [
-              new Date("2019-03-04").getTime(),
-              new Date("2019-03-08").getTime(),
-            ],
-          },
-          {
-            x: "Validation",
-            y: [
-              new Date("2019-03-08").getTime(),
-              new Date("2019-03-12").getTime(),
-            ],
-          },
-          {
-            x: "Deployment",
-            y: [
-              new Date("2019-03-12").getTime(),
-              new Date("2019-03-18").getTime(),
-            ],
-          },
-        ],
-      },
-    ],
+const TrackingTable = ({ projects }) => {
+  const projectSeries = projects.map((project, index) => {
+    return {
+      data: [
+        {
+          x: project.projectName,
+          y: [
+            new Date(
+              moment(project.projectStartDate).format("YYYY-MM-DD"),
+            ).getTime(),
+            new Date(
+              moment(project.projectFireDate).format("YYYY-MM-DD"),
+            ).getTime(),
+          ],
+        },
+      ],
+    };
+  });
+
+  const [state] = useState({
+    series: projectSeries,
     options: {
       chart: {
-        height: 350,
+        height: 300,
         type: "rangeBar",
         toolbar: {
           show: false, // Set to false to hide the toolbar
@@ -70,7 +55,7 @@ const TrackingTable = () => {
         options={state.options}
         series={state.series}
         type="rangeBar"
-        height={350}
+        height={500}
         width={750}
       />
     </Space>
@@ -97,35 +82,9 @@ const TrackingHistory = ({ isTrackingModalOpen, setIsTrackingModalOpen }) => {
       >
         <Typography.Title level={4}>Info</Typography.Title>
         <Typography.Title level={5}>
-          {moment(joinDate).format("DD-MM-YYYY")}
+          Employee Hire Date: {moment(joinDate).format("DD-MM-YYYY")}
         </Typography.Title>
-        <Typography.Title level={5}>
-          {fireDate ? moment(fireDate).format("DD-MM-YYYY") : "No Fire Date"}
-        </Typography.Title>
-        {projects?.map((project, index) => (
-          <React.Fragment key={index}>
-            <Typography.Title level={4}>Project</Typography.Title>
-            <Typography.Title level={5}>
-              {"Project Start Date: " +
-                moment(project.projectStartDate).format("DD-MM-YYYY")}
-            </Typography.Title>
-            <Typography.Title level={5}>
-              {project.projectEndDate
-                ? "Project End Date: " +
-                  moment(project.projectEndDate).format("DD-MM-YYYY")
-                : "No Project End Date"}
-            </Typography.Title>
-            <Typography.Title level={5}>
-              {"Join Date: " + moment(project.joinDate).format("DD-MM-YYYY")}
-            </Typography.Title>
-            <Typography.Title level={5}>
-              {project.doneDate
-                ? "Done Date: " + moment(project.doneDate).format("DD-MM-YYYY")
-                : "No Project Done Date"}
-            </Typography.Title>
-          </React.Fragment>
-        ))}
-        <TrackingTable />
+        <TrackingTable projects={projects} />
       </Modal>
     </>
   );
