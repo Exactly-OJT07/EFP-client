@@ -8,7 +8,6 @@ import { Space, Input, Spin, Button } from "antd";
 import Pagination from "../../components/pagination/pagination";
 
 function ManageEmployee() {
-  const [searchText, setSearchText] = useState("");
   const [searchNameText, setSearchNameText] = useState("");
   const [searchEmailText, setSearchEmailText] = useState("");
   const [table, setTable] = useState({
@@ -18,17 +17,10 @@ function ManageEmployee() {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const paginateOptions = {
-    searchByName: searchText.name,
-    searchByEmail: searchText.email,
+    searchByName: searchNameText,
+    searchByEmail: searchEmailText,
     page: table.page,
     take: table.take,
-  };
-
-  const handleSearch = () => {
-    setSearchText(() => ({
-      name: searchNameText,
-      email: searchEmailText,
-    }));
   };
 
   const {
@@ -52,7 +44,6 @@ function ManageEmployee() {
           }}
           onChange={(e) => {
             setSearchNameText(e.target.value);
-            handleSearch;
           }}
         />
         <Input
@@ -63,18 +54,9 @@ function ManageEmployee() {
           }}
           onChange={(e) => {
             setSearchEmailText(e.target.value);
-            handleSearch;
           }}
         />
-        <Button onClick={handleSearch}>
-          <SearchOutlined />
-        </Button>
-
-        <Button
-          type="primary"
-          onClick={() => setIsModalOpen(true)}
-          style={{ display: "flex" }}
-        >
+        <Button type="primary" onClick={() => setIsModalOpen(true)}>
           <PlusOutlined /> New Employee
         </Button>
         <CreateEmployee
