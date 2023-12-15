@@ -186,7 +186,7 @@ const ReadEmployee = () => {
   } = useGetClients(paginateOptions);
   return (
     <>
-      <Space.Compact className="employee-search" size="large">
+      <Space className="employee-search" size="large">
         <Input
           placeholder="Name"
           allowClear
@@ -208,7 +208,7 @@ const ReadEmployee = () => {
         <Button onClick={handleSearch}>
           <SearchOutlined />
         </Button>
-      </Space.Compact>
+      </Space>
 
       {isLoading ? (
         <Spin

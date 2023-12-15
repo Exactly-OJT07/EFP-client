@@ -124,6 +124,7 @@ const CreateEmployee = ({ isModalOpen, setIsModalOpen }) => {
       });
       message.success("Employee created successfully!");
       formCreate.resetFields();
+      setImageUrl(defaultImageUrl);
       setNewSkills([]);
       setConfirmLoading(false);
       setIsModalOpen(false);
@@ -133,6 +134,9 @@ const CreateEmployee = ({ isModalOpen, setIsModalOpen }) => {
   };
 
   const handleCreateCancel = () => {
+    formCreate.resetFields();
+    setImageUrl(defaultImageUrl);
+    setNewSkills([]);
     setIsModalOpen(false);
   };
 
@@ -144,7 +148,7 @@ const CreateEmployee = ({ isModalOpen, setIsModalOpen }) => {
         onOk={handleCreateOk}
         onCancel={handleCreateCancel}
         confirmLoading={confirmLoading}
-        width="1000px"
+        width="1100px"
       >
         <Form
           form={formCreate}
