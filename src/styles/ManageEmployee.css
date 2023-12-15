@@ -1,7 +1,13 @@
 .employee-search {
   margin-bottom: 10px;
   display: flex;
-  justify-content: space-between;
+}
+
+@media (max-width: 768px) {
+  .employee-search {
+    flex-direction: column;
+    align-items: start;
+  }
 }
 
 .pagination {
