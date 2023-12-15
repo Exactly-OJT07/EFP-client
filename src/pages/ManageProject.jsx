@@ -54,7 +54,7 @@ const ManageProject = () => {
 
   const [table, setTable] = useState({
     page: 1,
-    take: 2,
+    take: 3,
   });
 
   const [filters, setFilters] = useState("");
@@ -115,20 +115,28 @@ const ManageProject = () => {
     setIsModalOpen(false);
   };
 
+  const handleFilter = (status) => {
+    setStatus(status);
+    setTable((prevTable) => ({
+      ...prevTable,
+      page: 1,
+    }));
+  };
+
   return (
     <Content className="content-project">
       <Space direction="horizontal" className="status-filter">
         <div className="status">
-          <Button type="secondary" onClick={() => setStatus("")}>
+          <Button type="secondary" onClick={() => handleFilter("")}>
             All Status
           </Button>
-          <Button type="secondary" onClick={() => setStatus("pending")}>
+          <Button type="secondary" onClick={() => handleFilter("pending")}>
             Pending
           </Button>
-          <Button type="secondary" onClick={() => setStatus("on_progress")}>
+          <Button type="secondary" onClick={() => handleFilter("on_progress")}>
             On Progress
           </Button>
-          <Button type="secondary" onClick={() => setStatus("done")}>
+          <Button type="secondary" onClick={() => handleFilter("done")}>
             Done
           </Button>
         </div>

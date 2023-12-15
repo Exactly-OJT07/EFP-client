@@ -19,6 +19,8 @@ const Circleprogress = ({ project }) => {
       if (project.status === "done") {
         // Nếu trạng thái là "done", thiết lập percent là 100
         setPercent(100);
+      } else if (project.status === "pending") {
+        setPercent(0);
       } else if (currentDate >= startDate && currentDate <= endDate) {
         const totalTime = endDate - startDate;
         const elapsedTime = currentDate - startDate;

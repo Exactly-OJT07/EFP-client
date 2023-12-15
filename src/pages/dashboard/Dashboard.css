@@ -12,3 +12,8 @@
   width: 370px;
   height: auto;
 }
+.card-infor {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}

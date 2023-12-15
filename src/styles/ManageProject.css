@@ -21,7 +21,7 @@
 }
 
 .content-project .ant-col {
-  padding-bottom: 15px !important;
+  padding-bottom: 5px !important;
 }
 
 .content-project .ant-card-body {
@@ -34,7 +34,7 @@
 
 .content-project .ant-pagination {
   position: absolute;
-  bottom: 50px;
+  bottom: 40px;
 }
 .project-employee-avatar {
   display: flex;
