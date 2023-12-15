@@ -23,7 +23,7 @@ function ManageEmployee() {
       </Button>
       <CreateEmployee
         isModalOpen={isModalOpen}
-        setIsModalOpen={() => setIsModalOpen}
+        setIsModalOpen={setIsModalOpen}
         width="1000px"
         onCancel={handleCloseModal}
       />
