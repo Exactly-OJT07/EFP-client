@@ -10,7 +10,7 @@ const EmployeeName = ({ name, record }) => {
       onClick={() => {
         navigate(`/manageEmployees/employeeDetail/${record.id}`);
       }}
-      style={{ color: "blue" }}
+      style={{ color: "blue", cursor: "pointer" }}
     >
       {name}
     </Typography.Text>
@@ -61,12 +61,12 @@ const columns = [
       compare: (a, b) => a.email.localeCompare(b.email),
       multiple: 1,
     },
-    responsive: ["lg"],
   },
   {
     title: "Phone",
     dataIndex: "phone",
     key: "phone",
+    responsive: ["lg"],
   },
   {
     title: "Position",
