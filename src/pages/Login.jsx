@@ -3,6 +3,7 @@ import { Button, Form, Input, Alert } from "antd";
 import "../styles/Login.css";
 import { useNavigate } from "react-router-dom";
 import { openNotificationWithIcon } from "../components/notification/notification";
+import styled from "styled-components";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -37,6 +38,13 @@ const Login = () => {
     openNotificationWithIcon("error", "Login Failed");
   };
 
+  const validateEmailFormat = (rule, value) => {
+    if (value && !value.includes("@gmail.com")) {
+      return Promise.reject("Please enter correct EMAIL format!");
+    }
+    return Promise.resolve();
+  };
+
   const onFinish = (values) => {
     const storedCredentials =
       JSON.parse(localStorage.getItem("credentials")) || {};
@@ -60,15 +68,19 @@ const Login = () => {
     console.log("Failed:", errorInfo);
   };
 
+  const StyledPassword = styled(Input.Password)`
+    input::placeholder {
+      color: white;
+    }
+  `;
+
   return (
     <div className="login__container">
       <div className="login">
-        <div className="image">
-          <img
-            src="https://res.cloudinary.com/dtrwgtzzd/image/upload/v1702539462/vpk4eycgnsfk8mlfbvdu.jpg"
-            alt="Login"
-          />
-        </div>
+        {/* <div className="image">
+          <img src="src/assets/logo.jpg" alt="Login" />
+        </div> */}
+        <div className="imagelogin"></div>
         <Form
           name="login-form"
           onFinish={onFinish}
@@ -80,14 +92,6 @@ const Login = () => {
               type="success"
               showIcon
               onClose={() => setShowAlert(false)}
-            />
-          )}
-          {showError && (
-            <Alert
-              message="Login Failed"
-              type="error"
-              showIcon
-              onClose={() => setShowError(false)}
             />
           )}
           <p className="form-title">Log In</p>
@@ -103,9 +107,12 @@ const Login = () => {
                 required: true,
                 message: "Please input your email!",
               },
+              {
+                validator: validateEmailFormat,
+              },
             ]}
           >
-            <Input placeholder="Enter your Email" />
+            <Input className="login-email" placeholder="Enter your Email" />
           </Form.Item>
           <p className="title">Password</p>
           <Form.Item
@@ -117,7 +124,7 @@ const Login = () => {
               },
             ]}
           >
-            <Input.Password placeholder="Enter your Password" />
+            <StyledPassword placeholder="Enter your Password" />
           </Form.Item>
           <Form.Item>
             <Button
