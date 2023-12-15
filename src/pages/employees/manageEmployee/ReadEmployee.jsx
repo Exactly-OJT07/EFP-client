@@ -1,8 +1,20 @@
-import React, { useState } from "react";
-import { useGetClients } from "../../../hooks/useEmployee";
-import { SearchOutlined } from "@ant-design/icons";
-import { Space, Input, Spin, Table, Image as AntdImage, Button } from "antd";
-import Pagination from "../../../components/pagination/pagination";
+import React from "react";
+import { Table, Image as AntdImage, Typography } from "antd";
+import { useNavigate } from "react-router-dom";
+
+const EmployeeName = ({ record }) => {
+  const navigate = useNavigate();
+
+  return (
+    <Typography.Text
+      onClick={() => {
+        navigate(`/manageEmployees/employeeDetail/${record.id}`);
+      }}
+    >
+      {record.name}
+    </Typography.Text>
+  );
+};
 
 const columns = [
   {
@@ -37,11 +49,8 @@ const columns = [
       compare: (a, b) => a.name.localeCompare(b.name),
       multiple: 3,
     },
-    defaultSortOrder: "ascend",
     sortDirections: ["ascend", "descend"],
-    render: (name, record) => (
-      <a href={`/manageEmployees/employeeDetail/${record.id}`}>{name}</a>
-    ),
+    render: (name, record) => <EmployeeName record={record} />,
   },
   {
     title: "Email",
@@ -149,7 +158,7 @@ const columns = [
   },
 ];
 
-const EmployeeList = ({ data }) => (
+const ReadEmployee = ({ data }) => (
   <Table
     rowKey="id"
     columns={columns}
@@ -157,87 +166,5 @@ const EmployeeList = ({ data }) => (
     pagination={false}
   />
 );
-
-const ReadEmployee = () => {
-  const [table, setTable] = useState({
-    page: 1,
-    take: 5,
-  });
-
-  const [searchText, setSearchText] = useState("");
-  const [searchNameText, setSearchNameText] = useState("");
-  const [searchEmailText, setSearchEmailText] = useState("");
-
-  const paginateOptions = {
-    searchByName: searchText.name,
-    searchByEmail: searchText.email,
-    page: table.page,
-    take: table.take,
-  };
-
-  const handleSearch = () => {
-    setSearchText(() => ({
-      name: searchNameText,
-      email: searchEmailText,
-    }));
-  };
-
-  const {
-    data: employees,
-    isLoading,
-    isError,
-  } = useGetClients(paginateOptions);
-  return (
-    <>
-      <Space className="employee-search" size="large">
-        <Input
-          placeholder="Name"
-          allowClear
-          value={searchNameText}
-          style={{
-            width: 304,
-          }}
-          onChange={(e) => setSearchNameText(e.target.value)}
-        />
-        <Input
-          placeholder="Email"
-          allowClear
-          value={searchEmailText}
-          style={{
-            width: 304,
-          }}
-          onChange={(e) => setSearchEmailText(e.target.value)}
-        />
-        <Button onClick={handleSearch}>
-          <SearchOutlined />
-        </Button>
-      </Space>
-
-      {isLoading ? (
-        <Spin
-          size="large"
-          style={{
-            display: "flex",
-            justifyContent: "center",
-            position: "absolute",
-            top: "50%",
-            left: "50%",
-          }}
-        />
-      ) : isError ? (
-        <div style={{ textAlign: "center", marginTop: 20 }}>
-          <Typography.Title level={5}>{isError}</Typography.Title>
-        </div>
-      ) : (
-        <>
-          <EmployeeList data={employees} />
-          <div className="pagination">
-            <Pagination items={employees} table={table} setTable={setTable} />
-          </div>
-        </>
-      )}
-    </>
-  );
-};
 
 export default ReadEmployee;
