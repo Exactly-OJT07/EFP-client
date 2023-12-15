@@ -86,7 +86,6 @@ const EmployeeDetail = () => {
                   <Input
                     value={manager?.name ? manager.name : "No Manager"}
                     style={{ maxWidth: "300px" }}
-                    readOnly
                   />
                 </Form.Item>
               </Col>
@@ -115,7 +114,6 @@ const EmployeeDetail = () => {
                   <Input
                     value={moment(joinDate).format("DD-MM-YYYY")}
                     style={{ maxWidth: "300px" }}
-                    readOnly
                   />
                 </Form.Item>
               </Col>
@@ -126,7 +124,6 @@ const EmployeeDetail = () => {
                       fireDate ? moment(fireDate).format("DD-MM-YYYY") : ""
                     }
                     style={{ maxWidth: "300px" }}
-                    readOnly
                   />
                 </Form.Item>
               </Col>
@@ -135,7 +132,6 @@ const EmployeeDetail = () => {
                   <Input
                     value={moment(dateOfBirth).format("DD-MM-YYYY")}
                     style={{ maxWidth: "300px" }}
-                    readOnly
                   />
                 </Form.Item>
               </Col>
@@ -149,7 +145,6 @@ const EmployeeDetail = () => {
                       }[gender] || ""
                     }
                     style={{ maxWidth: "300px" }}
-                    readOnly
                   />
                 </Form.Item>
               </Col>
@@ -168,7 +163,6 @@ const EmployeeDetail = () => {
                       }[position] || ""
                     }
                     style={{ maxWidth: "300px" }}
-                    readOnly
                   />
                 </Form.Item>
               </Col>
@@ -182,7 +176,6 @@ const EmployeeDetail = () => {
                       }[status] || ""
                     }
                     style={{ maxWidth: "300px" }}
-                    readOnly
                   />
                 </Form.Item>
               </Col>
@@ -193,7 +186,6 @@ const EmployeeDetail = () => {
                     placeholder="Description"
                     value={description}
                     style={{ maxWidth: "680px" }}
-                    readOnly
                   />
                 </Form.Item>
               </Col>
@@ -220,7 +212,6 @@ const EmployeeDetail = () => {
                               <Input
                                 value={name}
                                 style={{ maxWidth: "300px" }}
-                                readOnly
                               />
                             </Form.Item>
                           </Col>
@@ -229,7 +220,6 @@ const EmployeeDetail = () => {
                               <Input
                                 value={exp}
                                 style={{ maxWidth: "300px" }}
-                                readOnly
                               />
                             </Form.Item>
                           </Col>
