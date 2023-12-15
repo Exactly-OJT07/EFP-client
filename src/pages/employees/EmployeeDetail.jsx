@@ -19,10 +19,7 @@ const EmployeeDetail = () => {
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [isTrackingModalOpen, setIsTrackingModalOpen] = useState(false);
   const { id } = useParams();
-  const { data: employee, isLoading, isError } = useGetOneEmployee(id);
-  if (isLoading) {
-    return <div>Loading...</div>;
-  }
+  const { data: employee, isError } = useGetOneEmployee(id);
 
   if (isError || !employee) {
     return <div>Employee not found</div>;
