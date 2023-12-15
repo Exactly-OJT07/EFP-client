@@ -58,13 +58,6 @@ const CreateProject = ({ isModalOpen, setIsModalOpen, setIsAssign }) => {
       title: "Member",
       dataIndex: "employeeId",
       key: "employeeId",
-      // render: (dataIndex) => {
-      //   console.log(dataIndex);
-      //   const { data : oneEmployee } = useGetOneEmployee(dataIndex);
-      //   console.log(oneEmployee);
-      //   // return oneEmployee.employee.name;
-      //   return "1111";
-      // },
     },
     {
       title: "Roles",
@@ -92,9 +85,9 @@ const CreateProject = ({ isModalOpen, setIsModalOpen, setIsAssign }) => {
     setNewRoles([]);
   };
 
-  const removeAssign = (member) => {
+  const removeAssign = (employeeName) => {
     const updatedAssigns = newAssigns.filter(
-      (assign) => assign.member !== member,
+      (assign) => assign.employeeName !== employeeName,
     );
     setNewAssigns(updatedAssigns);
   };
@@ -307,11 +300,19 @@ const CreateProject = ({ isModalOpen, setIsModalOpen, setIsAssign }) => {
                       width: "100%",
                     }}
                   >
-                    {assignedMembers?.data.map((member) => (
-                      <Select.Option key={member.id} value={member.id}>
-                        {member.name}
-                      </Select.Option>
-                    ))}
+                    {assignedMembers?.data
+                      .filter((member) => member.id !== newManager.id) // Filter out the manager
+                      .filter(
+                        (member) =>
+                          !newAssigns.some(
+                            (assign) => assign.employeeId === member.id,
+                          ),
+                      )
+                      .map((member) => (
+                        <Select.Option key={member.id} value={member.id}>
+                          {member.name}
+                        </Select.Option>
+                      ))}
                   </Select>
                 </Form.Item>
               </Col>
@@ -370,6 +371,7 @@ const CreateProject = ({ isModalOpen, setIsModalOpen, setIsAssign }) => {
                     dataSource={newAssigns.map((assign) => ({
                       ...assign,
                       employeeId: assign.employeeName,
+                      roles: assign.roles.join(", "),
                       key: assign.assign,
                     }))}
                     columns={[
@@ -378,8 +380,8 @@ const CreateProject = ({ isModalOpen, setIsModalOpen, setIsAssign }) => {
                         title: "Action",
                         render: (record) => (
                           <CloseCircleOutlined
-                            style={{ color: "red" }}
-                            onClick={() => removeAssign(record.member)}
+                            style={{ color: "black" }}
+                            onClick={() => removeAssign(record.employeeName)}
                           />
                         ),
                       },

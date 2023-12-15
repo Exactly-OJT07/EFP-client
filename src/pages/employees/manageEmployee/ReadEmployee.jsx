@@ -37,7 +37,7 @@ const columns = [
     defaultSortOrder: "ascend",
     sortDirections: ["ascend", "descend"],
     render: (name, record) => (
-      <a href={`/manageEmployees/employeeDetail/${record.id}`}>{name}</a>
+      <a navigate={`/manageEmployees/employeeDetail/${record.id}`}>{name}</a>
     ),
   },
   {
