@@ -1,5 +1,20 @@
 import React from "react";
-import { Table, Image as AntdImage } from "antd";
+import { Table, Image as AntdImage, Typography } from "antd";
+import { useNavigate } from "react-router-dom";
+
+const EmployeeName = ({ record }) => {
+  const navigate = useNavigate();
+
+  return (
+    <Typography.Text
+      onClick={() => {
+        navigate(`/manageEmployees/employeeDetail/${record.id}`);
+      }}
+    >
+      {record.name}
+    </Typography.Text>
+  );
+};
 
 const columns = [
   {
@@ -34,11 +49,8 @@ const columns = [
       compare: (a, b) => a.name.localeCompare(b.name),
       multiple: 3,
     },
-    defaultSortOrder: "ascend",
     sortDirections: ["ascend", "descend"],
-    render: (name, record) => (
-      <a navigate={`/manageEmployees/employeeDetail/${record.id}`}>{name}</a>
-    ),
+    render: (name, record) => <EmployeeName record={record} />,
   },
   {
     title: "Email",
