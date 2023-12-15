@@ -12,9 +12,12 @@ import {
 } from "antd";
 import moment from "moment";
 import DeleteEmployee from "./employeeDetail/DeleteEmployee";
+import "../../styles/EmployeeDetail.css";
+import TrackingHistory from "./employeeDetail/TrackingHistory";
 const { TextArea } = Input;
 const EmployeeDetail = () => {
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [isTrackingModalOpen, setIsTrackingModalOpen] = useState(false);
   const { id } = useParams();
   const { data: employee, isLoading, isError } = useGetOneEmployee(id);
   if (isLoading) {
@@ -42,7 +45,6 @@ const EmployeeDetail = () => {
     fireDate,
     manager,
   } = employee?.employee;
-  console.log(employee);
 
   const handleCloseDeleteModal = () => {
     setIsDeleteModalOpen(false);
@@ -51,27 +53,36 @@ const EmployeeDetail = () => {
   return (
     <>
       <Row gutter={32}>
-        <Col span={8} align="middle">
+        <Col align="middle" md={{ span: 24 }} lg={{ span: 8 }}>
           <Row gutter={32} layout="vertical">
             <Col span={24}>
               <AntdImage
-                width="164px"
-                height="164px"
+                width="200px"
+                height="200px"
                 style={{ borderRadius: "100%" }}
                 src={avatar}
               />
             </Col>
             <Col span={24}>
-              <Button style={{ marginTop: "15px" }}>Edit Image</Button>
+              <Button style={{ margin: "10px" }}>Edit Image</Button>
             </Col>
             <Col span={24}>
-              <Button type="primary" style={{ marginTop: "15px" }}>
+              <Button
+                type="primary"
+                style={{ margin: "10px" }}
+                onClick={() => setIsTrackingModalOpen(true)}
+              >
                 Tracking History
               </Button>
+              <TrackingHistory
+                isTrackingModalOpen={isTrackingModalOpen}
+                setIsTrackingModalOpen={setIsTrackingModalOpen}
+                width="1000px"
+              />
             </Col>
           </Row>
         </Col>
-        <Col span={16}>
+        <Col md={{ span: 24, align: "middle" }} lg={{ span: 16 }}>
           <Form layout="vertical">
             <Typography.Title level={3} style={{ lineHeight: "30px" }}>
               Personal Info
@@ -91,7 +102,6 @@ const EmployeeDetail = () => {
                   <Input
                     value={manager?.name ? manager.name : "No Manager"}
                     style={{ maxWidth: "300px" }}
-                    readOnly
                   />
                 </Form.Item>
               </Col>
@@ -120,7 +130,6 @@ const EmployeeDetail = () => {
                   <Input
                     value={moment(joinDate).format("DD-MM-YYYY")}
                     style={{ maxWidth: "300px" }}
-                    readOnly
                   />
                 </Form.Item>
               </Col>
@@ -131,7 +140,6 @@ const EmployeeDetail = () => {
                       fireDate ? moment(fireDate).format("DD-MM-YYYY") : ""
                     }
                     style={{ maxWidth: "300px" }}
-                    readOnly
                   />
                 </Form.Item>
               </Col>
@@ -140,7 +148,6 @@ const EmployeeDetail = () => {
                   <Input
                     value={moment(dateOfBirth).format("DD-MM-YYYY")}
                     style={{ maxWidth: "300px" }}
-                    readOnly
                   />
                 </Form.Item>
               </Col>
@@ -154,7 +161,6 @@ const EmployeeDetail = () => {
                       }[gender] || ""
                     }
                     style={{ maxWidth: "300px" }}
-                    readOnly
                   />
                 </Form.Item>
               </Col>
@@ -173,7 +179,6 @@ const EmployeeDetail = () => {
                       }[position] || ""
                     }
                     style={{ maxWidth: "300px" }}
-                    readOnly
                   />
                 </Form.Item>
               </Col>
@@ -187,18 +192,16 @@ const EmployeeDetail = () => {
                       }[status] || ""
                     }
                     style={{ maxWidth: "300px" }}
-                    readOnly
                   />
                 </Form.Item>
               </Col>
               <Col span={24}>
                 <Form.Item label="Description">
                   <TextArea
-                    rows={4}
+                    rows={6}
                     placeholder="Description"
                     value={description}
                     style={{ maxWidth: "680px" }}
-                    readOnly
                   />
                 </Form.Item>
               </Col>
@@ -207,7 +210,7 @@ const EmployeeDetail = () => {
                   {() => (
                     <>
                       {!!skills?.length && (
-                        <Row>
+                        <Row gutter={16}>
                           <Col span={12}>
                             <Typography.Text level={4}>Skill</Typography.Text>
                           </Col>
@@ -219,13 +222,12 @@ const EmployeeDetail = () => {
                         </Row>
                       )}
                       {skills?.map(({ name, exp }) => (
-                        <Row key={name}>
+                        <Row key={name} gutter={16}>
                           <Col span={12}>
                             <Form.Item>
                               <Input
                                 value={name}
                                 style={{ maxWidth: "300px" }}
-                                readOnly
                               />
                             </Form.Item>
                           </Col>
@@ -234,7 +236,6 @@ const EmployeeDetail = () => {
                               <Input
                                 value={exp}
                                 style={{ maxWidth: "300px" }}
-                                readOnly
                               />
                             </Form.Item>
                           </Col>
