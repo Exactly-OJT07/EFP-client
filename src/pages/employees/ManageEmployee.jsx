@@ -14,19 +14,21 @@ function ManageEmployee() {
 
   return (
     <>
-      <div>
-        <Button type="primary" onClick={() => setIsModalOpen(true)}>
-          <PlusOutlined /> New Employee
-        </Button>
-        <CreateEmployee
-          isModalOpen={isModalOpen}
-          setIsModalOpen={setIsModalOpen}
-          width="1000px"
-          onCancel={handleCloseModal}
-        />
-      </div>
+      <Button
+        type="primary"
+        onClick={() => setIsModalOpen(true)}
+        style={{ display: "flex" }}
+      >
+        <PlusOutlined /> New Employee
+      </Button>
+      <CreateEmployee
+        isModalOpen={isModalOpen}
+        setIsModalOpen={() => setIsModalOpen}
+        width="1000px"
+        onCancel={handleCloseModal}
+      />
 
-      <ReadEmployee />
+      <ReadEmployee style={{ display: "flex" }} />
     </>
   );
 }

@@ -43,7 +43,6 @@ const skills = [
 
 const CreateEmployee = ({ isModalOpen, setIsModalOpen }) => {
   const [formCreate] = useForm();
-
   const [newCode, setNewCode] = useState("");
   const [newName, setNewName] = useState("");
   const [newPhone, setNewPhone] = useState("");
@@ -59,26 +58,26 @@ const CreateEmployee = ({ isModalOpen, setIsModalOpen }) => {
   const [newDescription, setNewDescription] = useState("");
   const [newIsManager, setNewIsManager] = useState(false);
   const [newManager, setNewManager] = useState("");
-
   const [newSkills, setNewSkills] = useState([]);
   const [newSkill, setNewSkill] = useState("");
   const [newExperience, setNewExperience] = useState("");
-
   const [imageUrl, setImageUrl] = useState(
     "https://cdn.iconscout.com/icon/free/png-256/free-avatar-370-456322.png?f=webp",
   );
   const [loading, setLoading] = useState(false);
   const cld = new Cloudinary({ cloud: { cloudName: "dvm8fnczy" } });
-
   const [confirmLoading, setConfirmLoading] = useState(false);
-
   const { data: managers } = useGetManager();
-
   const { mutate: createEmployee } = useCreateEmployee();
-
   const addToSkills = () => {
     if (!newSkill || !newExperience) {
       message.error("Please enter skill name and years of experience.");
+      return;
+    }
+    const existingSkill = newSkills.find((skill) => skill.name === newSkill);
+
+    if (existingSkill) {
+      message.error("Skill already exists. Please choose a different skill.");
       return;
     }
     const newEntry = {
@@ -125,6 +124,7 @@ const CreateEmployee = ({ isModalOpen, setIsModalOpen }) => {
       });
       message.success("Employee created successfully!");
       formCreate.resetFields();
+      setImageUrl(defaultImageUrl);
       setNewSkills([]);
       setConfirmLoading(false);
       setIsModalOpen(false);
@@ -134,6 +134,9 @@ const CreateEmployee = ({ isModalOpen, setIsModalOpen }) => {
   };
 
   const handleCreateCancel = () => {
+    formCreate.resetFields();
+    setImageUrl(defaultImageUrl);
+    setNewSkills([]);
     setIsModalOpen(false);
   };
 
@@ -145,7 +148,7 @@ const CreateEmployee = ({ isModalOpen, setIsModalOpen }) => {
         onOk={handleCreateOk}
         onCancel={handleCreateCancel}
         confirmLoading={confirmLoading}
-        width="1000px"
+        width="1100px"
       >
         <Form
           form={formCreate}
@@ -160,47 +163,8 @@ const CreateEmployee = ({ isModalOpen, setIsModalOpen }) => {
             },
           }}
         >
-          <Col>
-            <Form.Item
-              label="Avatar"
-              valuePropName="avatar"
-              value={newAvatar}
-              onChange={(e) => setNewAvatar(e.target.value)}
-            >
-              <CloudinaryContext cloudName="dvm8fnczy" cld={cld}>
-                <Upload
-                  listType="picture-circle"
-                  maxCount={1}
-                  action={`https://api.cloudinary.com/v1_1/dvm8fnczy/image/upload`}
-                  data={{ upload_preset: "ackgbz0m" }}
-                  showUploadList={false}
-                  onChange={handleChange}
-                >
-                  <Spin spinning={loading} tip="Uploading...">
-                    {imageUrl ? (
-                      <div className="rounded-image-container">
-                        <CloudImage
-                          publicId={imageUrl}
-                          style={{
-                            width: "100px",
-                            height: "100px",
-                            borderRadius: "100%",
-                          }}
-                        />
-                      </div>
-                    ) : (
-                      <div>
-                        <PlusOutlined />
-                        <div style={{ marginTop: 8 }}>Upload</div>
-                      </div>
-                    )}
-                  </Spin>
-                </Upload>
-              </CloudinaryContext>
-            </Form.Item>
-          </Col>
           <Row gutter={10}>
-            <Col xs={24} sm={12} md={12} lg={6} xl={6}>
+            <Col>
               <Form.Item
                 name="code"
                 label="Code"
@@ -212,8 +176,7 @@ const CreateEmployee = ({ isModalOpen, setIsModalOpen }) => {
                   onChange={(e) => setNewCode(e.target.value)}
                 />
               </Form.Item>
-            </Col>
-            <Col xs={24} sm={12} md={12} lg={6} xl={6}>
+
               <Form.Item
                 name="name"
                 label="Name"
@@ -225,8 +188,7 @@ const CreateEmployee = ({ isModalOpen, setIsModalOpen }) => {
                   onChange={(e) => setNewName(e.target.value)}
                 />
               </Form.Item>
-            </Col>
-            <Col xs={24} sm={12} md={12} lg={6} xl={6}>
+
               <Form.Item
                 name="phone"
                 label="Phone"
@@ -244,8 +206,7 @@ const CreateEmployee = ({ isModalOpen, setIsModalOpen }) => {
                   onChange={(e) => setNewPhone(e.target.value)}
                 />
               </Form.Item>
-            </Col>
-            <Col xs={24} sm={12} md={12} lg={6} xl={6}>
+
               <Form.Item
                 name="email"
                 label="Email"
@@ -263,23 +224,7 @@ const CreateEmployee = ({ isModalOpen, setIsModalOpen }) => {
                   onChange={(e) => setNewEmail(e.target.value)}
                 />
               </Form.Item>
-            </Col>
-            <Col xs={24} sm={12} md={12} lg={6} xl={6}>
-              <Form.Item
-                name="description"
-                label="Description"
-                style={{ width: "100%" }}
-                rules={[
-                  { required: true, message: "Please enter a description!" },
-                ]}
-              >
-                <Input
-                  value={newDescription}
-                  onChange={(e) => setNewDescription(e.target.value)}
-                />
-              </Form.Item>
-            </Col>
-            <Col xs={24} sm={12} md={12} lg={6} xl={6}>
+
               <Form.Item
                 name="dateOfBirth"
                 label="Dob"
@@ -299,10 +244,28 @@ const CreateEmployee = ({ isModalOpen, setIsModalOpen }) => {
                     console.log(date);
                   }}
                   format="DD/MM/YYYY"
+                  disabledDate={(current) => {
+                    // Disable dates after today
+                    return current && current > moment().endOf("day");
+                  }}
                 />
               </Form.Item>
             </Col>
-            <Col xs={24} sm={12} md={12} lg={6} xl={6}>
+            <Col>
+              <Form.Item
+                name="description"
+                label="Description"
+                style={{ width: "100%" }}
+                rules={[
+                  { required: true, message: "Please enter a description!" },
+                ]}
+              >
+                <Input
+                  value={newDescription}
+                  onChange={(e) => setNewDescription(e.target.value)}
+                />
+              </Form.Item>
+
               <Form.Item
                 name="identityCard"
                 label="IdentityCard"
@@ -320,9 +283,7 @@ const CreateEmployee = ({ isModalOpen, setIsModalOpen }) => {
                   onChange={(e) => setNewIdentityCard(e.target.value)}
                 />
               </Form.Item>
-            </Col>
 
-            <Col xs={24} sm={12} md={12} lg={6} xl={6}>
               <Form.Item
                 name="gender"
                 label="Gender"
@@ -337,9 +298,7 @@ const CreateEmployee = ({ isModalOpen, setIsModalOpen }) => {
                   <Select.Option value="female">Female</Select.Option>
                 </Select>
               </Form.Item>
-            </Col>
 
-            <Col xs={24} sm={12} md={12} lg={6} xl={6}>
               <Form.Item
                 name="status"
                 label="Status"
@@ -354,8 +313,7 @@ const CreateEmployee = ({ isModalOpen, setIsModalOpen }) => {
                   <Select.Option value="active">Active</Select.Option>
                 </Select>
               </Form.Item>
-            </Col>
-            <Col xs={24} sm={12} md={12} lg={6} xl={6}>
+
               <Form.Item
                 name="position"
                 label="Position"
@@ -378,8 +336,7 @@ const CreateEmployee = ({ isModalOpen, setIsModalOpen }) => {
                 </Select>
               </Form.Item>
             </Col>
-
-            <Col xs={24} sm={12} md={12} lg={6} xl={6}>
+            <Col>
               <Form.Item
                 name="isManager"
                 label="IsManager"
@@ -399,8 +356,7 @@ const CreateEmployee = ({ isModalOpen, setIsModalOpen }) => {
                   <Radio value={false}>False</Radio>
                 </Radio.Group>
               </Form.Item>
-            </Col>
-            <Col xs={24} sm={12} md={12} lg={6} xl={6}>
+
               <Form.Item name="managerId" label="Manager">
                 <Select
                   value={newManager.id}
@@ -415,8 +371,7 @@ const CreateEmployee = ({ isModalOpen, setIsModalOpen }) => {
                   ))}
                 </Select>
               </Form.Item>
-            </Col>
-            <Col xs={24} sm={12} md={12} lg={6} xl={6}>
+
               <Form.Item
                 name="joinDate"
                 label="Join Date"
@@ -452,14 +407,20 @@ const CreateEmployee = ({ isModalOpen, setIsModalOpen }) => {
                 />
               </Form.Item>
             </Col>
-            <Col xl={12}>
-              <Form.Item name="skills" label="Skills" style={{ width: "100%" }}>
+            <Col>
+              <Form.Item name="skills" label="Skills">
                 <Table
+                  className="skills-table"
                   rowKey="name"
                   dataSource={newSkills.map((skill) => ({
                     ...skill,
                     key: skill.key,
                   }))}
+                  style={{
+                    width: "100%",
+                    maxHeight: "200px",
+                    overflow: "auto",
+                  }}
                   columns={[
                     ...skills,
                     {
@@ -478,20 +439,31 @@ const CreateEmployee = ({ isModalOpen, setIsModalOpen }) => {
                   pagination={false}
                 />
               </Form.Item>
-            </Col>
-            <Col xs={24} sm={12} md={12} lg={6} xl={6}>
-              <Form.Item
-                label="Name"
-                style={{ marginBottom: "8px" }}
-                rules={[
-                  { required: true, message: "Please enter a skill name!" },
-                ]}
-              >
-                <Input
+              <Form.Item label="Name">
+                <Select
                   value={newSkill}
-                  onChange={(e) => setNewSkill(e.target.value)}
-                />
+                  onChange={(value) => setNewSkill(value)}
+                  placeholder="Please select a skill"
+                >
+                  {[
+                    "HTML",
+                    "CSS",
+                    "JavaScript",
+                    "React",
+                    "Node.js",
+                    "Express",
+                    "MongoDB",
+                    "Python",
+                    "Django",
+                    "Flask",
+                  ].map((skill) => (
+                    <Select.Option key={skill} value={skill}>
+                      {skill}
+                    </Select.Option>
+                  ))}
+                </Select>
               </Form.Item>
+
               <Form.Item
                 label="Exp"
                 style={{ marginBottom: "8px" }}
@@ -518,6 +490,45 @@ const CreateEmployee = ({ isModalOpen, setIsModalOpen }) => {
                   }}
                 />
               </div>
+            </Col>
+            <Col xl={5}>
+              <Form.Item
+                label="Avatar"
+                valuePropName="avatar"
+                value={newAvatar}
+                onChange={(e) => setNewAvatar(e.target.value)}
+              >
+                <CloudinaryContext cloudName="dvm8fnczy" cld={cld}>
+                  <Upload
+                    listType="picture-circle"
+                    maxCount={1}
+                    action={`https://api.cloudinary.com/v1_1/dvm8fnczy/image/upload`}
+                    data={{ upload_preset: "ackgbz0m" }}
+                    showUploadList={false}
+                    onChange={handleChange}
+                  >
+                    <Spin spinning={loading} tip="Uploading...">
+                      {imageUrl ? (
+                        <div className="rounded-image-container">
+                          <CloudImage
+                            publicId={imageUrl}
+                            style={{
+                              width: "100px",
+                              height: "100px",
+                              borderRadius: "100%",
+                            }}
+                          />
+                        </div>
+                      ) : (
+                        <div>
+                          <PlusOutlined />
+                          <div style={{ marginTop: 8 }}>Upload</div>
+                        </div>
+                      )}
+                    </Spin>
+                  </Upload>
+                </CloudinaryContext>
+              </Form.Item>
             </Col>
           </Row>
         </Form>
