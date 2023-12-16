@@ -22,5 +22,5 @@ ReactDOM.createRoot(document.getElementById("root")).render(
         <RouterProvider router={router} />
       </Suspense>
     </I18nextProvider>
-  </QueryClientProvider>
+  </QueryClientProvider>,
 );

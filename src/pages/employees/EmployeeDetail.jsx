@@ -9,17 +9,36 @@ import {
   Col,
   Typography,
   Button,
+  Spin,
 } from "antd";
 import moment from "moment";
 import DeleteEmployee from "./employeeDetail/DeleteEmployee";
 import "../../styles/EmployeeDetail.css";
 import TrackingHistory from "./employeeDetail/TrackingHistory";
+import { Translation, useTranslation } from "react-i18next";
 const { TextArea } = Input;
 const EmployeeDetail = () => {
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [isTrackingModalOpen, setIsTrackingModalOpen] = useState(false);
   const { id } = useParams();
-  const { data: employee, isError } = useGetOneEmployee(id);
+  const { data: employee, isLoading, isError } = useGetOneEmployee(id);
+
+  const { t } = useTranslation();
+
+  if (isLoading) {
+    return (
+      <Spin
+        size="large"
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          position: "absolute",
+          top: "50%",
+          left: "50%",
+        }}
+      />
+    );
+  }
 
   if (isError || !employee) {
     return <div>Employee not found</div>;
@@ -61,7 +80,9 @@ const EmployeeDetail = () => {
               />
             </Col>
             <Col span={24}>
-              <Button style={{ margin: "10px" }}>Edit Image</Button>
+              <Button style={{ margin: "10px" }}>
+                <Translation>{(t) => t("EMPLOYEE.CHANGEAVATAR")}</Translation>
+              </Button>
             </Col>
             <Col span={24}>
               <Button
@@ -69,7 +90,7 @@ const EmployeeDetail = () => {
                 style={{ margin: "10px" }}
                 onClick={() => setIsTrackingModalOpen(true)}
               >
-                Tracking History
+                <Translation>{(t) => t("EMPLOYEE.TRACKING")}</Translation>
               </Button>
               <TrackingHistory
                 isTrackingModalOpen={isTrackingModalOpen}
@@ -82,11 +103,13 @@ const EmployeeDetail = () => {
         <Col md={{ span: 24, align: "middle" }} lg={{ span: 16 }}>
           <Form layout="vertical">
             <Typography.Title level={3} style={{ lineHeight: "30px" }}>
-              Personal Info
+              <Translation>{(t) => t("EMPLOYEE.DETAIL")}</Translation>
             </Typography.Title>
             <Row gutter={8}>
               <Col span={12}>
-                <Form.Item label="Employee Code">
+                <Form.Item
+                  label={<Translation>{(t) => t("EMPLOYEE.CODE")}</Translation>}
+                >
                   <Input
                     value={code ? code : ""}
                     style={{ maxWidth: "300px" }}
@@ -95,35 +118,61 @@ const EmployeeDetail = () => {
                 </Form.Item>
               </Col>
               <Col span={12}>
-                <Form.Item label="Manager Name">
+                <Form.Item
+                  label={
+                    <Translation>{(t) => t("EMPLOYEE.MANAGER")}</Translation>
+                  }
+                >
                   <Input
-                    value={manager?.name ? manager.name : "No Manager"}
+                    value={
+                      manager?.name
+                        ? manager.name
+                        : (t) => t("EMPLOYEE.NOMANAGER")
+                    }
                     style={{ maxWidth: "300px" }}
                   />
                 </Form.Item>
               </Col>
               <Col span={12}>
-                <Form.Item label="Name">
+                <Form.Item
+                  label={<Translation>{(t) => t("EMPLOYEE.NAME")}</Translation>}
+                >
                   <Input value={name} style={{ maxWidth: "300px" }} />
                 </Form.Item>
               </Col>
               <Col span={12}>
-                <Form.Item label="Email">
+                <Form.Item
+                  label={
+                    <Translation>{(t) => t("EMPLOYEE.EMAIL")}</Translation>
+                  }
+                >
                   <Input value={email} style={{ maxWidth: "300px" }} />
                 </Form.Item>
               </Col>
               <Col span={12}>
-                <Form.Item label="Phone Number">
+                <Form.Item
+                  label={
+                    <Translation>{(t) => t("EMPLOYEE.PHONE")}</Translation>
+                  }
+                >
                   <Input value={phone} style={{ maxWidth: "300px" }} />
                 </Form.Item>
               </Col>
               <Col span={12}>
-                <Form.Item label="Identity Card">
+                <Form.Item
+                  label={
+                    <Translation>{(t) => t("EMPLOYEE.IDENTITY")}</Translation>
+                  }
+                >
                   <Input value={identityCard} style={{ maxWidth: "300px" }} />
                 </Form.Item>
               </Col>
               <Col span={12}>
-                <Form.Item label="Join Date">
+                <Form.Item
+                  label={
+                    <Translation>{(t) => t("EMPLOYEE.JOINDATE")}</Translation>
+                  }
+                >
                   <Input
                     value={moment(joinDate).format("DD-MM-YYYY")}
                     style={{ maxWidth: "300px" }}
@@ -141,7 +190,9 @@ const EmployeeDetail = () => {
                 </Form.Item>
               </Col>
               <Col span={12}>
-                <Form.Item label="DoB">
+                <Form.Item
+                  label={<Translation>{(t) => t("EMPLOYEE.DOB")}</Translation>}
+                >
                   <Input
                     value={moment(dateOfBirth).format("DD-MM-YYYY")}
                     style={{ maxWidth: "300px" }}
@@ -149,7 +200,11 @@ const EmployeeDetail = () => {
                 </Form.Item>
               </Col>
               <Col span={12}>
-                <Form.Item label="Gender">
+                <Form.Item
+                  label={
+                    <Translation>{(t) => t("EMPLOYEE.GENDER")}</Translation>
+                  }
+                >
                   <Input
                     value={
                       {
@@ -162,7 +217,11 @@ const EmployeeDetail = () => {
                 </Form.Item>
               </Col>
               <Col span={12}>
-                <Form.Item label="Position">
+                <Form.Item
+                  label={
+                    <Translation>{(t) => t("EMPLOYEE.POSITION")}</Translation>
+                  }
+                >
                   <Input
                     value={
                       {
@@ -180,7 +239,11 @@ const EmployeeDetail = () => {
                 </Form.Item>
               </Col>
               <Col span={12}>
-                <Form.Item label="Status">
+                <Form.Item
+                  label={
+                    <Translation>{(t) => t("EMPLOYEE.STATUS")}</Translation>
+                  }
+                >
                   <Input
                     value={
                       {
@@ -193,7 +256,13 @@ const EmployeeDetail = () => {
                 </Form.Item>
               </Col>
               <Col span={24}>
-                <Form.Item label="Description">
+                <Form.Item
+                  label={
+                    <Translation>
+                      {(t) => t("EMPLOYEE.DESCRIPTION")}
+                    </Translation>
+                  }
+                >
                   <TextArea
                     rows={6}
                     placeholder="Description"
@@ -203,17 +272,23 @@ const EmployeeDetail = () => {
                 </Form.Item>
               </Col>
               <Col span={24}>
-                <Form.List label="Skills" name="skills" initialValue={skills}>
+                <Form.List name="skills" initialValue={skills}>
                   {() => (
                     <>
                       {!!skills?.length && (
                         <Row gutter={16}>
                           <Col span={12}>
-                            <Typography.Text level={4}>Skill</Typography.Text>
+                            <Typography.Text level={4}>
+                              <Translation>
+                                {(t) => t("EMPLOYEE.SKILL")}
+                              </Translation>
+                            </Typography.Text>
                           </Col>
                           <Col span={12}>
                             <Typography.Text level={4}>
-                              Experience
+                              <Translation>
+                                {(t) => t("EMPLOYEE.EXP")}
+                              </Translation>
                             </Typography.Text>
                           </Col>
                         </Row>
@@ -247,10 +322,10 @@ const EmployeeDetail = () => {
         </Col>
       </Row>
       <Button type="primary" style={{ margin: "5px" }}>
-        Edit
+        <Translation>{(t) => t("EDIT")}</Translation>
       </Button>
       <Button type="primary" danger onClick={() => setIsDeleteModalOpen(true)}>
-        Delete
+        <Translation>{(t) => t("DELETE")}</Translation>
       </Button>
       <DeleteEmployee
         isDeleteModalOpen={isDeleteModalOpen}

@@ -1,4 +1,12 @@
 {
+  "LANGUAGE": "Language",
+  "SIDEBAR": {
+    "DASHBOARD": "Dashboard",
+    "EMPLOYEES": "Employees",
+    "PROJECTS": "Projects",
+    "LOGOUT": "Logout",
+    "LOGOUTCONTENT": "Are you sure you want to logout?"
+  },
   "EMPLOYEE": {
     "EMPLOYEES": "Employees",
     "AVATAR": "Avatar",
@@ -8,6 +16,22 @@
     "PHONE": "Phone",
     "POSITION": "Position",
     "MANAGER": "Manager",
-    "STATUS": "Status"
-  }
+    "STATUS": "Status",
+    "IDENTITY": "Identity Card",
+    "DOB": "Date of Birth",
+    "GENDER": "Gender",
+    "DESCRIPTION": "Description",
+    "JOINDATE": "Join Date",
+
+    "SKILL": "Skill",
+    "EXP": "Experience/Year",
+
+    "DETAIL": "Personal Info",
+    "CHANGEAVATAR": "Change Avatar",
+    "TRACKING": "Tracking History",
+    "NOMANAGER": "No Manager"
+  },
+  "EDIT": "Change",
+  "DELETE": "Delete",
+  "CLOSE": "Ok"
 }

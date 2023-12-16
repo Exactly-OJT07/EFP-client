@@ -4,7 +4,6 @@ import { Translation, useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 
 const EmployeeName = ({ name, record }) => {
-  const { t } = useTranslation();
   const navigate = useNavigate();
 
   return (
@@ -100,7 +99,7 @@ const columns = [
         value: "devops",
       },
       {
-        text: "User Experience",
+        text: "UX-UI",
         value: "ux-ui",
       },
     ],
@@ -120,7 +119,7 @@ const columns = [
         case "devops":
           return "DevOps Engineer";
         case "ux_ui":
-          return "User Experience";
+          return "UX-UI";
         default:
           return "";
       }
@@ -161,13 +160,16 @@ const columns = [
   },
 ];
 
-const ReadEmployee = ({ data }) => (
-  <Table
-    rowKey="id"
-    columns={columns}
-    dataSource={data?.data}
-    pagination={false}
-  />
-);
+const ReadEmployee = ({ data }) => {
+  const { t } = useTranslation();
+  return (
+    <Table
+      rowKey="id"
+      columns={columns}
+      dataSource={data?.data}
+      pagination={false}
+    />
+  );
+};
 
 export default ReadEmployee;

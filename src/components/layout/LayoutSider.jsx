@@ -8,31 +8,30 @@ import { Layout, Menu, Modal } from "antd";
 import "./LayoutSider.css";
 import { useLocation, useNavigate } from "react-router-dom";
 import logoIcon from "../../assets/logo.jpg";
+import { Translation, useTranslation } from "react-i18next";
 
 const { Sider } = Layout;
 
-// eslint-disable-next-line react/prop-types
 export const LayoutSider = ({ collapsed = true }) => {
   const navigate = useNavigate();
   const location = useLocation();
+  const { t } = useTranslation();
 
   const showConfirmationModal = (onOkCallback) => {
     Modal.confirm({
-      title: "LOG OUT",
-      content: "Are you sure Log Out?",
+      title: <Translation>{(t) => t("SIDEBAR.LOGOUT")}</Translation>,
+      content: <Translation>{(t) => t("SIDEBAR.LOGOUTCONTENT")}</Translation>,
       onOk: onOkCallback,
       onCancel: () => {},
     });
   };
 
   const handleLogout = () => {
-    // Thực hiện các hành động khi đăng xuất
     localStorage.removeItem("credentials");
     localStorage.removeItem("authenticated");
     navigate("/login", { replace: true });
   };
 
-  // Kiểm tra trạng thái đăng nhập
   const isAuthenticated = localStorage.getItem("authenticated") === "true";
 
   if (!isAuthenticated) {
@@ -44,22 +43,22 @@ export const LayoutSider = ({ collapsed = true }) => {
     {
       key: "",
       icon: <DashboardOutlined />,
-      label: "Dashboard",
+      label: <Translation>{(t) => t("SIDEBAR.DASHBOARD")}</Translation>,
     },
     {
       key: "manageEmployees",
       icon: <UserOutlined />,
-      label: "Manage Employees",
+      label: <Translation>{(t) => t("SIDEBAR.EMPLOYEES")}</Translation>,
     },
     {
       key: "manageProjects",
       icon: <ThunderboltOutlined />,
-      label: "Manage Projects",
+      label: <Translation>{(t) => t("SIDEBAR.PROJECTS")}</Translation>,
     },
     {
       key: ".",
       icon: <LogoutOutlined />,
-      label: "Log Out",
+      label: <Translation>{(t) => t("SIDEBAR.LOGOUT")}</Translation>,
       onClick: () => showConfirmationModal(handleLogout),
     },
   ];

@@ -6,9 +6,11 @@ import Pagination from "../../components/pagination/pagination";
 import { useGetClients } from "../../hooks/useEmployee";
 import "../../styles/ManageEmployee.css";
 import ReadEmployee from "./manageEmployee/ReadEmployee";
+import { Translation, useTranslation } from "react-i18next";
 
 function ManageEmployee() {
   const navigate = useNavigate();
+  const { t } = useTranslation();
   const [searchNameText, setSearchNameText] = useState("");
   const [searchEmailText, setSearchEmailText] = useState("");
   const [table, setTable] = useState({
@@ -34,6 +36,8 @@ function ManageEmployee() {
     setIsModalOpen(false);
   };
 
+  console.log(<Translation>{(t) => t("EMPLOYEE.NAME")}</Translation>);
+
   return (
     <>
       <Space className="employee-search" size="large">
@@ -48,7 +52,7 @@ function ManageEmployee() {
           }}
         />
         <Input
-          placeholder="Email"
+          placeholder={<Translation>{(t) => t("EMPLOYEE.EMAIL")}</Translation>}
           value={searchEmailText}
           style={{
             width: 304,
