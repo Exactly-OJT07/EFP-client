@@ -46,3 +46,10 @@
   display: flex;
   margin-top: 15px;
 }
+
+.status-button.active {
+  background-color: #1474fc;
+  color: #fff;
+  font-weight: 500;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+}
