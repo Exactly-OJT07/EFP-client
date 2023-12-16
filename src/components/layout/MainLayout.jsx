@@ -1,7 +1,7 @@
 import { MenuFoldOutlined, MenuUnfoldOutlined } from "@ant-design/icons";
 import { Button, Dropdown, Layout, Spin, theme } from "antd";
 import { Suspense, useState } from "react";
-import { useTranslation } from "react-i18next";
+import { Translation, useTranslation } from "react-i18next";
 import { Outlet } from "react-router-dom";
 import en from "../../assets/united-states.png";
 import vn from "../../assets/vietnam.png";
@@ -27,6 +27,8 @@ const items = [
 export const PrivateLayout = () => {
   const { i18n } = useTranslation();
   const [collapsed, setCollapsed] = useState(false);
+
+  const { t } = useTranslation();
 
   const {
     token: { colorBgContainer },
@@ -84,7 +86,9 @@ export const PrivateLayout = () => {
               placement="bottomLeft"
               arrow
             >
-              <Button>Language</Button>
+              <Button>
+                <Translation>{(t) => t("LANGUAGE")}</Translation>
+              </Button>
             </Dropdown>
           </div>
         </Header>

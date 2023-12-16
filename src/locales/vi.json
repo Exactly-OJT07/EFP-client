@@ -1,13 +1,37 @@
 {
+  "LANGUAGE": "Ngôn Ngữ",
+  "SIDEBAR": {
+    "DASHBOARD": "Bảng thống kê",
+    "EMPLOYEES": "Nhân viên",
+    "PROJECTS": "Dự Án",
+    "LOGOUT": "Đăng Xuất",
+    "LOGOUTCONTENT": "Bạn có muốn đăng xuất không?"
+  },
   "EMPLOYEE": {
     "EMPLOYEES": "Nhân viên",
     "AVATAR": "Ảnh đại diện",
     "CODE": "Mã nhân viên",
-    "NAME": "Tên",
+    "NAME": "Họ và Tên",
     "EMAIL": "Email",
     "PHONE": "Số điện thoại",
     "POSITION": "Vị trí",
     "MANAGER": "Quản lý",
-    "STATUS": "Trạng thái"
-  }
+    "STATUS": "Trạng thái",
+    "IDENTITY": "CMND / CCCD",
+    "DOB": "Ngày sinh",
+    "GENDER": "Giới tính",
+    "DESCRIPTION": "Giới thiệu",
+    "JOINDATE": "Ngày vào công ty",
+
+    "SKILL": "Kỹ Năng",
+    "EXP": "Kinh nghiệm/Năm",
+
+    "DETAIL": "Thông tin nhân viên",
+    "NOMANAGER": "Không có cấp trên",
+    "TRACKING": "Xem lịch sử làm việc",
+    "CHANGEAVATAR": "Đổi ảnh đại diện"
+  },
+  "EDIT": "Thay Đổi",
+  "DELETE": "Xóa",
+  "CLOSE": "Đóng"
 }
