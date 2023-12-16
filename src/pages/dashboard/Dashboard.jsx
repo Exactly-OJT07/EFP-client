@@ -114,7 +114,7 @@ const Dashboard = () => {
       },
       labels: ["Done", "On Progress", "Pending"],
       title: {
-        text: "Circle Chart",
+        text: "Current Project Status",
         align: "center",
       },
     },
@@ -153,7 +153,7 @@ const Dashboard = () => {
                 >
                   <Space direction="horizontal">
                     <MoneyCollectOutlined />
-                    <strong style={{ color: "#092635" }}>Total Projects</strong>
+                    <strong style={{ color: "#383838" }}>Total Projects</strong>
                   </Space>
                   <div className="card-infor">
                     <Typography.Title>{projectTotal?.total}</Typography.Title>
@@ -183,7 +183,7 @@ const Dashboard = () => {
                 >
                   <Space direction="horizontal">
                     <UserOutlined />
-                    <strong style={{ color: "#092635" }}>
+                    <strong style={{ color: "#383838" }}>
                       Total Employees
                     </strong>
                   </Space>
@@ -215,7 +215,7 @@ const Dashboard = () => {
                 >
                   <Space direction="horizontal">
                     <CheckCircleOutlined />
-                    <strong style={{ color: "#092635" }}>Project Done</strong>
+                    <strong style={{ color: "#383838" }}>Project Done</strong>
                   </Space>
                   <div className="card-infor">
                     <Typography.Title>

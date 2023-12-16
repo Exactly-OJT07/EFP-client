@@ -59,6 +59,7 @@ const ManageProject = () => {
 
   const [filters, setFilters] = useState("");
   const [status, setStatus] = useState("");
+  const [activeFilter, setActiveFilter] = useState("");
 
   const paginateOptions = {
     search: filters.name,
@@ -116,6 +117,7 @@ const ManageProject = () => {
   };
 
   const handleFilter = (status) => {
+    setActiveFilter(status);
     setStatus(status);
     setTable((prevTable) => ({
       ...prevTable,
@@ -127,16 +129,38 @@ const ManageProject = () => {
     <Content className="content-project">
       <Space direction="horizontal" className="status-filter">
         <div className="status">
-          <Button type="secondary" onClick={() => handleFilter("")}>
+          <Button
+            className={`status-button ${activeFilter === "" ? "active" : ""}`}
+            type="secondary"
+            onClick={() => handleFilter("")}
+          >
             All Status
           </Button>
-          <Button type="secondary" onClick={() => handleFilter("pending")}>
+          <Button
+            className={`status-button ${
+              activeFilter === "pending" ? "active" : ""
+            }`}
+            type="secondary"
+            onClick={() => handleFilter("pending")}
+          >
             Pending
           </Button>
-          <Button type="secondary" onClick={() => handleFilter("on_progress")}>
+          <Button
+            className={`status-button ${
+              activeFilter === "on_progress" ? "active" : ""
+            }`}
+            type="secondary"
+            onClick={() => handleFilter("on_progress")}
+          >
             On Progress
           </Button>
-          <Button type="secondary" onClick={() => handleFilter("done")}>
+          <Button
+            className={`status-button ${
+              activeFilter === "done" ? "active" : ""
+            }`}
+            type="secondary"
+            onClick={() => handleFilter("done")}
+          >
             Done
           </Button>
         </div>
