@@ -7,7 +7,7 @@ import moment from "moment";
 import ReactApexChart from "react-apexcharts";
 
 const TrackingTable = ({ projects }) => {
-  const projectSeries = projects.map((project, index) => {
+  const projectSeries = projects.map((project) => {
     return {
       data: [
         {
@@ -25,40 +25,47 @@ const TrackingTable = ({ projects }) => {
     };
   });
 
-  const [state] = useState({
+  const [state, setState] = useState({
     series: projectSeries,
+
     options: {
       chart: {
-        height: 300,
+        width: 880,
+        height: 450,
         type: "rangeBar",
         toolbar: {
-          show: false, // Set to false to hide the toolbar
+          show: false,
         },
         zoom: {
-          enabled: false, // Set to false to disable zooming
+          enabled: false,
         },
       },
       plotOptions: {
         bar: {
           horizontal: true,
+          barHeight: "100%",
         },
       },
       xaxis: {
         type: "datetime",
       },
+      legend: {
+        show: false,
+      },
     },
   });
 
   return (
-    <Space id="chart">
+    <>
+      {console.log(state)}
       <ReactApexChart
         options={state.options}
         series={state.series}
-        type="rangeBar"
-        height={500}
-        width={750}
+        type={state.options.chart.type}
+        width={state.options.chart.width}
+        height={state.options.chart.height}
       />
-    </Space>
+    </>
   );
 };
 
@@ -68,7 +75,7 @@ const TrackingHistory = ({ isTrackingModalOpen, setIsTrackingModalOpen }) => {
 
   const { tracking } = employee?.employee;
 
-  const { joinDate, fireDate, projects } = tracking;
+  const { joinDate, projects } = tracking;
 
   return (
     <>

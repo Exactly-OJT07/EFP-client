@@ -60,7 +60,7 @@ const CreateEmployee = () => {
   const [newSkill, setNewSkill] = useState("");
   const [newExperience, setNewExperience] = useState("");
   const [imageUrl, setImageUrl] = useState(
-    "https://cdn.iconscout.com/icon/free/png-256/free-avatar-370-456322.png?f=webp"
+    "https://cdn.iconscout.com/icon/free/png-256/free-avatar-370-456322.png?f=webp",
   );
   const [loading, setLoading] = useState(false);
   const cld = new Cloudinary({ cloud: { cloudName: "dvm8fnczy" } });
@@ -126,12 +126,6 @@ const CreateEmployee = () => {
     } catch (error) {
       message.error("Error creating employee. Please check the form.");
     }
-  };
-
-  const handleCreateCancel = () => {
-    formCreate.resetFields();
-    setImageUrl(defaultImageUrl);
-    setNewSkills([]);
   };
 
   useEffect(() => {

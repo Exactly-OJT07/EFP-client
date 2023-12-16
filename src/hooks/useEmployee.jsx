@@ -21,7 +21,7 @@ export const useGetClients = (params) =>
     async () => {
       const { data } = await getEmployeeAPI(params);
       return data;
-    }
+    },
   );
 
 export const useCreateEmployee = () => {
@@ -38,7 +38,7 @@ export const useCreateEmployee = () => {
       onError: ({ response }) => {
         openNotificationWithIcon("error", "Create employee failed");
       },
-    }
+    },
   );
 
   return mutation;

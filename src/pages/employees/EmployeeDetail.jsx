@@ -9,17 +9,34 @@ import {
   Col,
   Typography,
   Button,
+  Spin,
 } from "antd";
 import moment from "moment";
 import DeleteEmployee from "./employeeDetail/DeleteEmployee";
 import "../../styles/EmployeeDetail.css";
 import TrackingHistory from "./employeeDetail/TrackingHistory";
+import { Translation, useTranslation } from "react-i18next";
 const { TextArea } = Input;
 const EmployeeDetail = () => {
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [isTrackingModalOpen, setIsTrackingModalOpen] = useState(false);
   const { id } = useParams();
-  const { data: employee, isError } = useGetOneEmployee(id);
+  const { data: employee, isLoading, isError } = useGetOneEmployee(id);
+
+  if (isLoading) {
+    return (
+      <Spin
+        size="large"
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          position: "absolute",
+          top: "50%",
+          left: "50%",
+        }}
+      />
+    );
+  }
 
   if (isError || !employee) {
     return <div>Employee not found</div>;
@@ -61,7 +78,7 @@ const EmployeeDetail = () => {
               />
             </Col>
             <Col span={24}>
-              <Button style={{ margin: "10px" }}>Edit Image</Button>
+              <Button style={{ margin: "10px" }}>Change Avatar</Button>
             </Col>
             <Col span={24}>
               <Button
@@ -141,7 +158,7 @@ const EmployeeDetail = () => {
                 </Form.Item>
               </Col>
               <Col span={12}>
-                <Form.Item label="DoB">
+                <Form.Item label="Date of Birth">
                   <Input
                     value={moment(dateOfBirth).format("DD-MM-YYYY")}
                     style={{ maxWidth: "300px" }}
