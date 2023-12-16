@@ -1,22 +1,46 @@
-import {
-  MenuFoldOutlined,
-  MenuUnfoldOutlined,
-  SettingOutlined,
-} from "@ant-design/icons";
-import { Button, Layout, Spin, theme, Dropdown, Menu } from "antd";
+import { MenuFoldOutlined, MenuUnfoldOutlined } from "@ant-design/icons";
+import { Button, Dropdown, Layout, Spin, theme } from "antd";
 import { Suspense, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { Outlet } from "react-router-dom";
-import { LayoutSider } from "./LayoutSider";
+import en from "../../assets/united-states.png";
+import vn from "../../assets/vietnam.png";
+import { LOCALES, LOCALE_STORAGE } from "../../constants/constants";
 import "../layout/MainLayout.css";
+import { LayoutSider } from "./LayoutSider";
 
 const { Content, Header } = Layout;
 
+const items = [
+  {
+    key: "1",
+    label: "Việt Nam",
+    icon: <img src={vn} alt="" />,
+  },
+  {
+    key: "2",
+    label: "English",
+    icon: <img src={en} alt="" />,
+  },
+];
+
 export const PrivateLayout = () => {
+  const { i18n } = useTranslation();
   const [collapsed, setCollapsed] = useState(false);
 
   const {
     token: { colorBgContainer },
   } = theme.useToken();
+
+  const handleClick = (e) => {
+    if (e.key === "1") {
+      i18n.changeLanguage(LOCALES.VI);
+      localStorage.setItem(LOCALE_STORAGE, LOCALES.VI);
+    } else {
+      i18n.changeLanguage(LOCALES.EN);
+      localStorage.setItem(LOCALE_STORAGE, LOCALES.EN);
+    }
+  };
 
   return (
     <Layout
@@ -50,6 +74,19 @@ export const PrivateLayout = () => {
               height: 64,
             }}
           />
+          <div
+            style={{
+              marginRight: "20px",
+            }}
+          >
+            <Dropdown
+              menu={{ items: items, onClick: handleClick }}
+              placement="bottomLeft"
+              arrow
+            >
+              <Button>Language</Button>
+            </Dropdown>
+          </div>
         </Header>
         <Content
           style={{

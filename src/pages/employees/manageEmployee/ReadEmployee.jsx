@@ -1,8 +1,10 @@
+import { Image as AntdImage, Table, Typography } from "antd";
 import React from "react";
-import { Table, Image as AntdImage, Typography } from "antd";
+import { Translation, useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 
 const EmployeeName = ({ name, record }) => {
+  const { t } = useTranslation();
   const navigate = useNavigate();
 
   return (
@@ -19,7 +21,7 @@ const EmployeeName = ({ name, record }) => {
 
 const columns = [
   {
-    title: "Avatar",
+    title: <Translation>{(t) => t("EMPLOYEE.AVATAR")}</Translation>,
     dataIndex: "avatar",
     key: "avatar",
     render: (avatar) => {
@@ -34,7 +36,7 @@ const columns = [
     },
   },
   {
-    title: "Code",
+    title: <Translation>{(t) => t("EMPLOYEE.CODE")}</Translation>,
     dataIndex: "code",
     key: "code",
     sorter: {
@@ -43,7 +45,7 @@ const columns = [
     },
   },
   {
-    title: "Name",
+    title: <Translation>{(t) => t("EMPLOYEE.NAME")}</Translation>,
     dataIndex: "name",
     key: "name",
     sorter: {
@@ -54,7 +56,7 @@ const columns = [
     render: (name, record) => <EmployeeName record={record} name={name} />,
   },
   {
-    title: "Email",
+    title: <Translation>{(t) => t("EMPLOYEE.EMAIL")}</Translation>,
     dataIndex: "email",
     key: "email",
     sorter: {
@@ -63,13 +65,13 @@ const columns = [
     },
   },
   {
-    title: "Phone",
+    title: <Translation>{(t) => t("EMPLOYEE.PHONE")}</Translation>,
     dataIndex: "phone",
     key: "phone",
     responsive: ["lg"],
   },
   {
-    title: "Position",
+    title: <Translation>{(t) => t("EMPLOYEE.POSITION")}</Translation>,
     dataIndex: "position",
     key: "position",
     filters: [
@@ -125,7 +127,7 @@ const columns = [
     },
   },
   {
-    title: "Manager",
+    title: <Translation>{(t) => t("EMPLOYEE.MANAGER")}</Translation>,
     dataIndex: "manager",
     key: "manager",
     render: (manager) => {
@@ -136,7 +138,7 @@ const columns = [
     responsive: ["lg"],
   },
   {
-    title: "Status",
+    title: <Translation>{(t) => t("EMPLOYEE.STATUS")}</Translation>,
     dataIndex: "status",
     key: "status",
     filters: [

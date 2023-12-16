@@ -1,18 +1,25 @@
-import { useParams } from "react-router-dom";
-import { useGetProjectData } from "../hooks/useProject";
+import { MailOutlined, UserAddOutlined } from "@ant-design/icons";
 import {
+  Avatar,
   Button,
+  Col,
   DatePicker,
   Form,
   Input,
-  Avatar,
-  Tooltip,
   Row,
-  Col,
+  Tooltip,
   Typography,
 } from "antd";
-import { MailOutlined, UserAddOutlined } from "@ant-design/icons";
 import dayjs from "dayjs";
+import moment from "moment";
+import Timeline, {
+  DateHeader,
+  SidebarHeader,
+  TimelineHeaders,
+} from "react-calendar-timeline";
+import "react-calendar-timeline/lib/Timeline.css";
+import { useParams } from "react-router-dom";
+import { useGetProjectData } from "../hooks/useProject";
 import "../styles/ProjectDetail.css";
 
 const { RangePicker } = DatePicker;
@@ -37,13 +44,32 @@ const ProjectDetail = () => {
     employee_project,
     startDate,
     endDate,
+    tracking,
   } = project?.project;
-  console.log(project);
 
   const handleAssignClick = () => {
-    // Xử lý sự kiện khi người dùng nhấn vào nút assign
     console.log("Assign button clicked");
   };
+
+  const groups = tracking?.member.map((item) => {
+    return { id: item.id, title: item.employeeName };
+  });
+
+  const items = tracking?.member.map((item) => {
+    const id = item.id;
+    const group = item.id;
+    const start_time = moment(item.joinDate);
+    const end_time = moment(item.doneDate ?? moment());
+    const title = item.employeeName;
+
+    return {
+      id,
+      group,
+      start_time,
+      end_time,
+      title,
+    };
+  });
 
   return (
     <div className="projectDetail-Content">
@@ -113,6 +139,40 @@ const ProjectDetail = () => {
             </div>
           </div>
         </Col>
+      </Row>
+      <Row>
+        <Timeline
+          groups={groups}
+          items={items}
+          defaultTimeStart={moment(tracking.joinDate)}
+          defaultTimeEnd={moment(tracking.fireDate)}
+          canMove={false}
+          canResize={false}
+          canChangeGroup={false}
+        >
+          <TimelineHeaders className="sticky">
+            <SidebarHeader>
+              {({ getRootProps }) => {
+                return (
+                  <div
+                    style={{
+                      display: "flex",
+                      justifyContent: "center",
+                      alignItems: "center",
+                      width: "150px",
+                      color: "white",
+                      fontWeight: "bold",
+                    }}
+                  >
+                    {name}
+                  </div>
+                );
+              }}
+            </SidebarHeader>
+            <DateHeader unit="primaryHeader" />
+            <DateHeader />
+          </TimelineHeaders>
+        </Timeline>
       </Row>
     </div>
   );

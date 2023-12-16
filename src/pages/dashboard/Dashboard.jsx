@@ -1,16 +1,16 @@
-import { Col, Row, Space, Card, Typography, Select, Spin } from "antd";
+import {
+  CheckCircleOutlined,
+  FallOutlined,
+  MoneyCollectOutlined,
+  RiseOutlined,
+  UserOutlined,
+} from "@ant-design/icons";
+import { Card, Col, Row, Select, Space, Spin, Typography } from "antd";
 import React, { useState } from "react";
 import ReactApexChart from "react-apexcharts";
-import "./Dashboard.css";
-import {
-  MoneyCollectOutlined,
-  UserOutlined,
-  CheckCircleOutlined,
-  RiseOutlined,
-  FallOutlined,
-} from "@ant-design/icons";
 import { useGetEmployeeTotal } from "../../hooks/useGetEmployeeTotal";
 import { useGetProjectTotal } from "../../hooks/useGetProjectTotal";
+import "./Dashboard.css";
 
 const { Option } = Select;
 
@@ -84,9 +84,9 @@ const Dashboard = () => {
 
   const circleChartState = {
     series: [
-      projectTotal?.donePercentage.toFixed(2) || 0,
-      projectTotal?.onProgressPercentage.toFixed(2) || 0,
-      projectTotal?.pendingPercentage.toFixed(2) || 0,
+      projectTotal?.donePercentage?.toFixed(2) || 0,
+      projectTotal?.onProgressPercentage?.toFixed(2) || 0,
+      projectTotal?.pendingPercentage?.toFixed(2) || 0,
     ],
     options: {
       chart: {

@@ -1,9 +1,10 @@
 import { PrivateLayout } from "../components/layout/MainLayout";
-import Dashboard from "../pages/dashboard/Dashboard";
 import ManageProject from "../pages/ManageProject";
-import ManageEmployee from "../pages/employees/ManageEmployee";
-import EmployeeDetail from "../pages/employees/EmployeeDetail";
 import ProjectDetail from "../pages/ProjectDetail";
+import Dashboard from "../pages/dashboard/Dashboard";
+import EmployeeDetail from "../pages/employees/EmployeeDetail";
+import ManageEmployee from "../pages/employees/ManageEmployee";
+import CreateEmployee from "../pages/employees/manageEmployee/CreateEmployee";
 import CreateProject from "../pages/projects/components/createProject";
 
 const routes = [
@@ -21,6 +22,7 @@ const routes = [
             path: "",
             element: <ManageEmployee />,
           },
+          { path: "create", element: <CreateEmployee /> },
           { path: "employeeDetail/:id", element: <EmployeeDetail /> },
         ],
       },

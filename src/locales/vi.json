@@ -1,0 +1,13 @@
+{
+  "EMPLOYEE": {
+    "EMPLOYEES": "Nhân viên",
+    "AVATAR": "Ảnh đại diện",
+    "CODE": "Mã nhân viên",
+    "NAME": "Tên",
+    "EMAIL": "Email",
+    "PHONE": "Số điện thoại",
+    "POSITION": "Vị trí",
+    "MANAGER": "Quản lý",
+    "STATUS": "Trạng thái"
+  }
+}

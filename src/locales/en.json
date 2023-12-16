@@ -1,0 +1,13 @@
+{
+  "EMPLOYEE": {
+    "EMPLOYEES": "Employees",
+    "AVATAR": "Avatar",
+    "CODE": "Code",
+    "NAME": "Name",
+    "EMAIL": "Email",
+    "PHONE": "Phone",
+    "POSITION": "Position",
+    "MANAGER": "Manager",
+    "STATUS": "Status"
+  }
+}

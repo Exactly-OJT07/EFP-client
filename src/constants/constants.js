@@ -16,3 +16,10 @@ export const API_URL = {
 export const DATE_TIME = {
   YEAR_MONTH_DATE_TIME: "DD-MM-YYYY",
 };
+
+export const LOCALE_STORAGE = "localeStorage";
+
+export const LOCALES = {
+  VI: "vi",
+  EN: "en",
+};

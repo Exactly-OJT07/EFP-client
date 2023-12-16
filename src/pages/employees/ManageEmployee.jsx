@@ -1,13 +1,14 @@
+import { PlusOutlined } from "@ant-design/icons";
+import { Button, Input, Space, Spin } from "antd";
 import React, { useState } from "react";
-import { PlusOutlined, SearchOutlined } from "@ant-design/icons";
+import { useNavigate } from "react-router";
+import Pagination from "../../components/pagination/pagination";
 import { useGetClients } from "../../hooks/useEmployee";
 import "../../styles/ManageEmployee.css";
 import ReadEmployee from "./manageEmployee/ReadEmployee";
-import CreateEmployee from "./manageEmployee/CreateEmployee";
-import { Space, Input, Spin, Button } from "antd";
-import Pagination from "../../components/pagination/pagination";
 
 function ManageEmployee() {
+  const navigate = useNavigate();
   const [searchNameText, setSearchNameText] = useState("");
   const [searchEmailText, setSearchEmailText] = useState("");
   const [table, setTable] = useState({
@@ -56,15 +57,9 @@ function ManageEmployee() {
             setSearchEmailText(e.target.value);
           }}
         />
-        <Button type="primary" onClick={() => setIsModalOpen(true)}>
+        <Button type="primary" onClick={() => navigate("create")}>
           <PlusOutlined /> New Employee
         </Button>
-        <CreateEmployee
-          isModalOpen={isModalOpen}
-          setIsModalOpen={setIsModalOpen}
-          width="1000px"
-          onCancel={handleCloseModal}
-        />
       </Space>
 
       {isLoading ? (
