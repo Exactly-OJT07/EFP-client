@@ -4,6 +4,7 @@
   padding: 10px;
   width: 785px;
   height: auto;
+  box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;
 }
 #circleChart {
   border-radius: 8px;
@@ -11,6 +12,7 @@
   padding: 30px;
   width: 370px;
   height: auto;
+  box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;
 }
 .card-infor {
   display: flex;

@@ -41,6 +41,8 @@ const ProjectDetail = () => {
     name,
     description,
     managerProject,
+    langFrame,
+    technology,
     employee_project,
     startDate,
     endDate,
@@ -76,6 +78,7 @@ const ProjectDetail = () => {
       <Row gutter={16}>
         <Col span={7} className="manager-infor">
           <div className="manager-detail">
+            <Typography.Title level={3}>Manager Information</Typography.Title>
             <img src={managerProject.avatar} alt={managerProject.name} />
             <Typography.Title level={5}>{managerProject.name}</Typography.Title>
             <p>
@@ -85,6 +88,9 @@ const ProjectDetail = () => {
         </Col>
         <Col span={15} className="project-infor">
           <div className="project-detail">
+            <Typography.Title level={3} style={{ marginBottom: "15px" }}>
+              Project Details
+            </Typography.Title>
             <Form
               labelCol={{
                 span: 5,
@@ -103,6 +109,26 @@ const ProjectDetail = () => {
 
               <Form.Item label="Description">
                 <Input value={description} readOnly />
+              </Form.Item>
+
+              <Form.Item label="Lang Frame">
+                <div className="langFrame-container">
+                  {langFrame.map((frame) => (
+                    <span key={frame.name} className="lang-frame-item">
+                      {frame.name}
+                    </span>
+                  ))}
+                </div>
+              </Form.Item>
+
+              <Form.Item label="Technology">
+                <div className="technology-container">
+                  {technology.map((tech) => (
+                    <span key={tech.name} className="technology-item">
+                      {tech.name}
+                    </span>
+                  ))}
+                </div>
               </Form.Item>
 
               <Form.Item label="Members Assigned">
