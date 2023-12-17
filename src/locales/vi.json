@@ -28,11 +28,28 @@
     "SKILL": "Kỹ Năng",
     "EXP": "Kinh nghiệm/Năm",
 
-    "NEW": "Tạo nhân viên mới",
+    "NEW": "Tạo nhân viên",
     "DETAIL": "Thông tin nhân viên",
     "NOMANAGER": "Không có cấp trên",
     "TRACKING": "Xem lịch sử làm việc",
     "CHANGEAVATAR": "Đổi ảnh đại diện"
+  },
+  "PROJECT": {
+    "NAME": "Tên dự án",
+    "MANAGER": "Quản lý",
+    "TEAMMEMBER": "Thành viên",
+
+    "ALLSTATUS": "Trạng thái",
+    "PENDING": "Chờ",
+    "ONPROGRESS": "Tiến triển",
+    "DONE": "Hoàn thành",
+    "CLOSED": "Bảo trì",
+
+    "NEW": "Tạo dự án",
+    "CREATEON": "Dự án được tạo vào ngày: ",
+    "DELETE": "Xóa dự án",
+    "DELETECONTENT": "Bạn có muốn xóa dự án này không?",
+    "NOPROJECT": "Không tìm thấy kết quả phù hợp."
   },
   "EDIT": "Thay Đổi",
   "DELETE": "Xóa",
