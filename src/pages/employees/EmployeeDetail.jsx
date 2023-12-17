@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useGetOneEmployee } from "../../hooks/useEmployee";
 import {
   Form,
@@ -23,6 +23,7 @@ const EmployeeDetail = () => {
   const { id } = useParams();
   const { data: employee, isLoading, isError } = useGetOneEmployee(id);
 
+  const navigate = useNavigate();
   const { t } = useTranslation();
 
   if (isLoading) {
@@ -68,6 +69,17 @@ const EmployeeDetail = () => {
 
   return (
     <>
+      <div style={{ display: "flex", justifyContent: "space-between" }}>
+        <Typography.Title level={3}>Personal</Typography.Title>
+        <div>
+          <Button
+            style={{ marginRight: "10px" }}
+            onClick={() => navigate("/manageEmployees")}
+          >
+            <Translation>{(t) => t("BACK")}</Translation>
+          </Button>
+        </div>
+      </div>
       <Row gutter={32}>
         <Col align="middle" md={{ span: 24 }} lg={{ span: 8 }}>
           <Row gutter={32} layout="vertical">

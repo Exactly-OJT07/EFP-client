@@ -34,23 +34,26 @@ import "../styles/ManageProject.css";
 import Circleprogress from "../components/circle-progress/Circleprogress";
 import ProjectDetail from "./ProjectDetail";
 import CreateProject from "./projects/components/createProject";
+import { Translation, useTranslation } from "react-i18next";
 
 const { Content } = Layout;
 const { Search } = Input;
 
 const settings = [
   {
-    label: "View",
+    label: <Translation>{(t) => t("VIEW")}</Translation>,
     key: "view",
   },
   {
-    label: "Delete",
+    label: <Translation>{(t) => t("DELETE")}</Translation>,
     key: "delete",
   },
 ];
 
 const ManageProject = () => {
   const navigate = useNavigate();
+
+  const { t } = useTranslation();
 
   const [table, setTable] = useState({
     page: 1,
@@ -92,10 +95,9 @@ const ManageProject = () => {
   };
 
   const showDeleteConfirm = (projectId) => {
-    console.log(projectId, "abc");
     Modal.confirm({
-      title: "Delete The Project",
-      content: "Are you sure to delete this project?",
+      title: <Translation>{(t) => t("PROJECT.DELETE")}</Translation>,
+      content: <Translation>{(t) => t("PROJECT.DELETECONTENT")}</Translation>,
       onOk: () => handleDeleteProject(projectId),
       onCancel: () => {},
       okText: "Yes",
@@ -135,7 +137,7 @@ const ManageProject = () => {
             type="secondary"
             onClick={() => handleFilter("")}
           >
-            All Status
+            <Translation>{(t) => t("PROJECT.ALLSTATUS")}</Translation>
           </Button>
           <Button
             className={`status-button ${
@@ -144,7 +146,7 @@ const ManageProject = () => {
             type="secondary"
             onClick={() => handleFilter("pending")}
           >
-            Pending
+            <Translation>{(t) => t("PROJECT.PENDING")}</Translation>
           </Button>
           <Button
             className={`status-button ${
@@ -153,7 +155,7 @@ const ManageProject = () => {
             type="secondary"
             onClick={() => handleFilter("on_progress")}
           >
-            On Progress
+            <Translation>{(t) => t("PROJECT.ONPROGRESS")}</Translation>
           </Button>
           <Button
             className={`status-button ${
@@ -162,11 +164,11 @@ const ManageProject = () => {
             type="secondary"
             onClick={() => handleFilter("done")}
           >
-            Done
+            <Translation>{(t) => t("PROJECT.DONE")}</Translation>
           </Button>
         </div>
         <Search
-          placeholder="Search Project"
+          placeholder={t("PROJECT.NAME")}
           allowClear
           style={{
             width: 300,
@@ -176,7 +178,8 @@ const ManageProject = () => {
 
         <div>
           <Button type="primary" onClick={() => setIsModalOpen(true)}>
-            <PlusOutlined /> New Project
+            <PlusOutlined />{" "}
+            <Translation>{(t) => t("PROJECT.NEW")}</Translation>
           </Button>
           <CreateProject
             isModalOpen={isModalOpen}
@@ -231,7 +234,9 @@ const ManageProject = () => {
                           strong
                           style={{ margin: 0 }}
                         >
-                          Manager
+                          <Translation>
+                            {(t) => t("PROJECT.MANAGER")}
+                          </Translation>
                         </Typography.Paragraph>
                         <Typography.Text strong style={{ margin: 0 }}>
                           {project.managerProject.name}
@@ -248,7 +253,9 @@ const ManageProject = () => {
                           strong
                           style={{ margin: 0 }}
                         >
-                          Team Member
+                          <Translation>
+                            {(t) => t("PROJECT.TEAMMEMBER")}
+                          </Translation>
                         </Typography.Paragraph>
                       </div>
                       <Avatar.Group maxCount={2}>
@@ -290,19 +297,35 @@ const ManageProject = () => {
                         options={[
                           {
                             value: "pending",
-                            label: "Pending",
+                            label: (
+                              <Translation>
+                                {(t) => t("PROJECT.PENDING")}
+                              </Translation>
+                            ),
                           },
                           {
                             value: "on_progress",
-                            label: "On Progress",
+                            label: (
+                              <Translation>
+                                {(t) => t("PROJECT.ONPROGRESS")}
+                              </Translation>
+                            ),
                           },
                           {
                             value: "done",
-                            label: "Done",
+                            label: (
+                              <Translation>
+                                {(t) => t("PROJECT.DONE")}
+                              </Translation>
+                            ),
                           },
                           {
                             value: "closed",
-                            label: "Closed",
+                            label: (
+                              <Translation>
+                                {(t) => t("PROJECT.CLOSED")}
+                              </Translation>
+                            ),
                             disabled: true,
                           },
                         ]}
@@ -362,7 +385,8 @@ const ManageProject = () => {
                       color: "grey",
                     }}
                   >
-                    Created On {toMomentDateTimeData(project.createdAt)}
+                    <Translation>{(t) => t("PROJECT.CREATEON")}</Translation>{" "}
+                    {toMomentDateTimeData(project.createdAt)}
                   </small>
                 </Space>
               </Card>
@@ -372,7 +396,7 @@ const ManageProject = () => {
       ) : (
         <div style={{ textAlign: "center", marginTop: 20 }}>
           <Typography.Title level={5}>
-            No matching projects found
+            <Translation>{(t) => t("PROJECT.NOPROJECT")}</Translation>
           </Typography.Title>
         </div>
       )}

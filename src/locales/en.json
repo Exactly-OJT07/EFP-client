@@ -1,5 +1,7 @@
 {
   "LANGUAGE": "Language",
+  "VIETNAMESE": "Vietnamese",
+  "ENGLISH": "English",
   "SIDEBAR": {
     "DASHBOARD": "Dashboard",
     "EMPLOYEES": "Employees",
@@ -26,12 +28,32 @@
     "SKILL": "Skill",
     "EXP": "Experience/Year",
 
+    "NEW": "New Employee",
     "DETAIL": "Personal Info",
     "CHANGEAVATAR": "Change Avatar",
     "TRACKING": "Tracking History",
     "NOMANAGER": "No Manager"
   },
+  "PROJECT": {
+    "NAME": "Project Name",
+    "MANAGER": "Manager",
+    "TEAMMEMBER": "Team Members",
+
+    "ALLSTATUS": "All Status",
+    "PENDING": "Pending",
+    "ONPROGRESS": "On Progress",
+    "DONE": "Done",
+    "CLOSED": "Closed",
+
+    "NEW": "New Project",
+    "CREATEON": "Created on: ",
+    "DELETE": "Delete Project",
+    "DELETECONTENT": "Are you sure you want to delete this project ?",
+    "NOPROJECT": "No matching projects found."
+  },
   "EDIT": "Change",
   "DELETE": "Delete",
-  "CLOSE": "Ok"
+  "CLOSE": "Ok",
+  "VIEW": "View",
+  "BACK": "Back"
 }

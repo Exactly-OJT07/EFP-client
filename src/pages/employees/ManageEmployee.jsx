@@ -32,17 +32,13 @@ function ManageEmployee() {
     isError,
   } = useGetClients(paginateOptions);
 
-  const handleCloseModal = () => {
-    setIsModalOpen(false);
-  };
-
   console.log(<Translation>{(t) => t("EMPLOYEE.NAME")}</Translation>);
 
   return (
     <>
       <Space className="employee-search" size="large">
         <Input
-          placeholder="Name"
+          placeholder={t("EMPLOYEE.NAME")}
           value={searchNameText}
           style={{
             width: 304,
@@ -52,7 +48,7 @@ function ManageEmployee() {
           }}
         />
         <Input
-          placeholder={<Translation>{(t) => t("EMPLOYEE.EMAIL")}</Translation>}
+          placeholder={t("EMPLOYEE.EMAIL")}
           value={searchEmailText}
           style={{
             width: 304,
@@ -62,7 +58,7 @@ function ManageEmployee() {
           }}
         />
         <Button type="primary" onClick={() => navigate("create")}>
-          <PlusOutlined /> New Employee
+          <PlusOutlined /> <Translation>{(t) => t("EMPLOYEE.NEW")}</Translation>
         </Button>
       </Space>
 
