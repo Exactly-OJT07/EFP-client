@@ -1,58 +1,70 @@
-import { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Button, Form, Input, Alert } from "antd";
 import "../styles/Login.css";
 import { useNavigate } from "react-router-dom";
 import { openNotificationWithIcon } from "../components/notification/notification";
+
 const Login = () => {
   const navigate = useNavigate();
   const [showAlert, setShowAlert] = useState(false);
   const [showError, setShowError] = useState(false);
+
+  useEffect(() => {
+    checkAuthentication();
+  }, []);
+
+  const checkAuthentication = () => {
+    const isAuthenticated = localStorage.getItem("authenticated") === "true";
+
+    if (isAuthenticated) {
+      navigate("/");
+    }
+  };
+
+  const handleSuccessfulLogin = (username) => {
+    setShowAlert(true);
+
+    const updatedCredentials = { username };
+    localStorage.setItem("credentials", JSON.stringify(updatedCredentials));
+    localStorage.setItem("authenticated", "true");
+
+    openNotificationWithIcon("success", "Login Successfully");
+    navigate("/");
+  };
+
+  const handleFailedLogin = () => {
+    setShowError(true);
+    openNotificationWithIcon("error", "Login Failed");
+  };
+
   const onFinish = (values) => {
-    // Get stored credentials from localStorage
     const storedCredentials =
       JSON.parse(localStorage.getItem("credentials")) || {};
-
     const hardcodedCredentials = {
       username: "linh@gmail.com",
       password: "123",
     };
 
-    if (
+    const isLoginSuccessful =
       (values.username === hardcodedCredentials.username &&
         values.password === hardcodedCredentials.password) ||
       (values.username === storedCredentials.username &&
-        values.password === storedCredentials.password)
-    ) {
-      setShowAlert(true);
+        values.password === storedCredentials.password);
 
-      const updatedCredentials = {
-        ...storedCredentials,
-        ...values,
-      };
-
-      localStorage.setItem(
-        "username",
-        JSON.stringify(updatedCredentials.username),
-      );
-
-      openNotificationWithIcon("success", "Login Successfully");
-      navigate("/dashboard");
-    } else {
-      openNotificationWithIcon("error", "Login Fail");
-    }
+    isLoginSuccessful
+      ? handleSuccessfulLogin(values.username)
+      : handleFailedLogin();
   };
 
   const onFinishFailed = (errorInfo) => {
     console.log("Failed:", errorInfo);
   };
+
   return (
     <div className="login__container">
       <div className="login">
         <div className="image">
-          <img
-            src="https://cdn.dribbble.com/users/535615/screenshots/17649043/media/e4c03808fa04fa65e0c58d6d61f2fd54.png"
-            alt="Login"
-          />
+          <img src="src/assets/logo.jpg" alt="Login" />
         </div>
         <Form
           name="login-form"
@@ -76,7 +88,10 @@ const Login = () => {
             />
           )}
           <p className="form-title">Log In</p>
-          <p>Enter your email and password to login to our dashboard.</p>
+          <p className="PPP">
+            {" "}
+            Enter your email and password to login to our dashboard.
+          </p>
           <p className="title">Email</p>
           <Form.Item
             name="username"
@@ -115,4 +130,5 @@ const Login = () => {
     </div>
   );
 };
+
 export default Login;

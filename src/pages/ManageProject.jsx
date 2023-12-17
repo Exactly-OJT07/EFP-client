@@ -3,7 +3,6 @@ import {
   MoreOutlined,
   PlusOutlined,
 } from "@ant-design/icons";
-
 import {
   Button,
   Card,
@@ -33,6 +32,8 @@ import {
 } from "../hooks/useProject";
 import "../styles/ManageProject.css";
 import Circleprogress from "../components/circle-progress/Circleprogress";
+import ProjectDetail from "./ProjectDetail";
+import CreateProject from "./projects/components/createProject";
 
 const { Content } = Layout;
 const { Search } = Input;
@@ -55,6 +56,7 @@ const ManageProject = () => {
     page: 1,
     take: 2,
   });
+
   const [filters, setFilters] = useState("");
   const [status, setStatus] = useState("");
 
@@ -64,6 +66,7 @@ const ManageProject = () => {
     page: table.page,
     take: table.take,
   };
+
   const { data: projects, isLoading, isError } = useGetData(paginateOptions);
 
   const projectStatusUpdateMutation = useProjectStatusUpdate();
@@ -106,6 +109,11 @@ const ManageProject = () => {
       console.log("Error");
     }
   };
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+  };
 
   return (
     <Content className="content-project">
@@ -133,9 +141,17 @@ const ManageProject = () => {
           onSearch={handleSearch}
         />
 
-        <Button type="primary">
-          <PlusOutlined /> New Project
-        </Button>
+        <div>
+          <Button type="primary" onClick={() => setIsModalOpen(true)}>
+            <PlusOutlined /> New Project
+          </Button>
+          <CreateProject
+            isModalOpen={isModalOpen}
+            setIsModalOpen={setIsModalOpen}
+            width="1000px"
+            onCancel={handleCloseModal}
+          />
+        </div>
       </Space>
       {isLoading ? (
         <Spin

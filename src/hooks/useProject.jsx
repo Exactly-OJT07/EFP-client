@@ -4,9 +4,11 @@ import {
   getProjectDetailApi,
   deleteProjectApi,
   patchStatusApi,
+  createProjectAPI,
 } from "../api/apiUrl";
 import { QUERY_KEY } from "../constants/query-key";
 import { openNotificationWithIcon } from "../components/notification/notification";
+import { NotificationType } from "../constants/constants";
 
 export const useGetData = (params) =>
   useQuery(
@@ -51,4 +53,16 @@ export const useDeleteProject = () => {
       openNotificationWithIcon("success", "Delete Project Successfully");
     },
   });
+};
+
+export const useCreateProject = () => {
+  const queryClient = useQueryClient();
+  const mutation = useMutation((newProject) => createProjectAPI(newProject), {
+    onSuccess: (data) => {
+      console.log(data, "data00");
+      queryClient.refetchQueries([QUERY_KEY.PROJECT]);
+      openNotificationWithIcon("success", data.data.message);
+    },
+  });
+  return mutation;
 };
