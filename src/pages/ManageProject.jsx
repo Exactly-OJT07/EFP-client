@@ -34,23 +34,26 @@ import "../styles/ManageProject.css";
 import Circleprogress from "../components/circle-progress/Circleprogress";
 import ProjectDetail from "./ProjectDetail";
 import CreateProject from "./projects/components/createProject";
+import { Translation, useTranslation } from "react-i18next";
 
 const { Content } = Layout;
 const { Search } = Input;
 
 const settings = [
   {
-    label: "View",
+    label: <Translation>{(t) => t("VIEW")}</Translation>,
     key: "view",
   },
   {
-    label: "Delete",
+    label: <Translation>{(t) => t("DELETE")}</Translation>,
     key: "delete",
   },
 ];
 
 const ManageProject = () => {
   const navigate = useNavigate();
+
+  const { t } = useTranslation();
 
   const [table, setTable] = useState({
     page: 1,

@@ -14,12 +14,12 @@ const { Content, Header } = Layout;
 const items = [
   {
     key: "1",
-    label: "Việt Nam",
+    label: <Translation>{(t) => t("VIETNAMESE")}</Translation>,
     icon: <img src={vn} alt="" />,
   },
   {
     key: "2",
-    label: "English",
+    label: <Translation>{(t) => t("ENGLISH")}</Translation>,
     icon: <img src={en} alt="" />,
   },
 ];

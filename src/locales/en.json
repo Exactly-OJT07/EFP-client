@@ -1,5 +1,7 @@
 {
   "LANGUAGE": "Language",
+  "VIETNAMESE": "Vietnamese",
+  "ENGLISH": "English",
   "SIDEBAR": {
     "DASHBOARD": "Dashboard",
     "EMPLOYEES": "Employees",
@@ -26,6 +28,7 @@
     "SKILL": "Skill",
     "EXP": "Experience/Year",
 
+    "NEW": "New Employee",
     "DETAIL": "Personal Info",
     "CHANGEAVATAR": "Change Avatar",
     "TRACKING": "Tracking History",
@@ -33,5 +36,7 @@
   },
   "EDIT": "Change",
   "DELETE": "Delete",
-  "CLOSE": "Ok"
+  "CLOSE": "Ok",
+  "VIEW": "View",
+  "BACK": "Back"
 }

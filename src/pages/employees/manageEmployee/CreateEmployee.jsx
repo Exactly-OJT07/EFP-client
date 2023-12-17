@@ -24,6 +24,7 @@ import { createJourneyCode } from "../../../helpers/code";
 import { useCreateEmployee } from "../../../hooks/useEmployee";
 import { useGetManager } from "../../../hooks/useManager";
 import "../../../styles/ManageEmployee.css";
+import { useTranslation } from "react-i18next";
 const { useForm } = Form;
 
 const skills = [
@@ -40,6 +41,8 @@ const skills = [
 ];
 
 const CreateEmployee = () => {
+  const { t } = useTranslation();
+
   const [formCreate] = useForm();
   const [newCode, setNewCode] = useState(createJourneyCode());
   const [newName, setNewName] = useState("");
@@ -51,7 +54,6 @@ const CreateEmployee = () => {
   const [newStatus, setNewStatus] = useState("");
   const [newEmail, setNewEmail] = useState("");
   const [newJoinDate, setNewJoinDate] = useState("");
-  const [newFireDate, setNewFireDate] = useState("");
   const [newAvatar, setNewAvatar] = useState("");
   const [newDescription, setNewDescription] = useState("");
   const [newIsManager, setNewIsManager] = useState(false);
@@ -289,7 +291,6 @@ const CreateEmployee = () => {
                 }}
                 format="DD/MM/YYYY"
                 disabledDate={(current) => {
-                  // Disable dates after today
                   return current && current > moment().endOf("day");
                 }}
               />
@@ -301,8 +302,8 @@ const CreateEmployee = () => {
               rules={[
                 {
                   required: true,
-                  pattern: /^[0-9]{9}$/,
-                  message: "IdentityCard must be 9 digits",
+                  pattern: /^[0-9]{9,12}$/,
+                  message: "IdentityCard must be 9 to 12 digits",
                 },
               ]}
             >

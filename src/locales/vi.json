@@ -1,5 +1,7 @@
 {
   "LANGUAGE": "Ngôn Ngữ",
+  "VIETNAMESE": "Tiếng Việt",
+  "ENGLISH": "Tiếng Anh",
   "SIDEBAR": {
     "DASHBOARD": "Bảng thống kê",
     "EMPLOYEES": "Nhân viên",
@@ -26,6 +28,7 @@
     "SKILL": "Kỹ Năng",
     "EXP": "Kinh nghiệm/Năm",
 
+    "NEW": "Tạo nhân viên mới",
     "DETAIL": "Thông tin nhân viên",
     "NOMANAGER": "Không có cấp trên",
     "TRACKING": "Xem lịch sử làm việc",
@@ -33,5 +36,7 @@
   },
   "EDIT": "Thay Đổi",
   "DELETE": "Xóa",
-  "CLOSE": "Đóng"
+  "CLOSE": "Đóng",
+  "VIEW": "Xem",
+  "BACK": "Quay lại"
 }
