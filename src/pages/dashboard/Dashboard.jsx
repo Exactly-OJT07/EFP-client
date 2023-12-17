@@ -33,11 +33,11 @@ const Dashboard = () => {
   const [areaChartState, setAreaChartState] = useState({
     series: [
       {
-        name: "series1",
+        name: "Projects",
         data: [31, 40, 28, 51, 42, 109, 100],
       },
       {
-        name: "series2",
+        name: "Employees",
         data: [11, 32, 45, 32, 34, 52, 41],
       },
     ],
@@ -114,7 +114,7 @@ const Dashboard = () => {
       },
       labels: ["Done", "On Progress", "Pending"],
       title: {
-        text: "Circle Chart",
+        text: "Current Project Status",
         align: "center",
       },
     },
@@ -147,13 +147,13 @@ const Dashboard = () => {
                 <Card
                   style={{
                     width: 370,
-                    background:
-                      "linear-gradient(135deg, #ABDCFF 10%, #0396FF 100%)",
+                    background: "#f5f5f5",
+                    boxShadow: "rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px",
                   }}
                 >
                   <Space direction="horizontal">
                     <MoneyCollectOutlined />
-                    <strong style={{ color: "#092635" }}>Total Projects</strong>
+                    <strong style={{ color: "#383838" }}>Total Projects</strong>
                   </Space>
                   <div className="card-infor">
                     <Typography.Title>{projectTotal?.total}</Typography.Title>
@@ -177,13 +177,13 @@ const Dashboard = () => {
                 <Card
                   style={{
                     width: 370,
-                    background:
-                      "linear-gradient( 135deg, #2AFADF 10%, #4C83FF 100%)",
+                    background: "#f5f5f5",
+                    boxShadow: "rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px",
                   }}
                 >
                   <Space direction="horizontal">
                     <UserOutlined />
-                    <strong style={{ color: "#092635" }}>
+                    <strong style={{ color: "#383838" }}>
                       Total Employees
                     </strong>
                   </Space>
@@ -209,13 +209,13 @@ const Dashboard = () => {
                 <Card
                   style={{
                     width: 370,
-                    background:
-                      "linear-gradient( 135deg, #FFD3A5 10%, #FD6585 100%)",
+                    background: "#f5f5f5",
+                    boxShadow: "rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px",
                   }}
                 >
                   <Space direction="horizontal">
                     <CheckCircleOutlined />
-                    <strong style={{ color: "#092635" }}>Project Done</strong>
+                    <strong style={{ color: "#383838" }}>Project Done</strong>
                   </Space>
                   <div className="card-infor">
                     <Typography.Title>
