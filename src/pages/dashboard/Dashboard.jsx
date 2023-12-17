@@ -33,11 +33,11 @@ const Dashboard = () => {
   const [areaChartState, setAreaChartState] = useState({
     series: [
       {
-        name: "series1",
+        name: "Projects",
         data: [31, 40, 28, 51, 42, 109, 100],
       },
       {
-        name: "series2",
+        name: "Employees",
         data: [11, 32, 45, 32, 34, 52, 41],
       },
     ],
@@ -147,8 +147,8 @@ const Dashboard = () => {
                 <Card
                   style={{
                     width: 370,
-                    background:
-                      "linear-gradient(135deg, #ABDCFF 10%, #0396FF 100%)",
+                    background: "#f5f5f5",
+                    boxShadow: "rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px",
                   }}
                 >
                   <Space direction="horizontal">
@@ -177,8 +177,8 @@ const Dashboard = () => {
                 <Card
                   style={{
                     width: 370,
-                    background:
-                      "linear-gradient( 135deg, #2AFADF 10%, #4C83FF 100%)",
+                    background: "#f5f5f5",
+                    boxShadow: "rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px",
                   }}
                 >
                   <Space direction="horizontal">
@@ -209,8 +209,8 @@ const Dashboard = () => {
                 <Card
                   style={{
                     width: 370,
-                    background:
-                      "linear-gradient( 135deg, #FFD3A5 10%, #FD6585 100%)",
+                    background: "#f5f5f5",
+                    boxShadow: "rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px",
                   }}
                 >
                   <Space direction="horizontal">
