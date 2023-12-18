@@ -13,9 +13,9 @@ import {
   Typography,
   Table,
 } from "antd";
-import { DownloadOutlined } from "@ant-design/icons";
+import { DownloadOutlined, CloseCircleOutlined } from "@ant-design/icons";
 import moment from "moment";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Translation, useTranslation } from "react-i18next";
 import { useNavigate, useParams } from "react-router-dom";
 import { Breadcrumb } from "../../components/beadcrumb/Breadcrumb";
@@ -24,12 +24,16 @@ import { useGetManager } from "../../hooks/useManager";
 import "../../styles/EmployeeDetail.css";
 import DeleteEmployee from "./employeeDetail/DeleteEmployee";
 import TrackingHistory from "./employeeDetail/TrackingHistory";
+
 const { TextArea } = Input;
+
 const EmployeeDetail = () => {
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
-  const [isTrackingModalOpen, setIsTrackingModalOpen] = useState(false);
   const { id } = useParams();
+  const navigate = useNavigate();
+  const { t } = useTranslation();
   const { data: employee, isLoading, isError } = useGetOneEmployee(id);
+
   const { data: managers } = useGetManager();
 
   const [editAvatar, setEditAvatar] = useState("");
@@ -58,8 +62,45 @@ const EmployeeDetail = () => {
   const [editTech, setEditTech] = useState("");
   const [editTechExperience, setEditTechExperience] = useState("");
 
-  const navigate = useNavigate();
-  const { t } = useTranslation();
+  if (isLoading) {
+    return (
+      <Spin
+        size="large"
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          position: "absolute",
+          top: "50%",
+          left: "50%",
+        }}
+      />
+    );
+  }
+
+  if (isError || !employee) {
+    return <div>Employee not found</div>;
+  }
+
+  const {
+    avatar,
+    name,
+    code,
+    email,
+    phone,
+    identityCard,
+    dateOfBirth,
+    gender,
+    status,
+    position,
+    skills,
+    langFrame,
+    tech,
+    address,
+    description,
+    joinDate,
+    fireDate,
+    manager,
+  } = employee?.employee;
 
   const techs = [
     {
@@ -106,7 +147,7 @@ const EmployeeDetail = () => {
     const existingSkill = editSkills.find((skill) => skill.name === editSkill);
 
     if (existingSkill) {
-      message.errort("VALIDATE.EXIST_SKILL");
+      message.error(t("VALIDATE.EXIST_SKILL"));
       return;
     }
     const newEntry = {
@@ -119,9 +160,9 @@ const EmployeeDetail = () => {
   };
   const removeSkill = (key) => {
     const updatedSkills = editSkills.filter((skill) => skill.key !== key);
-    setNewSkills(updatedSkills);
+    setEditSkills(updatedSkills);
   };
-  //language and Framework
+
   const addToLangFrame = () => {
     if (!editLangFrame || !editLangExperience) {
       message.error(t("VALIDATE.ERROR_LANGUAGE"));
@@ -139,7 +180,7 @@ const EmployeeDetail = () => {
       name: editLangFrame,
       exp: editLangExperience,
     };
-    setNewLangFrames([
+    setEditLangFrames([
       ...editLangFrames,
       { ...editLangEntry, key: editLangFrame.length + 1 },
     ]);
@@ -150,9 +191,9 @@ const EmployeeDetail = () => {
     const updatedLangFrames = editLangFrames.filter(
       (langFrame) => langFrame.key !== key,
     );
-    setNewLangFrames(updatedLangFrames);
+    setEditLangFrames(updatedLangFrames);
   };
-  //Technology
+
   const addToTech = () => {
     if (!editTech || !editTechExperience) {
       message.error(t("VALIDATE.TECHNOLOGY"));
@@ -180,50 +221,11 @@ const EmployeeDetail = () => {
     setEditTechs(updatedTechs);
   };
 
-  if (isLoading) {
-    return (
-      <Spin
-        size="large"
-        style={{
-          display: "flex",
-          justifyContent: "center",
-          position: "absolute",
-          top: "50%",
-          left: "50%",
-        }}
-      />
-    );
-  }
-
-  if (isError || !employee) {
-    return <div>Employee not found</div>;
-  }
-
-  const {
-    avatar,
-    name,
-    code,
-    email,
-    phone,
-    identityCard,
-    dateOfBirth,
-    gender,
-    status,
-    position,
-    skills,
-    langFrame,
-    tech,
-    address,
-    description,
-    joinDate,
-    fireDate,
-    manager,
-  } = employee?.employee;
-  console.log(employee?.employee);
-
   const handleCloseDeleteModal = () => {
     setIsDeleteModalOpen(false);
   };
+
+  const handleEditOk = () => {};
 
   const breadcrumbItems = [
     { key: "manageEmployees" },
@@ -247,38 +249,38 @@ const EmployeeDetail = () => {
           </Button>
         </div>
       </div>
-      <Row gutter={32}>
-        <Col align="middle" md={{ span: 24 }} lg={{ span: 12 }}>
-          <Row gutter={32} layout="vertical">
-            <Col span={24}>
-              <AntdImage
-                width="200px"
-                height="200px"
-                style={{ borderRadius: "100%" }}
-                src={avatar}
-              />
-            </Col>
-            <Col span={24}>
-              <Button style={{ margin: "10px" }}>
-                <Translation>{(t) => t("EMPLOYEE.CHANGEAVATAR")}</Translation>
-              </Button>
-            </Col>
-            <Col span={24}>
-              <Button
-                icon={<DownloadOutlined />}
-                type="primary"
-                style={{ margin: "10px", background: "green" }}
-              >
-                <Translation>{(t) => t("EMPLOYEE.EXPORT")}</Translation>
-              </Button>
-            </Col>
-            <Col span={24}>
-              <TrackingHistory />
-            </Col>
-          </Row>
-        </Col>
-        <Col md={{ span: 24, align: "middle" }} lg={{ span: 12 }}>
-          <Form layout="vertical">
+      <Form layout="vertical">
+        <Row gutter={32}>
+          <Col align="middle" md={{ span: 24 }} lg={{ span: 12 }}>
+            <Row gutter={32} layout="vertical">
+              <Col span={24}>
+                <AntdImage
+                  width="200px"
+                  height="200px"
+                  style={{ borderRadius: "100%" }}
+                  src={avatar}
+                />
+              </Col>
+              <Col span={24}>
+                <Button style={{ margin: "10px" }}>
+                  <Translation>{(t) => t("EMPLOYEE.CHANGEAVATAR")}</Translation>
+                </Button>
+              </Col>
+              <Col span={24}>
+                <Button
+                  icon={<DownloadOutlined />}
+                  type="primary"
+                  style={{ margin: "10px", background: "green" }}
+                >
+                  <Translation>{(t) => t("EMPLOYEE.EXPORT")}</Translation>
+                </Button>
+              </Col>
+              <Col span={24}>
+                <TrackingHistory />
+              </Col>
+            </Row>
+          </Col>
+          <Col md={{ span: 24, align: "middle" }} lg={{ span: 12 }}>
             <Row gutter={8}>
               <Col span={12}>
                 <Form.Item
@@ -508,288 +510,291 @@ const EmployeeDetail = () => {
                   />
                 </Form.Item>
               </Col>
-              <Col span={24}>
-                <Row gutter={15}>
-                  <Col xs={24} sm={12} md={12} lg={12} xl={12}>
-                    <Form.Item label={t("EMPLOYEE.SOFTSKILL")}>
-                      <Select
-                        value={editSkill}
-                        onChange={(value) => setEditSkill(value)}
-                        placeholder={t("VALIDATE.SKILL")}
-                      >
-                        {["Management", "Planning", "Team Work"].map(
-                          (skill) => (
-                            <Select.Option key={skill} value={skill}>
-                              {skill}
-                            </Select.Option>
-                          ),
-                        )}
-                      </Select>
-                    </Form.Item>
+            </Row>
+          </Col>
+        </Row>
+        <Row gutter={16}>
+          <Col span={24}>
+            <Row gutter={15}>
+              <Col xs={24} sm={12} md={12} lg={12} xl={12}>
+                <Form.Item label={t("EMPLOYEE.SOFTSKILL")}>
+                  <Select
+                    value={editSkill}
+                    onChange={(value) => setEditSkill(value)}
+                    placeholder={t("VALIDATE.SKILL")}
+                  >
+                    {["Management", "Planning", "Team Work"].map((skill) => (
+                      <Select.Option key={skill} value={skill}>
+                        {skill}
+                      </Select.Option>
+                    ))}
+                  </Select>
+                </Form.Item>
 
-                    <Form.Item label={t("EMPLOYEE.EXPERIENCE")}>
-                      <InputNumber
-                        value={editSkillExperience}
-                        onChange={(value) => setEditSkillExperience(value)}
-                        style={{ width: "100%" }}
-                        placeholder={t("VALIDATE.EXPERIENCE")}
-                        min={1}
-                      />
-                    </Form.Item>
-                    <Button
-                      style={{ marginTop: "20px" }}
-                      type="primary"
-                      onClick={() => {
-                        addToSkills();
-                      }}
-                    >
-                      {t("EMPLOYEE.ADDSKILL")}
-                    </Button>
-                  </Col>
-                  <Col xs={24} sm={12} md={12} lg={12} xl={12}>
-                    <Form.Item name="skills">
-                      <Table
-                        className="skills-table"
-                        rowKey="name"
-                        defaultValue={skills}
-                        dataSource={editSkills.map((skill) => ({
-                          ...skill,
-                          key: skill.key,
-                        }))}
-                        style={{
-                          width: "100%",
-                          maxHeight: "200px",
-                          overflow: "auto",
-                        }}
-                        columns={[
-                          ...skillss,
-                          {
-                            title: t("EMPLOYEE.ACTION"),
-                            width: 50,
-                            style: { whiteSpace: "nowrap" },
-                            render: (record) => (
-                              <CloseCircleOutlined
-                                type="link"
-                                onClick={() => {
-                                  removeSkill(record.key);
-                                }}
-                              />
-                            ),
-                          },
-                        ]}
-                        pagination={false}
-                      />
-                    </Form.Item>
-                  </Col>
-                </Row>
+                <Form.Item label={t("EMPLOYEE.EXPERIENCE")}>
+                  <InputNumber
+                    value={editSkillExperience}
+                    onChange={(value) => setEditSkillExperience(value)}
+                    style={{ width: "100%" }}
+                    placeholder={t("VALIDATE.EXPERIENCE")}
+                    min={1}
+                  />
+                </Form.Item>
+                <Button
+                  style={{ marginTop: "20px" }}
+                  type="primary"
+                  onClick={() => {
+                    addToSkills();
+                  }}
+                >
+                  {t("EMPLOYEE.ADDSKILL")}
+                </Button>
               </Col>
-              <Col span={24}>
-                <Row gutter={15}>
-                  <Col xs={24} sm={12} md={12} lg={12} xl={12}>
-                    <Form.Item
-                      label={t("EMPLOYEE.LANGFRAME")}
-                      style={{ padding: 0, margin: 0 }}
-                    >
-                      <Select
-                        value={editLangFrame}
-                        onChange={(value) => setEditLangFrame(value)}
-                        placeholder={t("VALIDATE.LANGUAGE")}
-                      >
-                        {[
-                          "HTML",
-                          "CSS",
-                          "JavaScript",
-                          "React",
-                          "Node.js",
-                          "Express",
-                          "NestJs",
-                          "Python",
-                          "C#",
-                          "C++",
-                          "Java",
-                          "Ruby",
-                          "PHP",
-                        ].map((langFrame) => (
-                          <Select.Option key={langFrame} value={langFrame}>
-                            {langFrame}
-                          </Select.Option>
-                        ))}
-                      </Select>
-                    </Form.Item>
-
-                    <Form.Item
-                      label={t("EMPLOYEE.EXPERIENCE")}
-                      style={{ marginBottom: "8px" }}
-                      rules={[
-                        {
-                          required: true,
-                          message: t("VALIDATE.EXPERIENCE"),
-                        },
-                      ]}
-                    >
-                      <InputNumber
-                        value={editLangExperience}
-                        onChange={(value) => setEditLangExperience(value)}
-                        style={{ width: "100%" }}
-                        placeholder={t("VALIDATE.EXPERIENCE")}
-                        min={1}
-                      />
-                    </Form.Item>
-                    <Button
-                      style={{ marginTop: "20px" }}
-                      type="primary"
-                      onClick={() => {
-                        addToLangFrame();
-                      }}
-                    >
-                      {t("EMPLOYEE.ADDLANGUAGE")}
-                    </Button>
-                  </Col>
-                  <Col xs={24} sm={12} md={12} lg={12} xl={12}>
-                    <Form.Item name="langFrames">
-                      <Table
-                        className="skills-table"
-                        rowKey="name"
-                        dataSource={editLangFrames.map((langFrame) => ({
-                          ...langFrame,
-                          key: langFrame.key,
-                        }))}
-                        style={{
-                          width: "100%",
-                          maxHeight: "200px",
-                          overflow: "auto",
-                        }}
-                        columns={[
-                          ...langFrames,
-                          {
-                            title: t("EMPLOYEE.ACTION"),
-                            width: 50,
-                            render: (record) => (
-                              <CloseCircleOutlined
-                                type="link"
-                                onClick={() => {
-                                  removeLangFrame(record.key);
-                                }}
-                              />
-                            ),
-                          },
-                        ]}
-                        pagination={false}
-                      />
-                    </Form.Item>
-                  </Col>
-                </Row>
-              </Col>
-              <Col span={24}>
-                <Row gutter={15}>
-                  <Col xs={24} sm={12} md={12} lg={12} xl={12}>
-                    <Form.Item
-                      label={t("EMPLOYEE.TECHNOLOGY")}
-                      style={{ padding: 0, margin: 0 }}
-                    >
-                      <Select
-                        value={editTech}
-                        onChange={(value) => setEditTech(value)}
-                        placeholder={t("VALIDATE.TECHNOLOGY")}
-                      >
-                        {[
-                          "Docker",
-                          "Git/GitHub",
-                          "Jira",
-                          "AWS",
-                          "K8S",
-                          "Tailwind",
-                          "MongoDB",
-                          "PostgreSQL",
-                          "SQL Server",
-                          "Redis",
-                        ].map((tech) => (
-                          <Select.Option key={tech} value={tech}>
-                            {tech}
-                          </Select.Option>
-                        ))}
-                      </Select>
-                    </Form.Item>
-
-                    <Form.Item
-                      label={t("EMPLOYEE.EXPERIENCE")}
-                      style={{ marginBottom: "8px" }}
-                      rules={[
-                        {
-                          required: true,
-                          message: t("VALIDATE.EXPERIENCE"),
-                        },
-                      ]}
-                    >
-                      <InputNumber
-                        value={editTechExperience}
-                        onChange={(value) => setEditTechExperience(value)}
-                        style={{ width: "100%" }}
-                        placeholder={t("VALIDATE.EXPERIENCE")}
-                        min={1}
-                      />
-                    </Form.Item>
-                    <Button
-                      style={{ marginTop: "20px" }}
-                      type="primary"
-                      onClick={() => {
-                        addToTech();
-                      }}
-                    >
-                      {t("EMPLOYEE.ADDTECHNOLOGY")}
-                    </Button>
-                  </Col>
-                  <Col xs={24} sm={12} md={12} lg={12} xl={12}>
-                    <Form.Item name="techs">
-                      <Table
-                        className="skills-table"
-                        rowKey="name"
-                        dataSource={editTechs.map((tech) => ({
-                          ...tech,
-                          key: tech.key,
-                        }))}
-                        style={{
-                          width: "100%",
-                          maxHeight: "200px",
-                          overflow: "auto",
-                        }}
-                        columns={[
-                          ...techs,
-                          {
-                            title: t("EMPLOYEE.ACTION"),
-                            width: 50,
-                            render: (record) => (
-                              <CloseCircleOutlined
-                                type="link"
-                                onClick={() => {
-                                  removeTech(record.key);
-                                }}
-                              />
-                            ),
-                          },
-                        ]}
-                        pagination={false}
-                      />
-                    </Form.Item>
-                  </Col>
-                </Row>
+              <Col xs={24} sm={12} md={12} lg={12} xl={12}>
+                <Form.Item name="skills">
+                  <Table
+                    className="skills-table"
+                    rowKey="name"
+                    dataSource={editSkills?.map((skill) => ({
+                      ...skill,
+                      key: skill.key,
+                    }))}
+                    style={{
+                      width: "100%",
+                      maxHeight: "200px",
+                      overflow: "auto",
+                    }}
+                    columns={[
+                      ...skillss,
+                      {
+                        title: t("EMPLOYEE.ACTION"),
+                        width: 50,
+                        style: { whiteSpace: "nowrap" },
+                        render: (record) => (
+                          <CloseCircleOutlined
+                            type="link"
+                            onClick={() => {
+                              removeSkill(record.key);
+                            }}
+                          />
+                        ),
+                      },
+                    ]}
+                    pagination={false}
+                  />
+                </Form.Item>
               </Col>
             </Row>
-          </Form>
-        </Col>
-      </Row>
-      <Button type="primary" style={{ margin: "5px" }}>
-        <Translation>{(t) => t("EDIT")}</Translation>
-      </Button>
-      <Button type="primary" danger onClick={() => setIsDeleteModalOpen(true)}>
-        <Translation>{(t) => t("DELETE")}</Translation>
-      </Button>
-      <DeleteEmployee
-        isDeleteModalOpen={isDeleteModalOpen}
-        setIsDeleteModalOpen={setIsDeleteModalOpen}
-        width="500px"
-        onCancel={handleCloseDeleteModal}
-      />
+          </Col>
+          <Col span={24}>
+            <Row gutter={15}>
+              <Col xs={24} sm={12} md={12} lg={12} xl={12}>
+                <Form.Item
+                  label={t("EMPLOYEE.LANGFRAME")}
+                  style={{ padding: 0, margin: 0 }}
+                >
+                  <Select
+                    value={editLangFrame}
+                    onChange={(value) => setEditLangFrame(value)}
+                    placeholder={t("VALIDATE.LANGUAGE")}
+                  >
+                    {[
+                      "HTML",
+                      "CSS",
+                      "JavaScript",
+                      "React",
+                      "Node.js",
+                      "Express",
+                      "NestJs",
+                      "Python",
+                      "C#",
+                      "C++",
+                      "Java",
+                      "Ruby",
+                      "PHP",
+                    ].map((langFrame) => (
+                      <Select.Option key={langFrame} value={langFrame}>
+                        {langFrame}
+                      </Select.Option>
+                    ))}
+                  </Select>
+                </Form.Item>
+
+                <Form.Item
+                  label={t("EMPLOYEE.EXPERIENCE")}
+                  style={{ marginBottom: "8px" }}
+                  rules={[
+                    {
+                      required: true,
+                      message: t("VALIDATE.EXPERIENCE"),
+                    },
+                  ]}
+                >
+                  <InputNumber
+                    value={editLangExperience}
+                    onChange={(value) => setEditLangExperience(value)}
+                    style={{ width: "100%" }}
+                    placeholder={t("VALIDATE.EXPERIENCE")}
+                    min={1}
+                  />
+                </Form.Item>
+                <Button
+                  style={{ marginTop: "20px" }}
+                  type="primary"
+                  onClick={() => {
+                    addToLangFrame();
+                  }}
+                >
+                  {t("EMPLOYEE.ADDLANGUAGE")}
+                </Button>
+              </Col>
+              <Col xs={24} sm={12} md={12} lg={12} xl={12}>
+                <Form.Item name="langFrames">
+                  <Table
+                    className="skills-table"
+                    rowKey="name"
+                    dataSource={editLangFrames?.map((langFrame) => ({
+                      ...langFrame,
+                      key: langFrame.key,
+                    }))}
+                    style={{
+                      width: "100%",
+                      maxHeight: "200px",
+                      overflow: "auto",
+                    }}
+                    columns={[
+                      ...langFrames,
+                      {
+                        title: t("EMPLOYEE.ACTION"),
+                        width: 50,
+                        render: (record) => (
+                          <CloseCircleOutlined
+                            type="link"
+                            onClick={() => {
+                              removeLangFrame(record.key);
+                            }}
+                          />
+                        ),
+                      },
+                    ]}
+                    pagination={false}
+                  />
+                </Form.Item>
+              </Col>
+            </Row>
+          </Col>
+          <Col span={24}>
+            <Row gutter={15}>
+              <Col xs={24} sm={12} md={12} lg={12} xl={12}>
+                <Form.Item
+                  label={t("EMPLOYEE.TECHNOLOGY")}
+                  style={{ padding: 0, margin: 0 }}
+                >
+                  <Select
+                    value={editTech}
+                    onChange={(value) => setEditTech(value)}
+                    placeholder={t("VALIDATE.TECHNOLOGY")}
+                  >
+                    {[
+                      "Docker",
+                      "Git/GitHub",
+                      "Jira",
+                      "AWS",
+                      "K8S",
+                      "Tailwind",
+                      "MongoDB",
+                      "PostgreSQL",
+                      "SQL Server",
+                      "Redis",
+                    ].map((tech) => (
+                      <Select.Option key={tech} value={tech}>
+                        {tech}
+                      </Select.Option>
+                    ))}
+                  </Select>
+                </Form.Item>
+
+                <Form.Item
+                  label={t("EMPLOYEE.EXPERIENCE")}
+                  style={{ marginBottom: "8px" }}
+                  rules={[
+                    {
+                      required: true,
+                      message: t("VALIDATE.EXPERIENCE"),
+                    },
+                  ]}
+                >
+                  <InputNumber
+                    value={editTechExperience}
+                    onChange={(value) => setEditTechExperience(value)}
+                    style={{ width: "100%" }}
+                    placeholder={t("VALIDATE.EXPERIENCE")}
+                    min={1}
+                  />
+                </Form.Item>
+                <Button
+                  style={{ marginTop: "20px" }}
+                  type="primary"
+                  onClick={() => {
+                    addToTech();
+                  }}
+                >
+                  {t("EMPLOYEE.ADDTECHNOLOGY")}
+                </Button>
+              </Col>
+              <Col xs={24} sm={12} md={12} lg={12} xl={12}>
+                <Form.Item name="techs">
+                  <Table
+                    className="skills-table"
+                    rowKey="name"
+                    dataSource={editTechs.map((tech) => ({
+                      ...tech,
+                      key: tech.key,
+                    }))}
+                    style={{
+                      width: "100%",
+                      maxHeight: "200px",
+                      overflow: "auto",
+                    }}
+                    columns={[
+                      ...techs,
+                      {
+                        title: t("EMPLOYEE.ACTION"),
+                        width: 50,
+                        render: (record) => (
+                          <CloseCircleOutlined
+                            type="link"
+                            onClick={() => {
+                              removeTech(record.key);
+                            }}
+                          />
+                        ),
+                      },
+                    ]}
+                    pagination={false}
+                  />
+                </Form.Item>
+              </Col>
+            </Row>
+          </Col>
+        </Row>
+        <Button type="primary" style={{ margin: "5px" }} onClick={handleEditOk}>
+          <Translation>{(t) => t("EDIT")}</Translation>
+        </Button>
+        <Button
+          type="primary"
+          danger
+          onClick={() => setIsDeleteModalOpen(true)}
+        >
+          <Translation>{(t) => t("DELETE")}</Translation>
+        </Button>
+        <DeleteEmployee
+          isDeleteModalOpen={isDeleteModalOpen}
+          setIsDeleteModalOpen={setIsDeleteModalOpen}
+          width="500px"
+          onCancel={handleCloseDeleteModal}
+        />
+      </Form>
     </>
   );
 };

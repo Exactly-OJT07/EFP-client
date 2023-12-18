@@ -6,27 +6,20 @@ import moment from "moment";
 import ReactApexChart from "react-apexcharts";
 
 const TrackingTable = ({ projects }) => {
-  const projectSeries = projects.map((project) => {
-    return {
-      data: [
-        {
-          x: project.projectName,
-          y: [
-            new Date(
-              moment(project.projectStartDate).format("YYYY-MM-DD"),
-            ).getTime(),
-            new Date(
-              moment(project.projectFireDate).format("YYYY-MM-DD"),
-            ).getTime(),
-          ],
-        },
-      ],
-    };
-  });
+  const projectSeries = projects.map((project) => ({
+    data: [
+      {
+        x: project.projectName,
+        y: [
+          new Date(moment(project.joinDate).format("YYYY-MM-DD")).getTime(),
+          new Date(moment(project.doneDate).format("YYYY-MM-DD")).getTime(),
+        ],
+      },
+    ],
+  }));
 
   const [state, setState] = useState({
     series: projectSeries,
-
     options: {
       chart: {
         width: 500,
