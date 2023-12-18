@@ -7,7 +7,6 @@ import {
 import { Layout, Menu, Modal } from "antd";
 import "./LayoutSider.css";
 import { useLocation, useNavigate } from "react-router-dom";
-import logoIcon from "../../assets/logo.jpg";
 import { Translation, useTranslation } from "react-i18next";
 
 const { Sider } = Layout;
@@ -69,7 +68,7 @@ export const LayoutSider = ({ collapsed = true }) => {
     <Sider theme="dark" trigger={null} collapsible collapsed={collapsed}>
       <div className="demo-logo-vertical">
         <img
-          src={logoIcon}
+          src="https://res.cloudinary.com/dtrwgtzzd/image/upload/v1702539462/vpk4eycgnsfk8mlfbvdu.jpg"
           alt=""
           style={{
             width: 65,
