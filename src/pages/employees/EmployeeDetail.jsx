@@ -11,6 +11,7 @@ import {
   Spin,
   Typography,
 } from "antd";
+import { DownloadOutlined } from "@ant-design/icons";
 import moment from "moment";
 import React, { useState } from "react";
 import { Translation, useTranslation } from "react-i18next";
@@ -146,6 +147,15 @@ const EmployeeDetail = () => {
                 setIsTrackingModalOpen={setIsTrackingModalOpen}
                 width="1000px"
               />
+            </Col>
+            <Col span={24}>
+              <Button
+                icon={<DownloadOutlined />}
+                type="primary"
+                style={{ margin: "10px", background: "green" }}
+              >
+                <Translation>{(t) => t("EMPLOYEE.EXPORT")}</Translation>
+              </Button>
             </Col>
           </Row>
         </Col>
@@ -314,6 +324,7 @@ const EmployeeDetail = () => {
                   <Select
                     defaultValue={position}
                     onChange={(value) => setNewPosition(value)}
+                    style={{ maxWidth: "300px" }}
                   >
                     <Select.Option value="fe">Front-end Dev</Select.Option>
                     <Select.Option value="be">Back-end Dev</Select.Option>
@@ -336,6 +347,7 @@ const EmployeeDetail = () => {
                   <Select
                     defaultValue={status}
                     onChange={(value) => setNewStatus(value)}
+                    style={{ maxWidth: "300px" }}
                   >
                     <Select.Option value="inactive">Inactive</Select.Option>
                     <Select.Option value="active">Active</Select.Option>
