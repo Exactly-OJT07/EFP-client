@@ -63,8 +63,9 @@
     "NOPROJECT": "No matching projects found."
   },
   "BREADCRUMB": {
+    "DASHBOARD": "Dashboard",
     "MANAGEEMPLOYEES": "Employees",
-    "EMPLOYEE_DETAIL": "Detail"
+    "MANAGEPROJECTS": "Projects"
   },
   "DATA": {
     "MALE": "Male",

@@ -2,9 +2,12 @@ import {
   Image as AntdImage,
   Button,
   Col,
+  DatePicker,
   Form,
   Input,
+  Radio,
   Row,
+  Select,
   Spin,
   Typography,
 } from "antd";
@@ -14,6 +17,7 @@ import { Translation, useTranslation } from "react-i18next";
 import { useNavigate, useParams } from "react-router-dom";
 import { Breadcrumb } from "../../components/beadcrumb/Breadcrumb";
 import { useGetOneEmployee } from "../../hooks/useEmployee";
+import { useGetManager } from "../../hooks/useManager";
 import "../../styles/EmployeeDetail.css";
 import DeleteEmployee from "./employeeDetail/DeleteEmployee";
 import TrackingHistory from "./employeeDetail/TrackingHistory";
@@ -23,6 +27,29 @@ const EmployeeDetail = () => {
   const [isTrackingModalOpen, setIsTrackingModalOpen] = useState(false);
   const { id } = useParams();
   const { data: employee, isLoading, isError } = useGetOneEmployee(id);
+  const { data: managers } = useGetManager();
+
+  const [editAvatar, setEditAvatar] = useState("");
+  const [editName, setEditName] = useState("");
+  const [editEmail, setEditEmail] = useState("");
+  const [editPhone, setEditPhone] = useState("");
+  const [editIdentity, setEditIdentity] = useState("");
+  const [editDoB, setEditDoB] = useState("");
+  const [editDescription, setEditDescription] = useState("");
+  const [editAddress, setEditAddress] = useState("");
+  const [editPosition, setEditPosition] = useState("");
+  const [editJoinDate, setEditJoinDate] = useState("");
+  const [editFireDate, setEditFireDate] = useState("");
+  const [editManager, setEditManager] = useState("");
+  const [editGender, setEditGender] = useState("");
+
+  const [editLangFrames, setEditLangFrames] = useState([]);
+  const [editLangFrame, setEditLangFrame] = useState("");
+  const [editLangExperience, setEditLangExperience] = useState("");
+
+  const [editTechs, setEditTechs] = useState([]);
+  const [editTech, setEditTech] = useState("");
+  const [editTechExperience, setEditTechExperience] = useState("");
 
   const navigate = useNavigate();
   const { t } = useTranslation();
@@ -76,8 +103,11 @@ const EmployeeDetail = () => {
   return (
     <>
       <Breadcrumb items={breadcrumbItems} />
+
       <div style={{ display: "flex", justifyContent: "space-between" }}>
-        <Typography.Title level={3}>Personal</Typography.Title>
+        <Typography.Title level={3} style={{ lineHeight: "30px" }}>
+          <Translation>{(t) => t("EMPLOYEE.DETAIL")}</Translation>
+        </Typography.Title>
         <div>
           <Button
             style={{ marginRight: "10px" }}
@@ -121,9 +151,6 @@ const EmployeeDetail = () => {
         </Col>
         <Col md={{ span: 24, align: "middle" }} lg={{ span: 16 }}>
           <Form layout="vertical">
-            <Typography.Title level={3} style={{ lineHeight: "30px" }}>
-              <Translation>{(t) => t("EMPLOYEE.DETAIL")}</Translation>
-            </Typography.Title>
             <Row gutter={8}>
               <Col span={12}>
                 <Form.Item
@@ -142,21 +169,34 @@ const EmployeeDetail = () => {
                     <Translation>{(t) => t("EMPLOYEE.MANAGER")}</Translation>
                   }
                 >
-                  <Input
-                    value={
-                      manager?.name
-                        ? manager.name
-                        : (t) => t("EMPLOYEE.NOMANAGER")
+                  <Select
+                    defaultValue={
+                      manager?.name ? manager.name : t("EMPLOYEE.NOMANAGER")
+                    }
+                    onChange={(value, option) =>
+                      setEditManager({ id: value, name: option.children })
                     }
                     style={{ maxWidth: "300px" }}
-                  />
+                  >
+                    {(managers || []).map((manager) => (
+                      <Select.Option key={manager.id} value={manager.id}>
+                        {manager.name}
+                      </Select.Option>
+                    ))}
+                  </Select>
                 </Form.Item>
               </Col>
               <Col span={12}>
                 <Form.Item
                   label={<Translation>{(t) => t("EMPLOYEE.NAME")}</Translation>}
                 >
-                  <Input value={name} style={{ maxWidth: "300px" }} />
+                  <Input
+                    defaultValue={name}
+                    onChange={(e) => {
+                      setEditName(e.target.value);
+                    }}
+                    style={{ maxWidth: "300px" }}
+                  />
                 </Form.Item>
               </Col>
               <Col span={12}>
@@ -165,7 +205,13 @@ const EmployeeDetail = () => {
                     <Translation>{(t) => t("EMPLOYEE.EMAIL")}</Translation>
                   }
                 >
-                  <Input value={email} style={{ maxWidth: "300px" }} />
+                  <Input
+                    defaultValue={email}
+                    onChange={(e) => {
+                      setEditEmail(e.target.value);
+                    }}
+                    style={{ maxWidth: "300px" }}
+                  />
                 </Form.Item>
               </Col>
               <Col span={12}>
@@ -174,7 +220,13 @@ const EmployeeDetail = () => {
                     <Translation>{(t) => t("EMPLOYEE.PHONE")}</Translation>
                   }
                 >
-                  <Input value={phone} style={{ maxWidth: "300px" }} />
+                  <Input
+                    defaultValue={phone}
+                    onChange={(e) => {
+                      setEditPhone(e.target.value);
+                    }}
+                    style={{ maxWidth: "300px" }}
+                  />
                 </Form.Item>
               </Col>
               <Col span={12}>
@@ -183,7 +235,13 @@ const EmployeeDetail = () => {
                     <Translation>{(t) => t("EMPLOYEE.IDENTITY")}</Translation>
                   }
                 >
-                  <Input value={identityCard} style={{ maxWidth: "300px" }} />
+                  <Input
+                    defaultValue={identityCard}
+                    onChange={(e) => {
+                      setEditIdentity(e.target.value);
+                    }}
+                    style={{ maxWidth: "300px" }}
+                  />
                 </Form.Item>
               </Col>
               <Col span={12}>
@@ -192,19 +250,27 @@ const EmployeeDetail = () => {
                     <Translation>{(t) => t("EMPLOYEE.JOINDATE")}</Translation>
                   }
                 >
-                  <Input
-                    value={moment(joinDate).format("DD-MM-YYYY")}
-                    style={{ maxWidth: "300px" }}
+                  <DatePicker
+                    style={{ width: "300px" }}
+                    defaultValue={moment(joinDate)}
+                    onChange={(e) => {
+                      setEditJoinDate(e ? e.format("DD/MM/YYYY") : null);
+                      console.log(e);
+                    }}
+                    format="DD/MM/YYYY"
                   />
                 </Form.Item>
               </Col>
               <Col span={12}>
                 <Form.Item label="Fire Date">
-                  <Input
-                    value={
-                      fireDate ? moment(fireDate).format("DD-MM-YYYY") : ""
-                    }
-                    style={{ maxWidth: "300px" }}
+                  <DatePicker
+                    style={{ width: "300px" }}
+                    defaultValue={moment(fireDate)}
+                    onChange={(e) => {
+                      setEditFireDate(e ? e.format("DD/MM/YYYY") : null);
+                      console.log(e);
+                    }}
+                    format="DD/MM/YYYY"
                   />
                 </Form.Item>
               </Col>
@@ -212,9 +278,14 @@ const EmployeeDetail = () => {
                 <Form.Item
                   label={<Translation>{(t) => t("EMPLOYEE.DOB")}</Translation>}
                 >
-                  <Input
-                    value={moment(dateOfBirth).format("DD-MM-YYYY")}
-                    style={{ maxWidth: "300px" }}
+                  <DatePicker
+                    style={{ width: "300px" }}
+                    defaultValue={moment(dateOfBirth)}
+                    onChange={(e) => {
+                      setEditDoB(e ? e.format("DD/MM/YYYY") : null);
+                      console.log(e);
+                    }}
+                    format="DD/MM/YYYY"
                   />
                 </Form.Item>
               </Col>
@@ -224,15 +295,14 @@ const EmployeeDetail = () => {
                     <Translation>{(t) => t("EMPLOYEE.GENDER")}</Translation>
                   }
                 >
-                  <Input
-                    value={
-                      {
-                        male: "Male",
-                        female: "Female",
-                      }[gender] || ""
-                    }
+                  <Select
+                    defaultValue={gender}
+                    onChange={(value) => setEditGender(value)}
                     style={{ maxWidth: "300px" }}
-                  />
+                  >
+                    <Select.Option value="male">Male</Select.Option>
+                    <Select.Option value="female">Female</Select.Option>
+                  </Select>
                 </Form.Item>
               </Col>
               <Col span={12}>
@@ -241,20 +311,20 @@ const EmployeeDetail = () => {
                     <Translation>{(t) => t("EMPLOYEE.POSITION")}</Translation>
                   }
                 >
-                  <Input
-                    value={
-                      {
-                        fe: "Front-end Dev",
-                        be: "Back-end Dev",
-                        fullstack: "FullStack",
-                        ba: "Business Analysis",
-                        qa: "Quality Assurance",
-                        devops: "DevOps Engineer",
-                        ux_ui: "User Experience",
-                      }[position] || ""
-                    }
-                    style={{ maxWidth: "300px" }}
-                  />
+                  <Select
+                    defaultValue={position}
+                    onChange={(value) => setNewPosition(value)}
+                  >
+                    <Select.Option value="fe">Front-end Dev</Select.Option>
+                    <Select.Option value="be">Back-end Dev</Select.Option>
+                    <Select.Option value="fullstack">FullStack</Select.Option>
+                    <Select.Option value="ba">Business Analysis</Select.Option>
+                    <Select.Option value="qa">Quality Assurance</Select.Option>
+                    <Select.Option value="devops">
+                      DevOps Engineer
+                    </Select.Option>
+                    <Select.Option value="ux_ui">User Experience</Select.Option>
+                  </Select>
                 </Form.Item>
               </Col>
               <Col span={12}>
@@ -263,15 +333,13 @@ const EmployeeDetail = () => {
                     <Translation>{(t) => t("EMPLOYEE.STATUS")}</Translation>
                   }
                 >
-                  <Input
-                    value={
-                      {
-                        active: "Active",
-                        inactive: "Inactive",
-                      }[status] || ""
-                    }
-                    style={{ maxWidth: "300px" }}
-                  />
+                  <Select
+                    defaultValue={status}
+                    onChange={(value) => setNewStatus(value)}
+                  >
+                    <Select.Option value="inactive">Inactive</Select.Option>
+                    <Select.Option value="active">Active</Select.Option>
+                  </Select>
                 </Form.Item>
               </Col>
               <Col span={24}>
@@ -285,7 +353,10 @@ const EmployeeDetail = () => {
                   <TextArea
                     rows={6}
                     placeholder="Description"
-                    value={description}
+                    defaultValue={description}
+                    onChange={(e) => {
+                      setEditDescription(e.target.value);
+                    }}
                     style={{ maxWidth: "680px" }}
                   />
                 </Form.Item>

@@ -11,6 +11,7 @@ import ReactApexChart from "react-apexcharts";
 import { useGetEmployeeTotal } from "../../hooks/useGetEmployeeTotal";
 import { useGetProjectTotal } from "../../hooks/useGetProjectTotal";
 import "./Dashboard.css";
+import { Breadcrumb } from "../../components/beadcrumb/Breadcrumb";
 
 const { Option } = Select;
 
@@ -127,10 +128,13 @@ const Dashboard = () => {
   const isPositiveProjectDonePercentageChange =
     projectTotal?.percentageDoneChange > 0;
 
+  const breadcrumbItems = [{ key: "dashboard" }];
+
   return (
     <>
       {projectTotal ? (
         <div style={{ marginLeft: 20 }}>
+          <Breadcrumb items={breadcrumbItems} />
           <Row justify="end">
             <Select
               defaultValue={selectedPeriod}
