@@ -10,21 +10,27 @@
     "LOGOUTCONTENT": "Bạn có muốn đăng xuất không?"
   },
   "EMPLOYEE": {
+    "PROFILE": "Thông tin cá nhân",
+    "STAFF": "Thông tin nhân viên",
     "EMPLOYEES": "Nhân viên",
     "AVATAR": "Ảnh đại diện",
     "CODE": "Mã nhân viên",
     "NAME": "Họ và Tên",
+    "ADDRESS": "Địa chỉ",
     "EMAIL": "Email",
     "PHONE": "Số điện thoại",
     "POSITION": "Vị trí",
-    "MANAGER": "Quản lý",
+    "MANAGER": "Người quản lý",
     "STATUS": "Trạng thái",
     "IDENTITY": "CMND / CCCD",
     "DOB": "Ngày sinh",
     "GENDER": "Giới tính",
     "DESCRIPTION": "Giới thiệu",
     "JOINDATE": "Ngày vào công ty",
-
+    "LANGFRAME": "Ngôn ngữ và Frameworks",
+    "TECHNOLOGY": "Công nghệ",
+    "SOFTSKILL": "Kĩ năng mềm",
+    "ISMANAGER": "Có là người quản lý không?",
     "SKILL": "Kỹ Năng",
     "EXP": "Kinh nghiệm/Năm",
 
@@ -32,7 +38,13 @@
     "DETAIL": "Thông tin nhân viên",
     "NOMANAGER": "Không có cấp trên",
     "TRACKING": "Xem lịch sử làm việc",
-    "CHANGEAVATAR": "Đổi ảnh đại diện"
+    "CHANGEAVATAR": "Đổi ảnh đại diện",
+    "ADDLANGUAGE": "Thêm ngôn ngữ",
+    "ADDTECHNOLOGY": "Thêm công nghệ",
+    "ADDSKILL": "Thêm kĩ năng",
+    "EXPERIENCE": "Kinh nghiệm",
+    "ACTION": "Hành Động",
+    "ENTERYEAR": "Nhập số năm sinh nghiệm"
   },
   "PROJECT": {
     "NAME": "Tên dự án",
@@ -51,9 +63,43 @@
     "DELETECONTENT": "Bạn có muốn xóa dự án này không?",
     "NOPROJECT": "Không tìm thấy kết quả phù hợp."
   },
+  "DATA": {
+    "MALE": "Nam",
+    "FEMALE": "Nữ",
+    "TRUE": "Có",
+    "FALSE": "Không",
+    "ACTIVE": "Đang hoạt động",
+    "INACTIVE": "Không hoạt động"
+  },
+  "VALIDATE": {
+    "NAME": "Vui lòng nhập họ tên",
+    "EMAIL": "Vui lòng nhập email",
+    "VALIDEMAIL": "Vui lòng nhập địa chỉ email hợp lệ!",
+    "DOB": "Vui lòng chọn ngày sinh",
+    "ADDRESS": "Vui lòng nhập địa chỉ",
+    "PHONE": "Số điện thoại phải có 10 số",
+    "IDENTITY": "Chứng minh nhân dân phải có từ 9 đến 12 chữ số",
+    "GENDER": "Vui lòng chọn giới tính",
+    "STATUS": "Vui lòng chọn trạng thái",
+    "POSITION": "Vui lòng chọn vị trí",
+    "JOINDATE": "Vui lòng nhập ngày vào công ty",
+    "MANAGER": "Vui lòng chọn nhân viên có là quản lý không?",
+    "LANGUAGE": "Vui lòng chọn ngôn ngữ và Frameworks",
+    "TECHNOLOGY": "Vui lòng chọn ngôn ngữ và công nghệ",
+    "SKILL": "Vui lòng chọn ngôn ngữ và kĩ năng mềm",
+    "EXPERIENCE": "Vui lòng nhập số năm kinh nghiệm",
+    "ERROR_EMPLOYEE": "Tạo mới nhân viên bị lỗi. Vui lòng kiểm tra biểu mẫu.",
+    "ERROR_LANGUAGE": "Vui lòng chọn ngôn ngữ và số năm kinh nghiệm",
+    "ERROR_TECH": "Vui lòng chọn công nghệ và số năm kinh nghiệm",
+    "ERROR_SKILL": "Vui lòng chọn kĩ năng mềm và số năm kinh nghiệm",
+    "EXIST_LANGUAGE": "Ngôn ngữ và Frameworks đã tồn tại. Vui lòng chọn một ngôn ngữ khác.",
+    "EXIST_TECHNOLOGY": "Công nghệ đã tồn tại. Vui lòng chọn một công nghệ khác.",
+    "EXIST_SKILL": "Kỹ năng đã tồn tại. Vui lòng chọn một kỹ năng khác."
+  },
   "EDIT": "Thay Đổi",
   "DELETE": "Xóa",
   "CLOSE": "Đóng",
   "VIEW": "Xem",
-  "BACK": "Quay lại"
+  "BACK": "Quay lại",
+  "SAVE": "Lưu"
 }
