@@ -47,6 +47,7 @@ const CreateEmployee = () => {
   const [newDescription, setNewDescription] = useState("");
   const [newIsManager, setNewIsManager] = useState(false);
   const [newManager, setNewManager] = useState("");
+
   const [newSkills, setNewSkills] = useState([]);
   const [newSkill, setNewSkill] = useState("");
   const [newExperience, setNewExperience] = useState("");
