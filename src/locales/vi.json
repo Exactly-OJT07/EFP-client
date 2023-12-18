@@ -36,7 +36,11 @@
 
     "NEW": "Tạo nhân viên",
     "DETAIL": "Thông tin nhân viên",
-    "NOMANAGER": "Không có cấp trên",
+    "NOMANAGER": "Không có quản lý",
+    "DELETE": "Xóa nhân viên",
+    "DELETECONTENT": "Bạn có muốn xóa nhân viên này không?",
+    "DELETEFINALCONTENT": "Nhân viên này có tham gia vào các dự án. Bạn có thực sự muốn xóa nhân viên này?",
+
     "TRACKING": "Xem lịch sử làm việc",
     "CHANGEAVATAR": "Đổi ảnh đại diện",
     "ADDLANGUAGE": "Thêm ngôn ngữ",
@@ -44,7 +48,8 @@
     "ADDSKILL": "Thêm kĩ năng",
     "EXPERIENCE": "Kinh nghiệm",
     "ACTION": "Hành Động",
-    "ENTERYEAR": "Nhập số năm sinh nghiệm"
+    "ENTERYEAR": "Nhập số năm sinh nghiệm",
+    "EXPORT": "Tải CV"
   },
   "PROJECT": {
     "NAME": "Tên dự án",
@@ -62,6 +67,11 @@
     "DELETE": "Xóa dự án",
     "DELETECONTENT": "Bạn có muốn xóa dự án này không?",
     "NOPROJECT": "Không tìm thấy kết quả phù hợp."
+  },
+  "BREADCRUMB": {
+    "DASHBOARD": "Trang chủ",
+    "MANAGEEMPLOYEES": "Nhân viên",
+    "MANAGEPROJECTS": "Dự án"
   },
   "DATA": {
     "MALE": "Nam",

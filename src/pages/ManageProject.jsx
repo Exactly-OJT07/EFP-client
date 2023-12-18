@@ -35,6 +35,7 @@ import Circleprogress from "../components/circle-progress/Circleprogress";
 import ProjectDetail from "./ProjectDetail";
 import CreateProject from "./projects/components/createProject";
 import { Translation, useTranslation } from "react-i18next";
+import { Breadcrumb } from "../components/beadcrumb/Breadcrumb";
 
 const { Content } = Layout;
 const { Search } = Input;
@@ -128,8 +129,11 @@ const ManageProject = () => {
     }));
   };
 
+  const breadcrumbItems = [{ key: "manageProjects" }];
+
   return (
     <Content className="content-project">
+      <Breadcrumb items={breadcrumbItems} />
       <Space direction="horizontal" className="status-filter">
         <div className="status">
           <Button

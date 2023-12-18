@@ -7,6 +7,7 @@ import { useGetClients } from "../../hooks/useEmployee";
 import "../../styles/ManageEmployee.css";
 import ReadEmployee from "./manageEmployee/ReadEmployee";
 import { Translation, useTranslation } from "react-i18next";
+import { Breadcrumb } from "../../components/beadcrumb/Breadcrumb";
 
 function ManageEmployee() {
   const navigate = useNavigate();
@@ -32,10 +33,11 @@ function ManageEmployee() {
     isError,
   } = useGetClients(paginateOptions);
 
-  console.log(<Translation>{(t) => t("EMPLOYEE.NAME")}</Translation>);
+  const breadcrumbItems = [{ key: "manageEmployees" }];
 
   return (
     <>
+      <Breadcrumb items={breadcrumbItems} />
       <Space className="employee-search" size="large">
         <Input
           placeholder={t("EMPLOYEE.NAME")}
