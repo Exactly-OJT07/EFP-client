@@ -35,3 +35,6 @@ export const getEmployeeTotalAPI = (params) =>
 
 export const getProjectTotalAPI = (params) =>
   axios.get(API_URL.PROJECT_TOTAL, { params });
+
+export const exportCVAPI = (params) =>
+  axios.post(API_URL.EXPORT_CV, { params });
