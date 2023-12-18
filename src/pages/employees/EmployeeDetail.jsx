@@ -1,21 +1,22 @@
-import React, { useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
-import { useGetOneEmployee } from "../../hooks/useEmployee";
 import {
+  Image as AntdImage,
+  Button,
+  Col,
   Form,
   Input,
-  Image as AntdImage,
   Row,
-  Col,
-  Typography,
-  Button,
   Spin,
+  Typography,
 } from "antd";
 import moment from "moment";
-import DeleteEmployee from "./employeeDetail/DeleteEmployee";
-import "../../styles/EmployeeDetail.css";
-import TrackingHistory from "./employeeDetail/TrackingHistory";
+import React, { useState } from "react";
 import { Translation, useTranslation } from "react-i18next";
+import { useNavigate, useParams } from "react-router-dom";
+import { Breadcrumb } from "../../components/beadcrumb/Breadcrumb";
+import { useGetOneEmployee } from "../../hooks/useEmployee";
+import "../../styles/EmployeeDetail.css";
+import DeleteEmployee from "./employeeDetail/DeleteEmployee";
+import TrackingHistory from "./employeeDetail/TrackingHistory";
 const { TextArea } = Input;
 const EmployeeDetail = () => {
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
@@ -67,8 +68,14 @@ const EmployeeDetail = () => {
     setIsDeleteModalOpen(false);
   };
 
+  const breadcrumbItems = [
+    { key: "manageEmployees" },
+    { key: "", title: name },
+  ];
+
   return (
     <>
+      <Breadcrumb items={breadcrumbItems} />
       <div style={{ display: "flex", justifyContent: "space-between" }}>
         <Typography.Title level={3}>Personal</Typography.Title>
         <div>

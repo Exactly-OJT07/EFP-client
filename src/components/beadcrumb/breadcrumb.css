@@ -1,0 +1,31 @@
+.ant-breadcrumb {
+  width: 100%;
+}
+
+.ant-breadcrumb ol > li:first-child .ant-breadcrumb-separator {
+  display: none;
+}
+
+.ant-breadcrumb .breadcrumb-item {
+  cursor: pointer;
+  font-size: 14px;
+  color: #909090;
+}
+
+.ant-breadcrumb .breadcrumb-item .home-active {
+  scale: 0.7;
+  margin-bottom: 2px;
+}
+
+.ant-breadcrumb .breadcrumb-item:hover {
+  color: #5646ff;
+}
+
+.ant-breadcrumb .ant-breadcrumb-separator {
+  margin: 0 10px;
+}
+
+.ant-breadcrumb .ant-breadcrumb-link {
+  color: #000000d9;
+  font-size: 14px;
+}
