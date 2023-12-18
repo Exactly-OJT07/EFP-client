@@ -11,3 +11,7 @@
 .logo-item h4 {
   color: white;
 }
+.demo-logo-vertical {
+  display: flex;
+  justify-content: center;
+}

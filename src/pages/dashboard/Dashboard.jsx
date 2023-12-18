@@ -1,7 +1,7 @@
 import {
   CheckCircleOutlined,
   FallOutlined,
-  MoneyCollectOutlined,
+  ProjectOutlined,
   RiseOutlined,
   UserOutlined,
 } from "@ant-design/icons";
@@ -20,9 +20,6 @@ const Dashboard = () => {
     setSelectedPeriod(value);
   };
 
-  const period = {
-    period: "year",
-  };
   const { data: employeeTotal } = useGetEmployeeTotal({
     period: selectedPeriod,
   });
@@ -30,15 +27,32 @@ const Dashboard = () => {
     period: selectedPeriod,
   });
 
+  const { data: employeeCountJoin } = useGetEmployeeTotal({
+    period: "count_join",
+  });
+
+  const { data: projectCountJoin } = useGetProjectTotal({
+    period: "count_join",
+  });
+
+  const formattedEmployeeData = employeeCountJoin
+    ? Object.values(employeeCountJoin)
+    : [];
+  const formattedProjectData = projectCountJoin
+    ? Object.values(projectCountJoin)
+    : [];
+
+  const dates = Object.keys(projectCountJoin || {});
+
   const [areaChartState, setAreaChartState] = useState({
     series: [
       {
         name: "Projects",
-        data: [31, 40, 28, 51, 42, 109, 100],
+        data: formattedProjectData,
       },
       {
         name: "Employees",
-        data: [11, 32, 45, 32, 34, 52, 41],
+        data: formattedEmployeeData,
       },
     ],
     options: {
@@ -60,15 +74,7 @@ const Dashboard = () => {
       },
       xaxis: {
         type: "datetime",
-        categories: [
-          "2018-09-19T00:00:00.000Z",
-          "2018-09-19T01:30:00.000Z",
-          "2018-09-19T02:30:00.000Z",
-          "2018-09-19T03:30:00.000Z",
-          "2018-09-19T04:30:00.000Z",
-          "2018-09-19T05:30:00.000Z",
-          "2018-09-19T06:30:00.000Z",
-        ],
+        categories: dates,
       },
       tooltip: {
         x: {
@@ -141,8 +147,9 @@ const Dashboard = () => {
               <Option value="month">Month</Option>
             </Select>
           </Row>
+
           <Row gutter={10} style={{ marginBottom: 20 }}>
-            <Col span={8}>
+            <Col span={8} className="chart-items">
               <Space direction="horizontal">
                 <Card
                   style={{
@@ -151,28 +158,47 @@ const Dashboard = () => {
                     boxShadow: "rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px",
                   }}
                 >
-                  <Space direction="horizontal">
-                    <MoneyCollectOutlined />
-                    <strong style={{ color: "#383838" }}>Total Projects</strong>
-                  </Space>
-                  <div className="card-infor">
-                    <Typography.Title>{projectTotal?.total}</Typography.Title>
-                    <Space direction="horizontal">
+                  <div className="chart-card">
+                    <ProjectOutlined
+                      style={{
+                        color: "#37a171",
+                        fontSize: 30,
+                        background: "#dbf6e5",
+                        padding: 20,
+                        borderRadius: 50,
+                      }}
+                    />
+                    <div className="card-infor">
+                      <h1>{projectTotal?.currentCount}</h1>
+                      <strong style={{ color: "#383838" }}>
+                        Total Projects
+                      </strong>
+                    </div>
+                    <Space
+                      direction="horizontal"
+                      style={{
+                        background: "rgba(255, 255, 255, 0.3)",
+                        borderRadius: 15,
+                        padding: 5,
+                        marginBottom: 20,
+                        border: "1px solid white",
+                      }}
+                    >
                       {isPositiveProjectPercentageChange ? (
                         <RiseOutlined style={{ color: "green" }} />
                       ) : (
                         <FallOutlined style={{ color: "red" }} />
                       )}
-                      <Typography.Title level={5}>
+                      <h5>
                         {projectTotal?.percentageProjectChange.toFixed()}%
-                      </Typography.Title>
+                      </h5>
                     </Space>
                   </div>
                 </Card>
               </Space>
             </Col>
 
-            <Col span={8}>
+            <Col span={8} className="chart-items">
               <Space direction="horizontal">
                 <Card
                   style={{
@@ -181,30 +207,45 @@ const Dashboard = () => {
                     boxShadow: "rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px",
                   }}
                 >
-                  <Space direction="horizontal">
-                    <UserOutlined />
-                    <strong style={{ color: "#383838" }}>
-                      Total Employees
-                    </strong>
-                  </Space>
-                  <div className="card-infor">
-                    <Typography.Title>{employeeTotal?.total}</Typography.Title>
-                    <Space direction="horizontal">
+                  <div className="chart-card">
+                    <UserOutlined
+                      style={{
+                        color: "#37a171",
+                        fontSize: 30,
+                        background: "#dbf6e5",
+                        padding: 20,
+                        borderRadius: 50,
+                      }}
+                    />
+                    <div className="card-infor">
+                      <h1>{employeeTotal?.currentCount}</h1>
+                      <strong style={{ color: "#383838" }}>
+                        Total Employees
+                      </strong>
+                    </div>
+                    <Space
+                      direction="horizontal"
+                      style={{
+                        background: "rgba(255, 255, 255, 0.3)",
+                        borderRadius: 15,
+                        padding: 5,
+                        marginBottom: 20,
+                        border: "1px solid white",
+                      }}
+                    >
                       {isPositiveEmployeePercentageChange ? (
                         <RiseOutlined style={{ color: "green" }} />
                       ) : (
                         <FallOutlined style={{ color: "red" }} />
                       )}
-                      <Typography.Title level={5}>
-                        {employeeTotal?.percentageChange.toFixed()}%
-                      </Typography.Title>
+                      <h5>{employeeTotal?.percentageChange.toFixed()}%</h5>
                     </Space>
                   </div>
                 </Card>
               </Space>
             </Col>
 
-            <Col span={8}>
+            <Col span={8} className="chart-items">
               <Space direction="horizontal">
                 <Card
                   style={{
@@ -213,23 +254,36 @@ const Dashboard = () => {
                     boxShadow: "rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px",
                   }}
                 >
-                  <Space direction="horizontal">
-                    <CheckCircleOutlined />
-                    <strong style={{ color: "#383838" }}>Project Done</strong>
-                  </Space>
-                  <div className="card-infor">
-                    <Typography.Title>
-                      {projectTotal?.currentDoneCount}
-                    </Typography.Title>
-                    <Space direction="horizontal">
+                  <div className="chart-card">
+                    <CheckCircleOutlined
+                      style={{
+                        color: "#37a171",
+                        fontSize: 30,
+                        background: "#dbf6e5",
+                        padding: 20,
+                        borderRadius: 50,
+                      }}
+                    />
+                    <div className="card-infor">
+                      <h1>{projectTotal?.currentDoneCount}</h1>
+                      <strong style={{ color: "#383838" }}>Project Done</strong>
+                    </div>
+                    <Space
+                      direction="horizontal"
+                      style={{
+                        background: "rgba(255, 255, 255, 0.3)",
+                        borderRadius: 15,
+                        padding: 5,
+                        marginBottom: 20,
+                        border: "1px solid white",
+                      }}
+                    >
                       {isPositiveProjectDonePercentageChange ? (
                         <RiseOutlined style={{ color: "green" }} />
                       ) : (
                         <FallOutlined style={{ color: "red" }} />
                       )}
-                      <Typography.Title level={5}>
-                        {projectTotal?.percentageDoneChange.toFixed()}%
-                      </Typography.Title>
+                      <h5>{projectTotal?.percentageDoneChange.toFixed()}%</h5>
                     </Space>
                   </div>
                 </Card>
@@ -255,7 +309,7 @@ const Dashboard = () => {
                   options={areaChartState.options}
                   series={areaChartState.series}
                   type="area"
-                  height={350}
+                  height={370}
                 />
               </div>
             </Col>
