@@ -10,29 +10,40 @@
     "LOGOUTCONTENT": "Are you sure you want to logout?"
   },
   "EMPLOYEE": {
+    "PROFILE": "Personal Information",
+    "STAFF": "Staff Information",
     "EMPLOYEES": "Employees",
     "AVATAR": "Avatar",
     "CODE": "Code",
     "NAME": "Name",
+    "ADDRESS": "Address",
     "EMAIL": "Email",
     "PHONE": "Phone",
     "POSITION": "Position",
     "MANAGER": "Manager",
+    "ISMANAGER": "Is Manager?",
     "STATUS": "Status",
     "IDENTITY": "Identity Card",
     "DOB": "Date of Birth",
     "GENDER": "Gender",
     "DESCRIPTION": "Description",
     "JOINDATE": "Join Date",
-
+    "LANGFRAME": "Language and Frameworks",
+    "TECHNOLOGY": "Technology",
+    "SOFTSKILL": "Soft Skills",
     "SKILL": "Skill",
     "EXP": "Experience/Year",
-
     "NEW": "New Employee",
     "DETAIL": "Personal Info",
     "CHANGEAVATAR": "Change Avatar",
     "TRACKING": "Tracking History",
-    "NOMANAGER": "No Manager"
+    "NOMANAGER": "No Manager",
+    "ADDLANGUAGE": "Add Language",
+    "ADDTECHNOLOGY": "Add Technology",
+    "ADDSKILL": "Add Skill",
+    "EXPERIENCE": "Experiences",
+    "ACTION": "Action",
+    "ENTERYEAR": "Enter year of experiences"
   },
   "PROJECT": {
     "NAME": "Project Name",
@@ -51,9 +62,43 @@
     "DELETECONTENT": "Are you sure you want to delete this project ?",
     "NOPROJECT": "No matching projects found."
   },
+  "DATA": {
+    "MALE": "Male",
+    "FEMALE": "Female",
+    "TRUE": "True",
+    "FALSE": "False",
+    "ACTIVE": "Active",
+    "INACTIVE": "InActive"
+  },
+  "VALIDATE": {
+    "NAME": "Please enter name!",
+    "EMAIL": "Please enter email",
+    "VALIDEMAIL": "Please enter a valid email address!",
+    "ADDRESS": "Please enter address",
+    "DOB": "Please select the date of birth!",
+    "PHONE": "Phone must be 10 digits",
+    "IDENTITY": "IdentityCard must be 9 to 12 digits",
+    "GENDER": "Please select a Gender!",
+    "STATUS": "Please input Status",
+    "POSITION": "Please input Position",
+    "JOINDATE": "Please choose the Join Date",
+    "MANAGER": "Please choose if employee is Manager or not",
+    "LANGUAGE": "Please choose the Language and Framework",
+    "Technology": "Please choose the Technology",
+    "SKILL": "Please choose the SKILL",
+    "EXPERIENCE": "Please enter the years of experience!",
+    "ERROR_EMPLOYEE": "Error creating employee. Please check the form.",
+    "ERROR_LANGUAGE": "Please choose language name and years of experience.",
+    "ERROR_TECH": "Please choose technology name and years of experience.",
+    "ERROR_SKILL": "Please choose soft skill name and years of experience.",
+    "EXIST_LANGUAGE": "Language and Frameworks already exists. Please choose a different language",
+    "EXIST_TECHNOLOGY": "Technology already exists. Please choose a different technology.",
+    "EXIST_SKILL": "Skill already exists. Please choose a different skill."
+  },
   "EDIT": "Change",
   "DELETE": "Delete",
   "CLOSE": "Ok",
   "VIEW": "View",
-  "BACK": "Back"
+  "BACK": "Back",
+  "SAVE": "Save"
 }
