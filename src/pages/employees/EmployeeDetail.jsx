@@ -1,3 +1,4 @@
+import { DownloadOutlined } from "@ant-design/icons";
 import {
   Image as AntdImage,
   Button,
@@ -5,23 +6,22 @@ import {
   DatePicker,
   Form,
   Input,
-  Radio,
   Row,
   Select,
   Spin,
   Typography,
 } from "antd";
-import { DownloadOutlined } from "@ant-design/icons";
 import moment from "moment";
-import React, { useState } from "react";
+import { useState } from "react";
 import { Translation, useTranslation } from "react-i18next";
 import { useNavigate, useParams } from "react-router-dom";
 import { Breadcrumb } from "../../components/beadcrumb/Breadcrumb";
-import { useGetOneEmployee } from "../../hooks/useEmployee";
+import { useCVExport, useGetOneEmployee } from "../../hooks/useEmployee";
 import { useGetManager } from "../../hooks/useManager";
 import "../../styles/EmployeeDetail.css";
 import DeleteEmployee from "./employeeDetail/DeleteEmployee";
 import TrackingHistory from "./employeeDetail/TrackingHistory";
+
 const { TextArea } = Input;
 const EmployeeDetail = () => {
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
@@ -29,6 +29,7 @@ const EmployeeDetail = () => {
   const { id } = useParams();
   const { data: employee, isLoading, isError } = useGetOneEmployee(id);
   const { data: managers } = useGetManager();
+  const { mutate: exportCv } = useCVExport();
 
   const [editAvatar, setEditAvatar] = useState("");
   const [editName, setEditName] = useState("");
@@ -153,6 +154,7 @@ const EmployeeDetail = () => {
                 icon={<DownloadOutlined />}
                 type="primary"
                 style={{ margin: "10px", background: "green" }}
+                onClick={() => exportCv(id)}
               >
                 <Translation>{(t) => t("EMPLOYEE.EXPORT")}</Translation>
               </Button>
