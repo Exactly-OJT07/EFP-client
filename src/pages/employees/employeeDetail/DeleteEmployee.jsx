@@ -1,6 +1,10 @@
 import { Modal, Typography } from "antd";
 import React, { useState } from "react";
-import { useDeleteEmployee } from "../../../hooks/useEmployee";
+import {
+  useDeleteEmployee,
+  useGetClients,
+  useGetOneEmployee,
+} from "../../../hooks/useEmployee";
 import { useParams } from "react-router-dom";
 import { Translation, useTranslation } from "react-i18next";
 
@@ -8,6 +12,9 @@ const DeleteEmployee = ({ isDeleteModalOpen, setIsDeleteModalOpen }) => {
   const [isFinalDeleteModalOpen, setIsFinalDeleteModalOpen] = useState(false);
   const { id } = useParams();
   const { t } = useTranslation();
+  const { data: employee } = useGetOneEmployee(id);
+  const { employee_project } = employee.employee;
+
   const deleteEmployeeMutation = useDeleteEmployee();
   const handleDeleteFinalOk = async (employeeId) => {
     try {
@@ -23,6 +30,9 @@ const DeleteEmployee = ({ isDeleteModalOpen, setIsDeleteModalOpen }) => {
   };
 
   const handleDeleteOk = () => {
+    if (employee_project != []) {
+      handleDeleteFinalOk(id);
+    }
     setIsDeleteModalOpen(false);
     setIsFinalDeleteModalOpen(true);
   };
