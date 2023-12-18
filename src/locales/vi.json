@@ -51,6 +51,10 @@
     "DELETECONTENT": "Bạn có muốn xóa dự án này không?",
     "NOPROJECT": "Không tìm thấy kết quả phù hợp."
   },
+  "BREADCRUMB": {
+    "MANAGEEMPLOYEES": "Nhân viên",
+    "EMPLOYEE_DETAIL": "Chi tiết"
+  },
   "EDIT": "Thay Đổi",
   "DELETE": "Xóa",
   "CLOSE": "Đóng",
