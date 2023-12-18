@@ -30,6 +30,9 @@ const DeleteEmployee = ({ isDeleteModalOpen, setIsDeleteModalOpen }) => {
   };
 
   const handleDeleteOk = () => {
+    if (employee_project != []) {
+      handleDeleteFinalOk(id);
+    }
     setIsDeleteModalOpen(false);
     setIsFinalDeleteModalOpen(true);
   };
