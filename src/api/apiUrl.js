@@ -36,5 +36,23 @@ export const getEmployeeTotalAPI = (params) =>
 export const getProjectTotalAPI = (params) =>
   axios.get(API_URL.PROJECT_TOTAL, { params });
 
-export const updateProjectDetailApi = (projectId, data) =>
-  axios.patch(`${API_URL.PROJECT}/${projectId}`, data);
+export const updateProjectDetailApi = async (projectId, partialUpdate) => {
+  const updatePayload = {
+    ...(partialUpdate.name && { name: partialUpdate.name }),
+    ...(partialUpdate.description && {
+      description: partialUpdate.description,
+    }),
+    ...(partialUpdate.startDate && { startDate: partialUpdate.startDate }),
+    ...(partialUpdate.endDate && { endDate: partialUpdate.endDate }),
+  };
+  try {
+    const response = await axios.patch(
+      `${API_URL.PROJECT}/${projectId}`,
+      updatePayload,
+    );
+    return response.data;
+  } catch (error) {
+    console.error("Error updating project details:", error);
+    throw error;
+  }
+};

@@ -45,12 +45,24 @@ const ProjectDetail = () => {
 
   const handleFormSubmit = async () => {
     try {
-      await updateProjectDetailApi(id, {
+      const updateData = {
         name: editableName,
         description: editableDescription,
         startDate: editableDeadline[0]?.format("YYYY-MM-DD"),
         endDate: editableDeadline[1]?.format("YYYY-MM-DD"),
+      };
+
+      // Only send the fields that have changed
+      const changedFields = Object.keys(updateData).filter(
+        (field) => updateData[field] !== project.project[field],
+      );
+
+      const partialUpdate = {};
+      changedFields.forEach((field) => {
+        partialUpdate[field] = updateData[field];
       });
+
+      await updateProjectDetailApi(id, partialUpdate);
       message.success("Project details updated successfully");
     } catch (error) {
       console.error("Error updating project details:", error);
@@ -143,19 +155,19 @@ const ProjectDetail = () => {
               initialValues={{ name, description }}
             >
               <Form.Item name="name" label="Project Name">
-                <Input.TextArea
-                  className="NAME"
+                <Input
                   value={editableName}
                   onChange={(e) => setEditableName(e.target.value)}
+                  style={{ color: "black" }}
                 />
               </Form.Item>
 
               <Form.Item name="description" label="Description">
                 <Input.TextArea
-                  value={description}
-                  autoSize={{ minRows: 3, maxRows: 5 }}
+                  value={editableDescription}
                   onChange={(e) => setEditableDescription(e.target.value)}
-                />{" "}
+                />
+                {}
               </Form.Item>
 
               <Form.Item label="Lang Frame">

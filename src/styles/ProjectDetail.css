@@ -104,3 +104,6 @@
   color: #37a171;
   font-weight: 600;
 }
+textarea:where(.css-dev-only-do-not-override-6j9yrn).ant-input {
+  color: black;
+}
