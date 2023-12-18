@@ -9,6 +9,7 @@ import {
   Row,
   Tooltip,
   Typography,
+  message,
 } from "antd";
 import dayjs from "dayjs";
 import moment from "moment";
@@ -21,6 +22,8 @@ import "react-calendar-timeline/lib/Timeline.css";
 import { useParams } from "react-router-dom";
 import { useGetProjectData } from "../hooks/useProject";
 import "../styles/ProjectDetail.css";
+import { updateProjectDetailApi } from "../api/apiUrl";
+import React, { useState } from "react";
 
 const { RangePicker } = DatePicker;
 
@@ -28,7 +31,10 @@ const ProjectDetail = () => {
   const { id } = useParams();
   const { data: project, isLoading, isError } = useGetProjectData(id);
   console.log(project);
-
+  const [editableName, setEditableName] = useState("");
+  const [editableDescription, setEditableDescription] = useState("");
+  const [editableDeadline, setEditableDeadline] = useState([null, null]);
+  const [currentStep, setCurrentStep] = useState(1);
   if (isLoading) {
     return <div>Loading...</div>;
   }
@@ -36,6 +42,37 @@ const ProjectDetail = () => {
   if (isError || !project) {
     return <div>Project not found</div>;
   }
+
+  const handleFormSubmit = async () => {
+    try {
+      await updateProjectDetailApi(id, {
+        name: editableName,
+        description: editableDescription,
+        startDate: editableDeadline[0]?.format("YYYY-MM-DD"),
+        endDate: editableDeadline[1]?.format("YYYY-MM-DD"),
+      });
+      message.success("Project details updated successfully");
+    } catch (error) {
+      console.error("Error updating project details:", error);
+      message.error("Failed to update project details");
+    }
+  };
+
+  const handleDeadlineChange = (dates) => {
+    setEditableDeadline(dates);
+
+    const today = dayjs();
+    const startDate = dayjs(dates[0]);
+    const endDate = dayjs(dates[1]);
+
+    if (today.isBefore(startDate)) {
+      setCurrentStep(0);
+    } else if (today.isAfter(endDate)) {
+      setCurrentStep(2);
+    } else {
+      setCurrentStep(1);
+    }
+  };
 
   const {
     name,
@@ -48,6 +85,7 @@ const ProjectDetail = () => {
     endDate,
     tracking,
   } = project?.project;
+  console.log(name, "name");
 
   const handleAssignClick = () => {
     console.log("Assign button clicked");
@@ -102,13 +140,22 @@ const ProjectDetail = () => {
               style={{
                 maxWidth: 700,
               }}
+              initialValues={{ name, description }}
             >
-              <Form.Item label="Project Name">
-                <Input value={name} readOnly />
+              <Form.Item name="name" label="Project Name">
+                <Input.TextArea
+                  className="NAME"
+                  value={editableName}
+                  onChange={(e) => setEditableName(e.target.value)}
+                />
               </Form.Item>
 
-              <Form.Item label="Description">
-                <Input value={description} readOnly />
+              <Form.Item name="description" label="Description">
+                <Input.TextArea
+                  value={description}
+                  autoSize={{ minRows: 3, maxRows: 5 }}
+                  onChange={(e) => setEditableDescription(e.target.value)}
+                />{" "}
               </Form.Item>
 
               <Form.Item label="Lang Frame">
@@ -153,15 +200,19 @@ const ProjectDetail = () => {
                 </Avatar.Group>
               </Form.Item>
 
-              <Form.Item label="Deadline">
+              <Form.Item name="deadline" label="Deadline">
                 <RangePicker
+                  value={editableDeadline}
                   defaultValue={[dayjs(startDate), dayjs(endDate)]}
                   format="YYYY-MM-DD"
+                  onChange={handleDeadlineChange}
                 />
               </Form.Item>
             </Form>
             <div className="button-container">
-              <Button type="primary">Submit</Button>
+              <Button type="primary" onClick={handleFormSubmit}>
+                Submit
+              </Button>
             </div>
           </div>
         </Col>
