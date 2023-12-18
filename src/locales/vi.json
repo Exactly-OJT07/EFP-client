@@ -30,7 +30,7 @@
 
     "NEW": "Tạo nhân viên",
     "DETAIL": "Thông tin nhân viên",
-    "NOMANAGER": "Không có cấp trên",
+    "NOMANAGER": "Không có quản lý",
     "TRACKING": "Xem lịch sử làm việc",
     "CHANGEAVATAR": "Đổi ảnh đại diện"
   },
@@ -52,8 +52,9 @@
     "NOPROJECT": "Không tìm thấy kết quả phù hợp."
   },
   "BREADCRUMB": {
+    "DASHBOARD": "Trang chủ",
     "MANAGEEMPLOYEES": "Nhân viên",
-    "EMPLOYEE_DETAIL": "Chi tiết"
+    "MANAGEPROJECTS": "Dự án"
   },
   "EDIT": "Thay Đổi",
   "DELETE": "Xóa",

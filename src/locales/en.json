@@ -52,10 +52,11 @@
     "NOPROJECT": "No matching projects found."
   },
   "BREADCRUMB": {
+    "DASHBOARD": "Dashboard",
     "MANAGEEMPLOYEES": "Employees",
-    "EMPLOYEE_DETAIL": "Detail"
+    "MANAGEPROJECTS": "Projects"
   },
-  "EDIT": "Change",
+  "EDIT": "Edit",
   "DELETE": "Delete",
   "CLOSE": "Ok",
   "VIEW": "View",
