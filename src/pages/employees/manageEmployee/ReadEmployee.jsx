@@ -132,7 +132,7 @@ const columns = [
     render: (manager) => {
       if (manager) {
         return manager.name;
-      } else return "No Manager";
+      } else return <Translation>{(t) => t("EMPLOYEE.NOMANAGER")}</Translation>;
     },
     responsive: ["lg"],
   },
@@ -142,19 +142,19 @@ const columns = [
     key: "status",
     filters: [
       {
-        text: "Active",
+        text: <Translation>{(t) => t("EMPLOYEE.ACTIVE")}</Translation>,
         value: "active",
       },
       {
-        text: "Inactive",
+        text: <Translation>{(t) => t("EMPLOYEE.INACTIVE")}</Translation>,
         value: "inactive",
       },
     ],
     onFilter: (value, record) => record.status.indexOf(value) === 0,
     render: (status) => {
       if (status === "active") {
-        return "Active";
-      } else return "Inactive";
+        return <Translation>{(t) => t("EMPLOYEE.ACTIVE")}</Translation>;
+      } else return <Translation>{(t) => t("EMPLOYEE.INACTIVE")}</Translation>;
     },
     responsive: ["lg"],
   },

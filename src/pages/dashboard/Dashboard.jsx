@@ -12,10 +12,12 @@ import { useGetEmployeeTotal } from "../../hooks/useGetEmployeeTotal";
 import { useGetProjectTotal } from "../../hooks/useGetProjectTotal";
 import "./Dashboard.css";
 import { Breadcrumb } from "../../components/beadcrumb/Breadcrumb";
+import { Translation, useTranslation } from "react-i18next";
 
 const { Option } = Select;
 
 const Dashboard = () => {
+  const { t } = useTranslation();
   const [selectedPeriod, setSelectedPeriod] = useState("year");
   const handlePeriodChange = (value) => {
     setSelectedPeriod(value);
@@ -48,11 +50,11 @@ const Dashboard = () => {
   const [areaChartState, setAreaChartState] = useState({
     series: [
       {
-        name: "Projects",
+        name: t("DASHBOARD.PROJECT"),
         data: formattedProjectData,
       },
       {
-        name: "Employees",
+        name: t("DASHBOARD.EMPLOYEE"),
         data: formattedEmployeeData,
       },
     ],
@@ -83,7 +85,7 @@ const Dashboard = () => {
         },
       },
       title: {
-        text: "Area Chart",
+        text: t("DASHBOARD.CHART"),
         align: "center",
       },
     },
@@ -111,7 +113,7 @@ const Dashboard = () => {
             },
             total: {
               show: true,
-              label: "Total",
+              label: t("DASHBOARD.TOTAL"),
               formatter: function () {
                 return projectTotal ? projectTotal?.total : 0;
               },
@@ -119,9 +121,13 @@ const Dashboard = () => {
           },
         },
       },
-      labels: ["Done", "On Progress", "Pending"],
+      labels: [
+        t("DASHBOARD.DONE"),
+        t("DASHBOARD.ONPROGRESS"),
+        t("DASHBOARD.PENDING"),
+      ],
       title: {
-        text: "Current Project Status",
+        text: t("DASHBOARD.CURRENT"),
         align: "center",
       },
     },
@@ -147,8 +153,8 @@ const Dashboard = () => {
               onChange={handlePeriodChange}
               style={{ width: 120, marginRight: 10, marginBottom: 10 }}
             >
-              <Option value="year">Year</Option>
-              <Option value="month">Month</Option>
+              <Option value="year">{t("DASHBOARD.YEAR")}</Option>
+              <Option value="month">{t("DASHBOARD.MONTH")}</Option>
             </Select>
           </Row>
 
@@ -175,7 +181,7 @@ const Dashboard = () => {
                     <div className="card-infor">
                       <h1>{projectTotal?.currentCount}</h1>
                       <strong style={{ color: "#383838" }}>
-                        Total Projects
+                        {t("DASHBOARD.PROJECT")}
                       </strong>
                     </div>
                     <Space
@@ -224,7 +230,7 @@ const Dashboard = () => {
                     <div className="card-infor">
                       <h1>{employeeTotal?.currentCount}</h1>
                       <strong style={{ color: "#383838" }}>
-                        Total Employees
+                        {t("DASHBOARD.EMPLOYEE")}
                       </strong>
                     </div>
                     <Space
@@ -270,7 +276,9 @@ const Dashboard = () => {
                     />
                     <div className="card-infor">
                       <h1>{projectTotal?.currentDoneCount}</h1>
-                      <strong style={{ color: "#383838" }}>Project Done</strong>
+                      <strong style={{ color: "#383838" }}>
+                        {t("DASHBOARD.DONEPROJECT")}
+                      </strong>
                     </div>
                     <Space
                       direction="horizontal"

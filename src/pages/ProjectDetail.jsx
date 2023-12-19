@@ -21,10 +21,12 @@ import "react-calendar-timeline/lib/Timeline.css";
 import { useParams } from "react-router-dom";
 import { useGetProjectData } from "../hooks/useProject";
 import "../styles/ProjectDetail.css";
+import { Translation, useTranslation } from "react-i18next";
 
 const { RangePicker } = DatePicker;
 
 const ProjectDetail = () => {
+  const { t } = useTranslation();
   const { id } = useParams();
   const { data: project, isLoading, isError } = useGetProjectData(id);
   console.log(project);
@@ -78,7 +80,9 @@ const ProjectDetail = () => {
       <Row gutter={16}>
         <Col span={7} className="manager-infor">
           <div className="manager-detail">
-            <Typography.Title level={3}>Manager Information</Typography.Title>
+            <Typography.Title level={3}>
+              {t("PROJECT.MANAGERINFO")}
+            </Typography.Title>
             <img src={managerProject.avatar} alt={managerProject.name} />
             <Typography.Title level={5}>{managerProject.name}</Typography.Title>
             <p>
@@ -89,7 +93,7 @@ const ProjectDetail = () => {
         <Col span={15} className="project-infor">
           <div className="project-detail">
             <Typography.Title level={3} style={{ marginBottom: "15px" }}>
-              Project Details
+              {t("PROJECT.DETAIL")}
             </Typography.Title>
             <Form
               labelCol={{
@@ -103,35 +107,35 @@ const ProjectDetail = () => {
                 maxWidth: 700,
               }}
             >
-              <Form.Item label="Project Name">
+              <Form.Item label={t("PROJECT.NAMEPROJECT")}>
                 <Input value={name} readOnly />
               </Form.Item>
 
-              <Form.Item label="Description">
+              <Form.Item label={t("PROJECT.DES")}>
                 <Input value={description} readOnly />
               </Form.Item>
 
-              <Form.Item label="Lang Frame">
+              <Form.Item label={t("PROJECT.LANGFRAME")}>
                 <div className="langFrame-container">
                   {langFrame.map((frame) => (
-                    <span key={frame.name} className="lang-frame-item">
-                      {frame.name}
+                    <span key={frame} className="lang-frame-item">
+                      {frame}
                     </span>
                   ))}
                 </div>
               </Form.Item>
 
-              <Form.Item label="Technology">
+              <Form.Item label={t("PROJECT.TECH")}>
                 <div className="technology-container">
                   {technology.map((tech) => (
-                    <span key={tech.name} className="technology-item">
-                      {tech.name}
+                    <span key={tech} className="technology-item">
+                      {tech}
                     </span>
                   ))}
                 </div>
               </Form.Item>
 
-              <Form.Item label="Members Assigned">
+              <Form.Item label={t("PROJECT.ASSIGN")}>
                 <Avatar.Group maxCount={2}>
                   {employee_project.map((member) => (
                     <Tooltip key={member.id}>
@@ -153,7 +157,7 @@ const ProjectDetail = () => {
                 </Avatar.Group>
               </Form.Item>
 
-              <Form.Item label="Deadline">
+              <Form.Item label={t("PROJECT.DEADLINE")}>
                 <RangePicker
                   defaultValue={[dayjs(startDate), dayjs(endDate)]}
                   format="YYYY-MM-DD"
@@ -161,7 +165,7 @@ const ProjectDetail = () => {
               </Form.Item>
             </Form>
             <div className="button-container">
-              <Button type="primary">Submit</Button>
+              <Button type="primary">{t("OK")}</Button>
             </div>
           </div>
         </Col>

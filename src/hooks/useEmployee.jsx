@@ -57,13 +57,14 @@ export const useDeleteEmployee = () => {
   const queryClient = useQueryClient();
 
   const deleteEmployee = async (employeeId) => {
-    console.log(employeeId);
     await deleteEmployeeApi(employeeId);
   };
+  const navigate = useNavigate();
   return useMutation(deleteEmployee, {
     onSuccess: () => {
-      queryClient.invalidateQueries(QUERY_KEY.EMPLOYEE);
       openNotificationWithIcon("success", "Delete Employee Successfully");
+      queryClient.invalidateQueries(QUERY_KEY.EMPLOYEE);
+      navigate("/manageEmployees");
     },
   });
 };

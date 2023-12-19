@@ -22,6 +22,8 @@
     "POSITION": "Vị trí",
     "MANAGER": "Người quản lý",
     "STATUS": "Trạng thái",
+    "ACTIVE": "Hoạt động",
+    "INACTIVE": "Không hoạt động",
     "IDENTITY": "CMND / CCCD",
     "DOB": "Ngày sinh",
     "GENDER": "Giới tính",
@@ -34,6 +36,9 @@
     "SKILL": "Kỹ Năng",
     "EXP": "Kinh nghiệm/Năm",
 
+    "SELECTJOINDATE": "Vui lòng chọn ngày vào công ty",
+    "SELECTDOBDATE": "Vui lòng chọn ngày sinh",
+
     "NEW": "Tạo nhân viên",
     "DETAIL": "Thông tin nhân viên",
     "NOMANAGER": "Không có quản lý",
@@ -41,7 +46,7 @@
     "DELETECONTENT": "Bạn có muốn xóa nhân viên này không?",
     "DELETEFINALCONTENT": "Nhân viên này có tham gia vào các dự án. Bạn có thực sự muốn xóa nhân viên này?",
 
-    "TRACKING": "Xem lịch sử làm việc",
+    "TRACKING": "Lịch sử làm việc",
     "CHANGEAVATAR": "Đổi ảnh đại diện",
     "ADDLANGUAGE": "Thêm ngôn ngữ",
     "ADDTECHNOLOGY": "Thêm công nghệ",
@@ -49,29 +54,59 @@
     "EXPERIENCE": "Kinh nghiệm",
     "ACTION": "Hành Động",
     "ENTERYEAR": "Nhập số năm sinh nghiệm",
-    "EXPORT": "Tải CV"
+    "EXPORT": "Tải CV",
+    "MANAGERDELETIONCONTENT": "Không được phép xóa người quản lý. Vui lòng chỉ định lại các dự án trước khi xóa."
   },
   "PROJECT": {
     "NAME": "Tên dự án",
-    "MANAGER": "Quản lý",
+    "MANAGER": "Quản lý dự án",
     "TEAMMEMBER": "Thành viên",
 
     "ALLSTATUS": "Trạng thái",
-    "PENDING": "Chờ",
-    "ONPROGRESS": "Tiến triển",
+    "ONPROGRESS": "Đang chạy",
     "DONE": "Hoàn thành",
+    "PENDING": "Chờ xử lý",
     "CLOSED": "Bảo trì",
+    "MEMBER": "Thành viên",
+    "ROLES": "Vai trò",
+    "DEADLINE": "Thời gian tiến hành",
+    "MANAGERINFO": "Quản lý dự án",
+    "DETAIL": "Thông tin dự án",
 
     "NEW": "Tạo dự án",
     "CREATEON": "Dự án được tạo vào ngày: ",
     "DELETE": "Xóa dự án",
     "DELETECONTENT": "Bạn có muốn xóa dự án này không?",
-    "NOPROJECT": "Không tìm thấy kết quả phù hợp."
+    "NOPROJECT": "Không tìm thấy kết quả phù hợp.",
+
+    "NEWPROJECT": "Tạo dự án mới",
+    "NAMEPROJECT": "Tên dự án",
+    "TECH": "Công nghệ",
+    "LANGFRAME": "Ngôn ngữ và Frameworks",
+    "STARTDATE": "Ngày bắt đầu",
+    "ENDDATE": "Ngày kết thúc",
+    "DES": "Mô tả dự án",
+    "SPEC": "Đặc điểm kỹ thuật",
+    "ASSIGN": "Thành viên dự án"
   },
   "BREADCRUMB": {
     "DASHBOARD": "Trang chủ",
     "MANAGEEMPLOYEES": "Nhân viên",
     "MANAGEPROJECTS": "Dự án"
+  },
+  "DASHBOARD": {
+    "DASHBOARD": "Bảng thống kê",
+    "EMPLOYEE": "Nhân viên",
+    "PROJECT": "Dự án",
+    "TOTAL": "Tổng",
+    "ONPROGRESS": "Đang chạy",
+    "DONE": "Hoàn thành",
+    "PENDING": "Chờ xử lý",
+    "CURRENT": "Hiện trạng dự án",
+    "DONEPROJECT": "Dự án hoàn thành",
+    "CHART": "Biểu đồ công ty",
+    "YEAR": "Năm",
+    "MONTH": "Tháng"
   },
   "DATA": {
     "MALE": "Nam",
@@ -98,18 +133,21 @@
     "TECHNOLOGY": "Vui lòng chọn ngôn ngữ và công nghệ",
     "SKILL": "Vui lòng chọn ngôn ngữ và kĩ năng mềm",
     "EXPERIENCE": "Vui lòng nhập số năm kinh nghiệm",
-    "ERROR_EMPLOYEE": "Tạo mới nhân viên bị lỗi. Vui lòng kiểm tra biểu mẫu.",
-    "ERROR_LANGUAGE": "Vui lòng chọn ngôn ngữ và số năm kinh nghiệm",
-    "ERROR_TECH": "Vui lòng chọn công nghệ và số năm kinh nghiệm",
-    "ERROR_SKILL": "Vui lòng chọn kĩ năng mềm và số năm kinh nghiệm",
-    "EXIST_LANGUAGE": "Ngôn ngữ và Frameworks đã tồn tại. Vui lòng chọn một ngôn ngữ khác.",
-    "EXIST_TECHNOLOGY": "Công nghệ đã tồn tại. Vui lòng chọn một công nghệ khác.",
-    "EXIST_SKILL": "Kỹ năng đã tồn tại. Vui lòng chọn một kỹ năng khác."
+    "ERROREMPLOYEE": "Tạo mới nhân viên bị lỗi. Vui lòng kiểm tra biểu mẫu.",
+    "ERRORLANGUAGE": "Vui lòng chọn ngôn ngữ và số năm kinh nghiệm",
+    "ERRORTECH": "Vui lòng chọn công nghệ và số năm kinh nghiệm",
+    "ERRORSKILL": "Vui lòng chọn kĩ năng mềm và số năm kinh nghiệm",
+    "EXISTLANGUAGE": "Ngôn ngữ và Frameworks đã tồn tại. Vui lòng chọn một ngôn ngữ khác.",
+    "EXISTTECHNOLOGY": "Công nghệ đã tồn tại. Vui lòng chọn một công nghệ khác.",
+    "EXISTSKILL": "Kỹ năng đã tồn tại. Vui lòng chọn một kỹ năng khác.",
+    "DATAINPUT": "Vui lòng điền thông tin"
   },
   "EDIT": "Thay Đổi",
   "DELETE": "Xóa",
   "CLOSE": "Đóng",
   "VIEW": "Xem",
   "BACK": "Quay lại",
-  "SAVE": "Lưu"
+  "SAVE": "Lưu",
+  "CANCEL": "Hủy Bỏ",
+  "OK": "Lưu"
 }
