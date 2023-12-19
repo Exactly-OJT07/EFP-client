@@ -1,5 +1,6 @@
 import axios from "axios";
 import { API_URL } from "../constants/constants";
+import { Buffer } from "buffer";
 
 export const getEmployeeAPI = (params) =>
   axios.get(API_URL.EMPLOYEE, { params });
@@ -36,5 +37,21 @@ export const getEmployeeTotalAPI = (params) =>
 export const getProjectTotalAPI = (params) =>
   axios.get(API_URL.PROJECT_TOTAL, { params });
 
-export const exportCVAPI = (params) =>
-  axios.post(API_URL.EXPORT_CV, { params });
+export const exportCv = async (id) =>
+  await axios
+    .post(`${API_URL.EMPLOYEE}/cv`, {
+      id,
+      responseType: "arraybuffer",
+    })
+    .then((response) => {
+      const blob = new Blob([Buffer.from(response.data, "hex")], {
+        type: "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+      });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = "cv.docx";
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    });

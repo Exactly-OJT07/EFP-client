@@ -19,7 +19,7 @@ import React, { useEffect, useState } from "react";
 import { Translation, useTranslation } from "react-i18next";
 import { useNavigate, useParams } from "react-router-dom";
 import { Breadcrumb } from "../../components/beadcrumb/Breadcrumb";
-import { useGetOneEmployee } from "../../hooks/useEmployee";
+import { useCVExport, useGetOneEmployee } from "../../hooks/useEmployee";
 import { useGetManager } from "../../hooks/useManager";
 import "../../styles/EmployeeDetail.css";
 import DeleteEmployee from "./employeeDetail/DeleteEmployee";
@@ -35,7 +35,7 @@ const EmployeeDetail = () => {
   const { data: employee, isLoading, isError } = useGetOneEmployee(id);
 
   const { data: managers } = useGetManager();
-
+  const { mutate: exportCv } = useCVExport();
   const [editAvatar, setEditAvatar] = useState("");
   const [editName, setEditName] = useState("");
   const [editEmail, setEditEmail] = useState("");
@@ -271,6 +271,7 @@ const EmployeeDetail = () => {
                   icon={<DownloadOutlined />}
                   type="primary"
                   style={{ margin: "10px", background: "green" }}
+                  onClick={() => exportCv(id)}
                 >
                   <Translation>{(t) => t("EMPLOYEE.EXPORT")}</Translation>
                 </Button>

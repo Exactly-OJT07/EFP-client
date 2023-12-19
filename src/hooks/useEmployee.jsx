@@ -5,6 +5,7 @@ import {
   deleteEmployeeApi,
   getEmployeeAPI,
   getEmployeeDetailApi,
+  exportCv,
 } from "../api/apiUrl";
 import { openNotificationWithIcon } from "../components/notification/notification";
 import { QUERY_KEY } from "../constants/query-key";
@@ -65,3 +66,14 @@ export const useDeleteEmployee = () => {
     },
   });
 };
+
+export const useCVExport = () =>
+  useMutation(async (id) => await exportCv(id), {
+    onError({ response }) {
+      if (response.status === 400) {
+        notificationError("Not found employee");
+      } else {
+        notificationError("Please try again");
+      }
+    },
+  });
