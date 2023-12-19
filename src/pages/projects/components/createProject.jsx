@@ -125,6 +125,7 @@ const CreateProject = ({ isModalOpen, setIsModalOpen, setIsAssign }) => {
               <Input
                 value={newName}
                 onChange={(e) => setNewName(e.target.value)}
+                placeholder="Name"
               />
             </Form.Item>
 
@@ -138,6 +139,7 @@ const CreateProject = ({ isModalOpen, setIsModalOpen, setIsAssign }) => {
                 onChange={(value, option) =>
                   setNewManager({ id: value, name: option.children })
                 }
+                placeholder="Manager"
               >
                 {(managers || []).map((manager) => (
                   <Select.Option key={manager.id} value={manager.id}>
@@ -154,7 +156,7 @@ const CreateProject = ({ isModalOpen, setIsModalOpen, setIsAssign }) => {
             >
               <Select
                 mode="multiple"
-                placeholder="Please select"
+                placeholder="Technology"
                 value={newTechnology}
                 onChange={(selectedValues) => setNewTechnology(selectedValues)}
                 style={{
@@ -187,6 +189,7 @@ const CreateProject = ({ isModalOpen, setIsModalOpen, setIsAssign }) => {
               <Input
                 value={newSpecification}
                 onChange={(e) => setNewSpecification(e.target.value)}
+                placeholder="Specification"
               />
             </Form.Item>
           </Col>
@@ -200,6 +203,7 @@ const CreateProject = ({ isModalOpen, setIsModalOpen, setIsAssign }) => {
               <Input
                 value={newDescription}
                 onChange={(e) => setNewDescription(e.target.value)}
+                placeholder="Description"
               />
             </Form.Item>
 
@@ -210,7 +214,7 @@ const CreateProject = ({ isModalOpen, setIsModalOpen, setIsAssign }) => {
             >
               <Select
                 mode="multiple"
-                placeholder="Please select"
+                placeholder="LangFrame"
                 value={newLangFrame}
                 onChange={(selectedValues) => setNewLangFrame(selectedValues)}
                 style={{
@@ -236,50 +240,46 @@ const CreateProject = ({ isModalOpen, setIsModalOpen, setIsAssign }) => {
               </Select>
             </Form.Item>
 
-            <Row>
-              <Col xs={24} sm={12} md={12} lg={12} xl={12}>
-                <Form.Item
-                  name="startDate"
-                  label="StartDate"
-                  rules={[
-                    { required: true, message: "Please enter your data!" },
-                  ]}
-                >
-                  <DatePicker
-                    value={newStartDate ? moment(newStartDate) : null}
-                    onChange={(e) =>
-                      setNewStartDate(
-                        e ? e.format("YYYY-MM-DD HH:mm:ss") : null,
-                      )
-                    }
-                    showTime={{ format: "HH:mm:ss" }}
-                    format="DD/MM/YYYY HH:mm:ss"
-                  />
-                </Form.Item>
-              </Col>
+            <Col span={24}>
+              <Form.Item
+                name="startDate"
+                label="StartDate"
+                rules={[{ required: true, message: "Please enter your data!" }]}
+              >
+                <DatePicker
+                  style={{ width: "100%" }}
+                  value={newStartDate ? moment(newStartDate) : null}
+                  onChange={(e) =>
+                    setNewStartDate(e ? e.format("YYYY-MM-DD HH:mm:ss") : null)
+                  }
+                  showTime={{ format: "HH:mm:ss" }}
+                  format="DD/MM/YYYY HH:mm:ss"
+                  placeholder="StartDate"
+                />
+              </Form.Item>
+            </Col>
 
-              <Col xs={24} sm={12} md={12} lg={12} xl={12}>
-                <Form.Item
-                  name="endDate"
-                  label="EndDate"
-                  rules={[
-                    { required: true, message: "Please enter your data!" },
-                  ]}
-                >
-                  <DatePicker
-                    value={newEndDate ? moment(newEndDate) : null}
-                    onChange={(e) =>
-                      setNewEndDate(e ? e.format("YYYY-MM-DD HH:mm:ss") : null)
-                    }
-                    showTime={{ format: "HH:mm:ss" }}
-                    format="DD/MM/YYYY HH:mm:ss"
-                    disabledDate={(current) => {
-                      return current && current < moment(newStartDate);
-                    }}
-                  />
-                </Form.Item>
-              </Col>
-            </Row>
+            <Col span={24}>
+              <Form.Item
+                name="endDate"
+                label="EndDate"
+                rules={[{ required: true, message: "Please enter your data!" }]}
+              >
+                <DatePicker
+                  style={{ width: "100%" }}
+                  value={newEndDate ? moment(newEndDate) : null}
+                  onChange={(e) =>
+                    setNewEndDate(e ? e.format("YYYY-MM-DD HH:mm:ss") : null)
+                  }
+                  showTime={{ format: "HH:mm:ss" }}
+                  format="DD/MM/YYYY HH:mm:ss"
+                  disabledDate={(current) => {
+                    return current && current < moment(newStartDate);
+                  }}
+                  placeholder="EndDate"
+                />
+              </Form.Item>
+            </Col>
           </Col>
 
           <Col xs={24} sm={24} md={8}>
@@ -295,7 +295,7 @@ const CreateProject = ({ isModalOpen, setIsModalOpen, setIsAssign }) => {
                   <Select
                     value={newAssign}
                     onChange={(value) => setNewAssign(value)}
-                    placeholder="Please select"
+                    placeholder="Member"
                     style={{
                       width: "100%",
                     }}
@@ -329,7 +329,7 @@ const CreateProject = ({ isModalOpen, setIsModalOpen, setIsAssign }) => {
                     mode="multiple"
                     value={newRoles}
                     onChange={(values) => setNewRoles(values)}
-                    placeholder="Please select"
+                    placeholder="Roles"
                     style={{ width: "100%" }}
                   >
                     {[
