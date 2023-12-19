@@ -2,7 +2,6 @@ import { Modal, Typography } from "antd";
 import React, { useState } from "react";
 import {
   useDeleteEmployee,
-  useGetClients,
   useGetOneEmployee,
 } from "../../../hooks/useEmployee";
 import { useParams } from "react-router-dom";
@@ -13,7 +12,10 @@ const DeleteEmployee = ({ isDeleteModalOpen, setIsDeleteModalOpen }) => {
   const { id } = useParams();
   const { t } = useTranslation();
   const { data: employee } = useGetOneEmployee(id);
-  const { employee_project } = employee.employee;
+  const employee_project = employee.employee.employee_project;
+
+  const isManagerEmp = employee.employee && employee.employee.isManager;
+  const employeeId = employee.employee.id;
 
   const deleteEmployeeMutation = useDeleteEmployee();
   const handleDeleteFinalOk = async (employeeId) => {
@@ -22,16 +24,15 @@ const DeleteEmployee = ({ isDeleteModalOpen, setIsDeleteModalOpen }) => {
     } catch (error) {
       console.log("Error");
     }
-    return (window.location = "/manageEmployees");
   };
 
   const handleDeleteFinalCancel = () => {
     setIsFinalDeleteModalOpen(false);
   };
 
-  const handleDeleteOk = () => {
-    if (employee_project != []) {
-      handleDeleteFinalOk(id);
+  const handleChangeConfirm = () => {
+    if (employee_project.length === 0 && isManagerEmp === false) {
+      return handleDeleteFinalOk(id);
     }
     setIsDeleteModalOpen(false);
     setIsFinalDeleteModalOpen(true);
@@ -40,14 +41,13 @@ const DeleteEmployee = ({ isDeleteModalOpen, setIsDeleteModalOpen }) => {
   const handleDeleteCancel = () => {
     setIsDeleteModalOpen(false);
   };
-
   return (
     <>
       <Modal
         open={isDeleteModalOpen}
         title={t("EMPLOYEE.DELETE")}
         onOk={() => {
-          handleDeleteOk();
+          handleChangeConfirm();
         }}
         onCancel={handleDeleteCancel}
       >
@@ -59,14 +59,25 @@ const DeleteEmployee = ({ isDeleteModalOpen, setIsDeleteModalOpen }) => {
       <Modal
         open={isFinalDeleteModalOpen}
         title={t("EMPLOYEE.DELETE")}
+        okButtonProps={{ style: { display: isManagerEmp ? "none" : "" } }}
         onOk={() => {
           handleDeleteFinalOk(id);
         }}
         onCancel={handleDeleteFinalCancel}
       >
-        <Typography.Title level={3} style={{ margin: "5px" }}>
-          <Translation>{(t) => t("EMPLOYEE.DELETEFINALCONTENT")}</Translation>
-        </Typography.Title>
+        {isManagerEmp ? (
+          <>
+            <Typography.Title level={3} style={{ margin: "5px" }}>
+              <Translation>
+                {(t) => t("EMPLOYEE.MANAGERDELETIONCONTENT")}
+              </Translation>
+            </Typography.Title>
+          </>
+        ) : (
+          <Typography.Title level={3} style={{ margin: "5px" }}>
+            <Translation>{(t) => t("EMPLOYEE.DELETEFINALCONTENT")}</Translation>
+          </Typography.Title>
+        )}
       </Modal>
     </>
   );

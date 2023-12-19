@@ -34,6 +34,9 @@
     "SKILL": "Kỹ Năng",
     "EXP": "Kinh nghiệm/Năm",
 
+    "SELECTJOINDATE": "Vui lòng chọn ngày vào công ty",
+    "SELECTDOBDATE": "Vui lòng chọn ngày sinh",
+
     "NEW": "Tạo nhân viên",
     "DETAIL": "Thông tin nhân viên",
     "NOMANAGER": "Không có quản lý",
@@ -49,7 +52,8 @@
     "EXPERIENCE": "Kinh nghiệm",
     "ACTION": "Hành Động",
     "ENTERYEAR": "Nhập số năm sinh nghiệm",
-    "EXPORT": "Tải CV"
+    "EXPORT": "Tải CV",
+    "MANAGERDELETIONCONTENT": "Không được phép xóa người quản lý. Vui lòng chỉ định lại các dự án trước khi xóa."
   },
   "PROJECT": {
     "NAME": "Tên dự án",
@@ -98,13 +102,13 @@
     "TECHNOLOGY": "Vui lòng chọn ngôn ngữ và công nghệ",
     "SKILL": "Vui lòng chọn ngôn ngữ và kĩ năng mềm",
     "EXPERIENCE": "Vui lòng nhập số năm kinh nghiệm",
-    "ERROR_EMPLOYEE": "Tạo mới nhân viên bị lỗi. Vui lòng kiểm tra biểu mẫu.",
-    "ERROR_LANGUAGE": "Vui lòng chọn ngôn ngữ và số năm kinh nghiệm",
-    "ERROR_TECH": "Vui lòng chọn công nghệ và số năm kinh nghiệm",
-    "ERROR_SKILL": "Vui lòng chọn kĩ năng mềm và số năm kinh nghiệm",
-    "EXIST_LANGUAGE": "Ngôn ngữ và Frameworks đã tồn tại. Vui lòng chọn một ngôn ngữ khác.",
-    "EXIST_TECHNOLOGY": "Công nghệ đã tồn tại. Vui lòng chọn một công nghệ khác.",
-    "EXIST_SKILL": "Kỹ năng đã tồn tại. Vui lòng chọn một kỹ năng khác."
+    "ERROREMPLOYEE": "Tạo mới nhân viên bị lỗi. Vui lòng kiểm tra biểu mẫu.",
+    "ERRORLANGUAGE": "Vui lòng chọn ngôn ngữ và số năm kinh nghiệm",
+    "ERRORTECH": "Vui lòng chọn công nghệ và số năm kinh nghiệm",
+    "ERRORSKILL": "Vui lòng chọn kĩ năng mềm và số năm kinh nghiệm",
+    "EXISTLANGUAGE": "Ngôn ngữ và Frameworks đã tồn tại. Vui lòng chọn một ngôn ngữ khác.",
+    "EXISTTECHNOLOGY": "Công nghệ đã tồn tại. Vui lòng chọn một công nghệ khác.",
+    "EXISTSKILL": "Kỹ năng đã tồn tại. Vui lòng chọn một kỹ năng khác."
   },
   "EDIT": "Thay Đổi",
   "DELETE": "Xóa",

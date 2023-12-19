@@ -33,7 +33,8 @@
     "SOFTSKILL": "Soft Skills",
     "SKILL": "Skill",
     "EXP": "Experience/Year",
-
+    "SELECTJOINDATE": "Please select JoinDate of employee",
+    "SELECTDOBDATE": "Please select Date of Birth",
     "NEW": "New Employee",
     "DETAIL": "Personal Info",
     "CHANGEAVATAR": "Change Avatar",
@@ -48,7 +49,8 @@
     "EXPERIENCE": "Experiences",
     "ACTION": "Action",
     "ENTERYEAR": "Enter year of experiences",
-    "EXPORT": "Export CV"
+    "EXPORT": "Export CV",
+    "MANAGERDELETIONCONTENT": "Deleting a manager is not allowed. Please reassign the projects before deleting."
   },
   "PROJECT": {
     "NAME": "Project Name",
@@ -97,13 +99,13 @@
     "Technology": "Please choose the Technology",
     "SKILL": "Please choose the SKILL",
     "EXPERIENCE": "Please enter the years of experience!",
-    "ERROR_EMPLOYEE": "Error creating employee. Please check the form.",
-    "ERROR_LANGUAGE": "Please choose language name and years of experience.",
-    "ERROR_TECH": "Please choose technology name and years of experience.",
-    "ERROR_SKILL": "Please choose soft skill name and years of experience.",
-    "EXIST_LANGUAGE": "Language and Frameworks already exists. Please choose a different language",
-    "EXIST_TECHNOLOGY": "Technology already exists. Please choose a different technology.",
-    "EXIST_SKILL": "Skill already exists. Please choose a different skill."
+    "ERROREMPLOYEE": "Error creating employee. Please check the form.",
+    "ERRORLANGUAGE": "Please choose language name and years of experience.",
+    "ERRORTECH": "Please choose technology name and years of experience.",
+    "ERRORSKILL": "Please choose soft skill name and years of experience.",
+    "EXISTLANGUAGE": "Language and Frameworks already exists. Please choose a different language",
+    "EXISTTECHNOLOGY": "Technology already exists. Please choose a different technology.",
+    "EXISTSKILL": "Skill already exists. Please choose a different skill."
   },
   "EDIT": "Change",
   "DELETE": "Delete",

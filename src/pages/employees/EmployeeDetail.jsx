@@ -27,6 +27,7 @@ import { useGetManager } from "../../hooks/useManager";
 import "../../styles/EmployeeDetail.css";
 import TrackingHistory from "./employeeDetail/TrackingHistory";
 import { edit } from "@cloudinary/url-gen/actions/animated";
+import DeleteEmployee from "./employeeDetail/DeleteEmployee";
 
 const { TextArea } = Input;
 
@@ -91,7 +92,6 @@ const EmployeeDetail = () => {
       key: "exp",
     },
   ];
-
   const initialValues = {
     code: employee?.employee.code ?? "",
     description: employee?.employee.description ?? "",
@@ -783,6 +783,12 @@ const EmployeeDetail = () => {
           >
             <Translation>{(t) => t("DELETE")}</Translation>
           </Button>
+          <DeleteEmployee
+            isDeleteModalOpen={isDeleteModalOpen}
+            setIsDeleteModalOpen={setIsDeleteModalOpen}
+            width="500px"
+            onCancel={handleCloseDeleteModal}
+          />
         </Form>
       )}
     </>
