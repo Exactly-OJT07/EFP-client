@@ -5,6 +5,7 @@ import {
   deleteEmployeeApi,
   getEmployeeAPI,
   getEmployeeDetailApi,
+  patchEmployeeApi,
   exportCv,
 } from "../api/apiUrl";
 import { openNotificationWithIcon } from "../components/notification/notification";
@@ -65,6 +66,23 @@ export const useDeleteEmployee = () => {
       openNotificationWithIcon("success", "Delete Employee Successfully");
     },
   });
+};
+
+export const useUpdateEmployee = (employeeId) => {
+  const queryClient = useQueryClient();
+
+  const employeeUpdate = async ({ data }) => {
+    await patchEmployeeApi(employeeId, data);
+  };
+
+  const mutation = useMutation(employeeUpdate, {
+    onSuccess: () => {
+      queryClient.invalidateQueries([QUERY_KEY.EMPLOYEE]);
+      openNotificationWithIcon("success", "Change Employee Data Successfully");
+    },
+  });
+
+  return mutation;
 };
 
 export const useCVExport = () =>

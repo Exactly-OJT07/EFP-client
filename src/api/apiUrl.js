@@ -37,21 +37,5 @@ export const getEmployeeTotalAPI = (params) =>
 export const getProjectTotalAPI = (params) =>
   axios.get(API_URL.PROJECT_TOTAL, { params });
 
-export const exportCv = async (id) =>
-  await axios
-    .post(`${API_URL.EMPLOYEE}/cv`, {
-      id,
-      responseType: "arraybuffer",
-    })
-    .then((response) => {
-      const blob = new Blob([Buffer.from(response.data, "hex")], {
-        type: "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
-      });
-      const url = URL.createObjectURL(blob);
-      const link = document.createElement("a");
-      link.href = url;
-      link.download = "cv.docx";
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-    });
+export const patchEmployeeApi = (employeeId, data) =>
+  axios.patch(`${API_URL.EMPLOYEE}/${employeeId}`, data);
