@@ -1,6 +1,6 @@
 import axios from "axios";
-import { API_URL } from "../constants/constants";
 import { Buffer } from "buffer";
+import { API_URL } from "../constants/constants";
 
 export const getEmployeeAPI = (params) =>
   axios.get(API_URL.EMPLOYEE, { params });
@@ -58,3 +58,14 @@ export const exportCv = async (id) =>
       link.click();
       document.body.removeChild(link);
     });
+
+export const getEmployeeNoPaginate = () =>
+  axios.get(`${API_URL.EMPLOYEE}${API_URL.NOPAGINATE}`);
+
+export const assignEmployee = (params) => axios.post("/assign", params);
+export const unassignEmployee = (params) => {
+  return axios.delete("/assign", { data: params });
+};
+
+export const updateProject = (id, params) =>
+  axios.patch(`/project/${id}`, params);

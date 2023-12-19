@@ -1,13 +1,16 @@
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import {
+  assignEmployee,
+  createProjectAPI,
+  deleteProjectApi,
   getProjectApi,
   getProjectDetailApi,
-  deleteProjectApi,
   patchStatusApi,
-  createProjectAPI,
+  unassignEmployee,
+  updateProject,
 } from "../api/apiUrl";
-import { QUERY_KEY } from "../constants/query-key";
 import { openNotificationWithIcon } from "../components/notification/notification";
+import { QUERY_KEY } from "../constants/query-key";
 
 export const useGetData = (params) =>
   useQuery(
@@ -15,7 +18,7 @@ export const useGetData = (params) =>
     async () => {
       const { data } = await getProjectApi(params);
       return data;
-    },
+    }
   );
 
 export const useProjectStatusUpdate = () => {
@@ -64,4 +67,35 @@ export const useCreateProject = () => {
     },
   });
   return mutation;
+};
+
+export const useAssignEmp = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation((params) => assignEmployee(params), {
+    onSuccess: () => {
+      queryClient.refetchQueries([QUERY_KEY.PROJECT]);
+      openNotificationWithIcon("success", "success");
+    },
+  });
+};
+
+export const useUnAssignEmp = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation((params) => unassignEmployee(params), {
+    onSuccess: () => {
+      queryClient.refetchQueries([QUERY_KEY.PROJECT]);
+      openNotificationWithIcon("success", "success");
+    },
+  });
+};
+
+export const useUpdateProject = (id) => {
+  const queryClient = useQueryClient();
+  return useMutation((params) => updateProject(id, params), {
+    onSuccess: () => {
+      openNotificationWithIcon("success", "success");
+    },
+  });
 };

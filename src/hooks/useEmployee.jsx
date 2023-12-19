@@ -3,10 +3,11 @@ import { useNavigate } from "react-router";
 import {
   createEmployeeAPI,
   deleteEmployeeApi,
+  exportCv,
   getEmployeeAPI,
   getEmployeeDetailApi,
+  getEmployeeNoPaginate,
   patchEmployeeApi,
-  exportCv,
 } from "../api/apiUrl";
 import { openNotificationWithIcon } from "../components/notification/notification";
 import { QUERY_KEY } from "../constants/query-key";
@@ -23,7 +24,7 @@ export const useGetClients = (params) =>
     async () => {
       const { data } = await getEmployeeAPI(params);
       return data;
-    },
+    }
   );
 
 export const useCreateEmployee = () => {
@@ -40,7 +41,7 @@ export const useCreateEmployee = () => {
       onError: ({ response }) => {
         openNotificationWithIcon("error", "Create employee failed");
       },
-    },
+    }
   );
 
   return mutation;
@@ -94,4 +95,10 @@ export const useCVExport = () =>
         notificationError("Please try again");
       }
     },
+  });
+
+export const useGetEmpNoPaginate = () =>
+  useQuery([QUERY_KEY.NOPAGINATE], async () => {
+    const { data } = await getEmployeeNoPaginate();
+    return data;
   });
