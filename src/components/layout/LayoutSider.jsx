@@ -66,10 +66,18 @@ export const LayoutSider = ({ collapsed = true }) => {
   const { pathname } = location;
 
   return (
-    <Sider theme="dark" trigger={null} collapsible collapsed={collapsed}>
-      <div className="demo-logo-vertical">
+    <Sider
+      theme="light"
+      trigger={null}
+      collapsible
+      collapsed={collapsed}
+      style={{ borderRight: "1px solid #dcdcdc" }}
+    >
+      <div className="demo-logo-vertical" collapsible>
         <img
-          src={logoIcon}
+          src={
+            "https://res.cloudinary.com/dvm8fnczy/image/upload/v1702886027/zlsfcfdkmebldaw1htls.jpg"
+          }
           alt=""
           style={{
             width: 65,
@@ -80,11 +88,12 @@ export const LayoutSider = ({ collapsed = true }) => {
         />
       </div>
       <Menu
-        theme="dark"
+        theme="light"
         mode="inline"
         items={menu}
         selectedKeys={[pathname.substring(1)]}
         onClick={({ key }) => navigate(key)}
+        className="custom-menu"
       />
     </Sider>
   );
