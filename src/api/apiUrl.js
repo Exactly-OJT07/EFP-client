@@ -37,6 +37,9 @@ export const getEmployeeTotalAPI = (params) =>
 export const getProjectTotalAPI = (params) =>
   axios.get(API_URL.PROJECT_TOTAL, { params });
 
+export const patchEmployeeApi = (employeeId, data) =>
+  axios.patch(`${API_URL.EMPLOYEE}/${employeeId}`, data);
+
 export const exportCv = async (id) =>
   await axios
     .post(`${API_URL.EMPLOYEE}/cv`, {
