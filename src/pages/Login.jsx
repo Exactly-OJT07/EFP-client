@@ -70,17 +70,13 @@ const Login = () => {
 
   const StyledPassword = styled(Input.Password)`
     input::placeholder {
-      color: white;
+      color: black;
     }
   `;
 
   return (
     <div className="login__container">
       <div className="login">
-        {/* <div className="image">
-          <img src="src/assets/logo.jpg" alt="Login" />
-        </div> */}
-        <div className="imagelogin"></div>
         <Form
           name="login-form"
           onFinish={onFinish}
@@ -132,7 +128,7 @@ const Login = () => {
               htmlType="submit"
               className="login-form-button"
             >
-              Sign In
+              Log In
             </Button>
           </Form.Item>
         </Form>
