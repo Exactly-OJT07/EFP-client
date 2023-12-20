@@ -26,6 +26,7 @@ import { useCreateEmployee } from "../../../hooks/useEmployee";
 import { useGetManager } from "../../../hooks/useManager";
 import "../../../styles/ManageEmployee.css";
 import { Translation, useTranslation } from "react-i18next";
+import { Breadcrumb } from "../../../components/beadcrumb/Breadcrumb";
 const { useForm } = Form;
 
 const CreateEmployee = () => {
@@ -235,8 +236,14 @@ const CreateEmployee = () => {
     }
   }, [isError]);
 
+  const breadcrumbItems = [
+    { key: "manageEmployees" },
+    { key: "", title: t("EMPLOYEE.CREATE") },
+  ];
+
   return (
     <>
+      <Breadcrumb items={breadcrumbItems} />
       <Form
         form={formCreate}
         name="createEmployee"

@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from "react";
+import { UserOutlined, LockOutlined } from "@ant-design/icons";
+
 import { Button, Form, Input, Alert } from "antd";
 import "../styles/Login.css";
 import { useNavigate } from "react-router-dom";
@@ -34,15 +36,15 @@ const Login = () => {
 
   const handleFailedLogin = () => {
     setShowError(true);
-    openNotificationWithIcon("error", "Login Failed");
+    openNotificationWithIcon("error", "Login Failed, Check Email or Password");
   };
 
   const onFinish = (values) => {
     const storedCredentials =
       JSON.parse(localStorage.getItem("credentials")) || {};
     const hardcodedCredentials = {
-      username: "linh@gmail.com",
-      password: "123",
+      username: "admin@admin.com",
+      password: "admin",
     };
 
     const isLoginSuccessful =
@@ -58,19 +60,18 @@ const Login = () => {
 
   const onFinishFailed = (errorInfo) => {
     console.log("Failed:", errorInfo);
+    if (errorInfo.errorFields && errorInfo.errorFields.length > 0) {
+      const errorMessage = errorInfo.errorFields[0].errors[0];
+      openNotificationWithIcon("error", errorMessage);
+    }
   };
 
   return (
     <div className="login__container">
       <div className="login">
-        <div className="image">
-          <img
-            src="https://res.cloudinary.com/dtrwgtzzd/image/upload/v1702539462/vpk4eycgnsfk8mlfbvdu.jpg"
-            alt="Login"
-          />
-        </div>
         <Form
           name="login-form"
+          layout="vertical"
           onFinish={onFinish}
           onFinishFailed={onFinishFailed}
         >
@@ -82,33 +83,31 @@ const Login = () => {
               onClose={() => setShowAlert(false)}
             />
           )}
-          {showError && (
-            <Alert
-              message="Login Failed"
-              type="error"
-              showIcon
-              onClose={() => setShowError(false)}
-            />
-          )}
-          <p className="form-title">Log In</p>
+
           <p className="PPP">
             {" "}
             Enter your email and password to login to our dashboard.
           </p>
-          <p className="title">Email</p>
+
           <Form.Item
+            label={<p className="bold-label">Email</p>}
             name="username"
             rules={[
+              { required: true, message: "Please input your email!" },
               {
-                required: true,
-                message: "Please input your email!",
+                type: "email",
+                message: "Please enter correct email format!",
               },
             ]}
           >
-            <Input placeholder="Enter your Email" />
+            <Input
+              prefix={<UserOutlined className="site-form-item-icon" />}
+              placeholder="Enter your Email"
+            />
           </Form.Item>
-          <p className="title">Password</p>
+
           <Form.Item
+            label={<p className="bold-label">Password</p>}
             name="password"
             rules={[
               {
@@ -117,15 +116,19 @@ const Login = () => {
               },
             ]}
           >
-            <Input.Password placeholder="Enter your Password" />
+            <Input.Password
+              prefix={<LockOutlined className="site-form-item-icon" />}
+              placeholder="Enter your Password"
+            />
           </Form.Item>
+
           <Form.Item>
             <Button
               type="primary"
               htmlType="submit"
               className="login-form-button"
             >
-              Sign In
+              Log In
             </Button>
           </Form.Item>
         </Form>

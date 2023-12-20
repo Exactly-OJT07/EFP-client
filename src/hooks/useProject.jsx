@@ -5,6 +5,7 @@ import {
   deleteProjectApi,
   patchStatusApi,
   createProjectAPI,
+  editProjectDetailApi,
 } from "../api/apiUrl";
 import { QUERY_KEY } from "../constants/query-key";
 import { openNotificationWithIcon } from "../components/notification/notification";
@@ -38,7 +39,22 @@ export const useGetProjectData = (id) =>
     const { data } = await getProjectDetailApi(id);
     return data;
   });
-
+export const useEditProjectDetailData = (projectId) => {
+  const queryClient = useQueryClient();
+  const editProjectDetails = async ({ updatedData, startDate, endDate }) => {
+    await editProjectDetailApi(projectId, {
+      ...updatedData,
+      startDate,
+      endDate,
+    });
+  };
+  return useMutation(editProjectDetails, {
+    onSuccess: () => {
+      queryClient.invalidateQueries([QUERY_KEY.PROJECT]);
+      openNotificationWithIcon("success", "Edit Project Details Successfully");
+    },
+  });
+};
 export const useDeleteProject = () => {
   const queryClient = useQueryClient();
 
