@@ -123,7 +123,7 @@ const CreateProject = ({ isModalOpen, setIsModalOpen, setIsAssign }) => {
             <Form.Item
               name="name"
               label={t("PROJECT.NAMEPROJECT")}
-              rules={[{ required: true, message: t("VALIDATE.DATAINPUT") }]}
+              rules={[{ required: true, message: t("VALIDATE.DATAINPUTNAME") }]}
             >
               <Input
                 value={newName}
@@ -135,7 +135,9 @@ const CreateProject = ({ isModalOpen, setIsModalOpen, setIsAssign }) => {
             <Form.Item
               name="managerId"
               label={t("PROJECT.MANAGER")}
-              rules={[{ required: true, message: t("VALIDATE.DATAINPUT") }]}
+              rules={[
+                { required: true, message: t("VALIDATE.DATAINPUTMANAGER") },
+              ]}
             >
               <Select
                 value={newManager.id}
@@ -155,7 +157,7 @@ const CreateProject = ({ isModalOpen, setIsModalOpen, setIsAssign }) => {
             <Form.Item
               name="technology"
               label={t("PROJECT.TECH")}
-              rules={[{ required: true, message: t("VALIDATE.DATAINPUT") }]}
+              rules={[{ required: true, message: t("VALIDATE.DATAINPUTTECH") }]}
             >
               <Select
                 mode="multiple"
@@ -187,7 +189,7 @@ const CreateProject = ({ isModalOpen, setIsModalOpen, setIsAssign }) => {
             <Form.Item
               name="specification"
               label={t("PROJECT.SPEC")}
-              rules={[{ required: true, message: t("VALIDATE.DATAINPUT") }]}
+              rules={[{ required: true, message: t("VALIDATE.DATAINPUTSPEC") }]}
             >
               <Input
                 value={newSpecification}
@@ -201,7 +203,7 @@ const CreateProject = ({ isModalOpen, setIsModalOpen, setIsAssign }) => {
             <Form.Item
               name="description"
               label={t("PROJECT.DES")}
-              rules={[{ required: true, message: t("VALIDATE.DATAINPUT") }]}
+              rules={[{ required: true, message: t("VALIDATE.DATAINPUTDES") }]}
             >
               <Input
                 value={newDescription}
@@ -213,7 +215,7 @@ const CreateProject = ({ isModalOpen, setIsModalOpen, setIsAssign }) => {
             <Form.Item
               name="langFrame"
               label={t("PROJECT.LANGFRAME")}
-              rules={[{ required: true, message: t("VALIDATE.DATAINPUT") }]}
+              rules={[{ required: true, message: t("VALIDATE.DATAINPUTLANG") }]}
             >
               <Select
                 mode="multiple"
@@ -242,47 +244,44 @@ const CreateProject = ({ isModalOpen, setIsModalOpen, setIsAssign }) => {
                 ))}
               </Select>
             </Form.Item>
+            <Form.Item
+              name="startDate"
+              label={t("PROJECT.STARTDATE")}
+              rules={[
+                { required: true, message: t("VALIDATE.DATAINPUTSTART") },
+              ]}
+            >
+              <DatePicker
+                style={{ width: "100%" }}
+                value={newStartDate ? moment(newStartDate) : null}
+                onChange={(e) =>
+                  setNewStartDate(e ? e.format("YYYY-MM-DD HH:mm:ss") : null)
+                }
+                showTime={{ format: "HH:mm:ss" }}
+                format="DD/MM/YYYY HH:mm:ss"
+                placeholder={t("PROJECT.STARTDATE")}
+              />
+            </Form.Item>
 
-            <Col span={24}>
-              <Form.Item
-                name="startDate"
-                label={t("PROJECT.STARTDATE")}
-                rules={[{ required: true, message: t("VALIDATE.DATAINPUT") }]}
-              >
-                <DatePicker
-                  style={{ width: "100%" }}
-                  value={newStartDate ? moment(newStartDate) : null}
-                  onChange={(e) =>
-                    setNewStartDate(e ? e.format("YYYY-MM-DD HH:mm:ss") : null)
-                  }
-                  showTime={{ format: "HH:mm:ss" }}
-                  format="DD/MM/YYYY HH:mm:ss"
-                  placeholder={t("PROJECT.STARTDATE")}
-                />
-              </Form.Item>
-            </Col>
-
-            <Col span={24}>
-              <Form.Item
-                name="endDate"
-                label={t("PROJECT.ENDDATE")}
-                rules={[{ required: true, message: t("VALIDATE.DATAINPUT") }]}
-              >
-                <DatePicker
-                  style={{ width: "100%" }}
-                  value={newEndDate ? moment(newEndDate) : null}
-                  onChange={(e) =>
-                    setNewEndDate(e ? e.format("YYYY-MM-DD HH:mm:ss") : null)
-                  }
-                  showTime={{ format: "HH:mm:ss" }}
-                  format="DD/MM/YYYY HH:mm:ss"
-                  disabledDate={(current) => {
-                    return current && current < moment(newStartDate);
-                  }}
-                  placeholder={t("PROJECT.ENDDATE")}
-                />
-              </Form.Item>
-            </Col>
+            <Form.Item
+              name="endDate"
+              label={t("PROJECT.ENDDATE")}
+              rules={[{ required: true, message: t("VALIDATE.DATAINPUTEND") }]}
+            >
+              <DatePicker
+                style={{ width: "100%" }}
+                value={newEndDate ? moment(newEndDate) : null}
+                onChange={(e) =>
+                  setNewEndDate(e ? e.format("YYYY-MM-DD HH:mm:ss") : null)
+                }
+                showTime={{ format: "HH:mm:ss" }}
+                format="DD/MM/YYYY HH:mm:ss"
+                disabledDate={(current) => {
+                  return current && current < moment(newStartDate);
+                }}
+                placeholder={t("PROJECT.ENDDATE")}
+              />
+            </Form.Item>
           </Col>
 
           <Col xs={24} sm={24} md={8}>
@@ -291,7 +290,9 @@ const CreateProject = ({ isModalOpen, setIsModalOpen, setIsAssign }) => {
                 <Form.Item
                   label={t("PROJECT.MEMBER")}
                   style={{ marginBottom: "8px" }}
-                  rules={[{ required: true, message: t("VALIDATE.DATAINPUT") }]}
+                  rules={[
+                    { required: true, message: t("VALIDATE.DATAINPUTMEM") },
+                  ]}
                 >
                   <Select
                     value={newAssign}
@@ -322,7 +323,9 @@ const CreateProject = ({ isModalOpen, setIsModalOpen, setIsAssign }) => {
                 <Form.Item
                   label={t("PROJECT.ROLES")}
                   style={{ marginBottom: "8px" }}
-                  rules={[{ required: true, message: t("VALIDATE.DATAINPUT") }]}
+                  rules={[
+                    { required: true, message: t("VALIDATE.DATAINPUTROLE") },
+                  ]}
                 >
                   <Select
                     mode="multiple"

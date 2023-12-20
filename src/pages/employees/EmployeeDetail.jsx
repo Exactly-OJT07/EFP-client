@@ -112,6 +112,7 @@ const EmployeeDetail = () => {
     name: employee?.employee.name ?? "",
     phone: employee?.employee.phone ?? "",
     manager: employee?.employee.managerId ?? "",
+    isManager: employee?.employee.isManager ?? "",
     joinDate: moment(employee?.employee.joinDate),
     dateOfBirth: moment(employee?.employee.dateOfBirth),
     gender: employee?.employee.gender,

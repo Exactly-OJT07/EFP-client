@@ -6,6 +6,7 @@ import {
   getEmployeeAPI,
   getEmployeeDetailApi,
   patchEmployeeApi,
+  getEmployeeNoPaginate,
   exportCv,
 } from "../api/apiUrl";
 import { openNotificationWithIcon } from "../components/notification/notification";
@@ -99,4 +100,9 @@ export const useCVExport = () =>
         notificationError("Please try again");
       }
     },
+  });
+export const useGetEmpNoPaginate = () =>
+  useQuery([QUERY_KEY.NOPAGINATE], async () => {
+    const { data } = await getEmployeeNoPaginate();
+    return data;
   });

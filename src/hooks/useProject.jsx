@@ -4,8 +4,11 @@ import {
   getProjectDetailApi,
   deleteProjectApi,
   patchStatusApi,
+  assignEmployee,
   createProjectAPI,
   editProjectDetailApi,
+  unassignEmployee,
+  updateProject,
 } from "../api/apiUrl";
 import { QUERY_KEY } from "../constants/query-key";
 import { openNotificationWithIcon } from "../components/notification/notification";
@@ -80,4 +83,34 @@ export const useCreateProject = () => {
     },
   });
   return mutation;
+};
+export const useAssignEmp = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation((params) => assignEmployee(params), {
+    onSuccess: () => {
+      queryClient.refetchQueries([QUERY_KEY.PROJECT]);
+      openNotificationWithIcon("success", "success");
+    },
+  });
+};
+
+export const useUnAssignEmp = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation((params) => unassignEmployee(params), {
+    onSuccess: () => {
+      queryClient.refetchQueries([QUERY_KEY.PROJECT]);
+      openNotificationWithIcon("success", "success");
+    },
+  });
+};
+
+export const useUpdateProject = (id) => {
+  const queryClient = useQueryClient();
+  return useMutation((params) => updateProject(id, params), {
+    onSuccess: () => {
+      openNotificationWithIcon("success", "success");
+    },
+  });
 };
