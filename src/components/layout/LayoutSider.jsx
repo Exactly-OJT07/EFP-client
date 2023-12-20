@@ -92,7 +92,11 @@ export const LayoutSider = ({ collapsed = true }) => {
         mode="inline"
         items={menu}
         selectedKeys={[pathname.substring(1)]}
-        onClick={({ key }) => navigate(key)}
+        onClick={({ key }) => {
+          if (key !== ".") {
+            navigate(key);
+          }
+        }}
         className="custom-menu"
       />
     </Sider>

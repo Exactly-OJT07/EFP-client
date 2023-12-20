@@ -13,7 +13,6 @@ import { useGetProjectTotal } from "../../hooks/useGetProjectTotal";
 import "./Dashboard.css";
 import { Breadcrumb } from "../../components/beadcrumb/Breadcrumb";
 import { Translation, useTranslation } from "react-i18next";
-
 const { Option } = Select;
 
 const Dashboard = () => {
@@ -47,7 +46,7 @@ const Dashboard = () => {
 
   const dates = Object.keys(projectCountJoin || {});
 
-  const [areaChartState, setAreaChartState] = useState({
+  const areaChartState = {
     series: [
       {
         name: t("DASHBOARD.PROJECT"),
@@ -63,10 +62,10 @@ const Dashboard = () => {
         height: 350,
         type: "area",
         toolbar: {
-          show: false, // Set to false to hide the toolbar
+          show: false,
         },
         zoom: {
-          enabled: false, // Set to false to disable zooming
+          enabled: false,
         },
       },
       dataLabels: {
@@ -89,7 +88,7 @@ const Dashboard = () => {
         align: "center",
       },
     },
-  });
+  };
 
   const circleChartState = {
     series: [

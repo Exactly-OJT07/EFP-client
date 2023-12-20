@@ -47,10 +47,14 @@ export const useCreateEmployee = () => {
 };
 
 export const useGetOneEmployee = (id) => {
-  return useQuery([QUERY_KEY.EMPLOYEE, id], async () => {
-    const { data } = await getEmployeeDetailApi(id);
-    return data;
-  });
+  return useQuery(
+    [QUERY_KEY.EMPLOYEE, id],
+    async () => {
+      const { data } = await getEmployeeDetailApi(id);
+      return data;
+    },
+    { cacheTime: 0 },
+  );
 };
 
 export const useDeleteEmployee = () => {
