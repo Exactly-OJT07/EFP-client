@@ -175,13 +175,24 @@ const ManageProject = () => {
           placeholder={t("PROJECT.NAME")}
           allowClear
           style={{
-            width: 300,
+            width: 304,
+            borderTopLeftRadius: "100px",
+            height: "35px",
+            padding: "0 13px 1px 28px",
+            justifyContent: "center",
           }}
           onSearch={handleSearch}
         />
 
         <div>
-          <Button type="primary" onClick={() => setIsModalOpen(true)}>
+          <Button
+            type="primary"
+            onClick={() => setIsModalOpen(true)}
+            style={{
+              borderRadius: "50px",
+              height: "35px",
+            }}
+          >
             <PlusOutlined />{" "}
             <Translation>{(t) => t("PROJECT.NEW")}</Translation>
           </Button>
@@ -294,6 +305,8 @@ const ManageProject = () => {
                         defaultValue={project.status}
                         style={{
                           width: 120,
+                          borderRadius: "50px",
+                          height: "35px",
                         }}
                         onChange={(newStatus) => {
                           handleStatusChange(project.id, newStatus);

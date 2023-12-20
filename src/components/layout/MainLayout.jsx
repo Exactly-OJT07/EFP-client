@@ -59,11 +59,12 @@ export const PrivateLayout = () => {
           style={{
             height: 60,
             padding: 0,
-            background: colorBgContainer,
+            background: "#fff",
             display: "flex",
             flexDirection: "row",
             justifyContent: "space-between",
             alignItems: "center",
+            borderBottom: "1px solid rgba(0, 0, 0, 0.08)",
           }}
         >
           <Button
@@ -98,7 +99,7 @@ export const PrivateLayout = () => {
             margin: "24px 16px",
             padding: 24,
             height: "100%",
-            background: colorBgContainer,
+            background: "#fff",
             borderRadius: 5,
           }}
         >

@@ -1,5 +1,5 @@
 import { PlusOutlined } from "@ant-design/icons";
-import { Button, Input, Space, Spin } from "antd";
+import { Button, Input, Row, Col, Space, Spin } from "antd";
 import React, { useState } from "react";
 import { useNavigate } from "react-router";
 import Pagination from "../../components/pagination/pagination";
@@ -38,31 +38,49 @@ function ManageEmployee() {
   return (
     <>
       <Breadcrumb items={breadcrumbItems} />
-      <Space className="employee-search" size="large">
-        <Input
-          placeholder={t("EMPLOYEE.NAME")}
-          value={searchNameText}
-          style={{
-            width: 304,
-          }}
-          onChange={(e) => {
-            setSearchNameText(e.target.value);
-          }}
-        />
-        <Input
-          placeholder={t("EMPLOYEE.EMAIL")}
-          value={searchEmailText}
-          style={{
-            width: 304,
-          }}
-          onChange={(e) => {
-            setSearchEmailText(e.target.value);
-          }}
-        />
-        <Button type="primary" onClick={() => navigate("create")}>
-          <PlusOutlined /> <Translation>{(t) => t("EMPLOYEE.NEW")}</Translation>
-        </Button>
-      </Space>
+      <Row style={{ display: "flex", justifyContent: "space-between" }}>
+        <Col
+          span={16}
+          style={{ display: "flex", justifyContent: "flex-start" }}
+        >
+          <Space className="employee-search" size="large">
+            <Input
+              placeholder={t("EMPLOYEE.NAME")}
+              value={searchNameText}
+              style={{
+                width: 304,
+              }}
+              onChange={(e) => {
+                setSearchNameText(e.target.value);
+              }}
+            />
+            <Input
+              placeholder={t("EMPLOYEE.EMAIL")}
+              value={searchEmailText}
+              style={{
+                width: 304,
+              }}
+              onChange={(e) => {
+                setSearchEmailText(e.target.value);
+              }}
+            />
+          </Space>
+        </Col>
+
+        <Col span={7} style={{ display: "flex", justifyContent: "flex-end" }}>
+          <Button
+            type="primary"
+            onClick={() => navigate("create")}
+            style={{
+              borderRadius: "50px",
+              height: "35px",
+            }}
+          >
+            <PlusOutlined />{" "}
+            <Translation>{(t) => t("EMPLOYEE.NEW")}</Translation>
+          </Button>
+        </Col>
+      </Row>
 
       {isLoading ? (
         <Spin

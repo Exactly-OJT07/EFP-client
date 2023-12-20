@@ -333,7 +333,11 @@ const EmployeeDetail = () => {
         </Typography.Title>
         <div>
           <Button
-            style={{ marginRight: "10px" }}
+            style={{
+              marginRight: "10px",
+              borderRadius: "50px",
+              height: "35px",
+            }}
             onClick={() => navigate("/manageEmployees")}
           >
             <Translation>{(t) => t("BACK")}</Translation>
@@ -395,7 +399,11 @@ const EmployeeDetail = () => {
                 />
                 <Col span={24}>
                   <Button
-                    style={{ margin: "10px" }}
+                    style={{
+                      margin: "10px",
+                      borderRadius: "50px",
+                      height: "35px",
+                    }}
                     onClick={() => fileInputRef.current.click()}
                   >
                     <Translation>
@@ -407,7 +415,12 @@ const EmployeeDetail = () => {
                   <Button
                     icon={<DownloadOutlined />}
                     type="primary"
-                    style={{ margin: "10px", background: "green" }}
+                    style={{
+                      margin: "10px",
+                      background: "green",
+                      borderRadius: "50px",
+                      height: "35px",
+                    }}
                     onClick={() => exportCv(id)}
                   >
                     <Translation>{(t) => t("EMPLOYEE.EXPORT")}</Translation>
@@ -670,7 +683,11 @@ const EmployeeDetail = () => {
                   />
                 </Form.Item>
                 <Button
-                  style={{ marginTop: "20px" }}
+                  style={{
+                    marginTop: "20px",
+                    borderRadius: "50px",
+                    height: "35px",
+                  }}
                   type="primary"
                   onClick={() => {
                     addToLangFrame();
@@ -774,7 +791,11 @@ const EmployeeDetail = () => {
                       />
                     </Form.Item>
                     <Button
-                      style={{ marginTop: "20px" }}
+                      style={{
+                        marginTop: "20px",
+                        borderRadius: "50px",
+                        height: "35px",
+                      }}
                       type="primary"
                       onClick={() => {
                         addToTech();
@@ -868,7 +889,11 @@ const EmployeeDetail = () => {
                   />
                 </Form.Item>
                 <Button
-                  style={{ marginTop: "20px" }}
+                  style={{
+                    marginTop: "5px",
+                    borderRadius: "50px",
+                    height: "35px",
+                  }}
                   type="primary"
                   onClick={() => {
                     addToSkills();
@@ -913,24 +938,39 @@ const EmployeeDetail = () => {
               </Col>
             </Row>
           </Card>
-          <Form.Item>
-            <Button type="primary" htmlType="submit" style={{ margin: "5px" }}>
-              <Translation>{(t) => t("EDIT")}</Translation>
-            </Button>
-            <Button
-              type="primary"
-              danger
-              onClick={() => setIsDeleteModalOpen(true)}
-            >
-              <Translation>{(t) => t("DELETE")}</Translation>
-            </Button>
-            <DeleteEmployee
-              isDeleteModalOpen={isDeleteModalOpen}
-              setIsDeleteModalOpen={setIsDeleteModalOpen}
-              width="500px"
-              onCancel={handleCloseDeleteModal}
-            />
-          </Form.Item>
+          <Row style={{ display: "flex", justifyContent: "flex-end" }}>
+            <Form.Item>
+              <Button
+                type="primary"
+                htmlType="submit"
+                style={{
+                  marginTop: "5px",
+                  borderRadius: "50px",
+                  height: "35px",
+                }}
+              >
+                <Translation>{(t) => t("EDIT")}</Translation>
+              </Button>
+              <Button
+                type="primary"
+                danger
+                style={{
+                  marginTop: "5px",
+                  borderRadius: "50px",
+                  height: "35px",
+                }}
+                onClick={() => setIsDeleteModalOpen(true)}
+              >
+                <Translation>{(t) => t("DELETE")}</Translation>
+              </Button>
+              <DeleteEmployee
+                isDeleteModalOpen={isDeleteModalOpen}
+                setIsDeleteModalOpen={setIsDeleteModalOpen}
+                width="500px"
+                onCancel={handleCloseDeleteModal}
+              />
+            </Form.Item>
+          </Row>
         </Form>
       )}
     </>
