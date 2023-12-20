@@ -169,26 +169,31 @@ const EmployeeDetail = () => {
     value.tech = editTechs;
     console.log(value);
     try {
-      // Assuming your useUpdateEmployee hook handles the mutation logic
       await EmployeeUpdateMutation.mutateAsync({
         employeeId: id,
         data: value,
       });
       console.log(initialValues.skills);
       console.log(editSkills);
-      //       if (initialValues.skills !== editSkills) {
-      // setEditSkills([]);
-      //       }
-      setEditSkills([]);
-      setEditLangs([]);
-      setEditTechs([]);
-      // Optionally: Handle success, navigate, or perform other actions on successful mutation
+
+      if (
+        JSON.stringify(initialValues.skills) === JSON.stringify(editSkills) &&
+        JSON.stringify(initialValues.langFrame) === JSON.stringify(editLangs) &&
+        JSON.stringify(initialValues.tech) === JSON.stringify(editTechs)
+      ) {
+        setEditLangs(value.langFrame);
+        setEditSkills(value.skills);
+        setEditTechs(value.tech);
+      } else {
+        setEditSkills([]);
+        setEditLangs([]);
+        setEditTechs([]);
+      }
     } catch (error) {
       console.error("Error updating employee data:", error);
-      // Optionally: Handle error, show error message, or perform other actions on failed mutation
     }
   };
-  //langFrame
+
   const addToLangFrame = () => {
     if (!editLang || !editLangExperience) {
       message.error(t("VALIDATE.ERRORLANGUAGE"));
