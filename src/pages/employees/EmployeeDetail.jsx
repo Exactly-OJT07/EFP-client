@@ -27,6 +27,7 @@ import { useGetManager } from "../../hooks/useManager";
 import "../../styles/EmployeeDetail.css";
 import TrackingHistory from "./employeeDetail/TrackingHistory";
 import { edit } from "@cloudinary/url-gen/actions/animated";
+import DeleteEmployee from "./employeeDetail/DeleteEmployee";
 
 const { TextArea } = Input;
 
@@ -91,7 +92,6 @@ const EmployeeDetail = () => {
       key: "exp",
     },
   ];
-
   const initialValues = {
     code: employee?.employee.code ?? "",
     description: employee?.employee.description ?? "",
@@ -168,10 +168,10 @@ const EmployeeDetail = () => {
       // Optionally: Handle error, show error message, or perform other actions on failed mutation
     }
   };
-
+  //langFrame
   const addToLangFrame = () => {
     if (!editLang || !editLangExperience) {
-      message.error(t("VALIDATE.ERROR_LANGUAGE"));
+      message.error(t("VALIDATE.ERRORLANGUAGE"));
       return;
     }
     const existingLangFrame = editLangs.find(
@@ -179,7 +179,7 @@ const EmployeeDetail = () => {
     );
 
     if (existingLangFrame) {
-      message.error(t("VALIDATE.EXIST_LANGFRAME"));
+      message.error(t("VALIDATE.EXISTLANGUAGE"));
       return;
     }
     const editLangEntry = {
@@ -199,27 +199,25 @@ const EmployeeDetail = () => {
     );
     setEditLangs(updatedLangFrames);
   };
-
+  //technology
   const addToTech = () => {
     if (!editTech || !editTechExperience) {
       message.error(t("VALIDATE.TECHNOLOGY"));
       return;
     }
-    // const existingTech = editTechs.find((tech) => tech.name === editTech);
-
-    // if (existingTech) {
-    //   message.error("VALIDATE.EXIST_TECHNOLOGY");
-    //   return;
-    // }
+    const existingTech = editTechs.find((tech) => tech.name === editTech);
+    if (existingTech) {
+      message.error(t("VALIDATE.EXISTTECHNOLOGY"));
+      return;
+    }
     const editTechEntry = {
       name: editTech,
       exp: editTechExperience,
-      key: editTechs.length + 1,
     };
-    setEditTechs([...editTechs, editTechEntry]);
-    form.setFieldsValue({
-      techs: [...initialValues.tech, editTechEntry],
-    });
+    setEditTechs([
+      ...editTechs,
+      { ...editTechEntry, key: editTech.length + 1 },
+    ]);
     setEditTech("");
     setEditTechExperience("");
   };
@@ -230,13 +228,13 @@ const EmployeeDetail = () => {
 
   const addToSkills = () => {
     if (!editSkill || !editSkillExperience) {
-      message.error(t("VALIDATE.ERROR_SKILL"));
+      message.error(t("VALIDATE.ERRORSKILL"));
       return;
     }
     const existingSkill = editSkills.find((skill) => skill.name === editSkill);
 
     if (existingSkill) {
-      message.error(t("VALIDATE.EXIST_SKILL"));
+      message.error(t("VALIDATE.EXISTSKILL"));
       return;
     }
     const newEntry = {
@@ -420,8 +418,12 @@ const EmployeeDetail = () => {
                     }
                   >
                     <Select style={{ maxWidth: "300px" }}>
-                      <Select.Option value="male">Male</Select.Option>
-                      <Select.Option value="female">Female</Select.Option>
+                      <Select.Option value="male">
+                        {t("DATA.MALE")}
+                      </Select.Option>
+                      <Select.Option value="female">
+                        {t("DATA.FEMALE")}
+                      </Select.Option>
                     </Select>
                   </Form.Item>
                 </Col>
@@ -459,8 +461,12 @@ const EmployeeDetail = () => {
                     }
                   >
                     <Select style={{ maxWidth: "300px" }}>
-                      <Select.Option value="inactive">Inactive</Select.Option>
-                      <Select.Option value="active">Active</Select.Option>
+                      <Select.Option value="inactive">
+                        {t("EMPLOYEE.INACTIVE")}
+                      </Select.Option>
+                      <Select.Option value="active">
+                        {t("EMPLOYEE.ACTIVE")}
+                      </Select.Option>
                     </Select>
                   </Form.Item>
                 </Col>
@@ -489,7 +495,7 @@ const EmployeeDetail = () => {
                   >
                     <TextArea
                       rows={6}
-                      placeholder="Description"
+                      placeholder={t("EMPLOYEE.DESCRIPTION")}
                       style={{ maxWidth: "680px" }}
                     />
                   </Form.Item>
@@ -783,6 +789,12 @@ const EmployeeDetail = () => {
           >
             <Translation>{(t) => t("DELETE")}</Translation>
           </Button>
+          <DeleteEmployee
+            isDeleteModalOpen={isDeleteModalOpen}
+            setIsDeleteModalOpen={setIsDeleteModalOpen}
+            width="500px"
+            onCancel={handleCloseDeleteModal}
+          />
         </Form>
       )}
     </>

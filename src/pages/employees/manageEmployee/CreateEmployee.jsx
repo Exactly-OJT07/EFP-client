@@ -109,13 +109,13 @@ const CreateEmployee = () => {
 
   const addToSkills = () => {
     if (!newSkill || !newExperience) {
-      message.error(t("VALIDATE.ERROR_SKILL"));
+      message.error(t("VALIDATE.ERRORSKILL"));
       return;
     }
     const existingSkill = newSkills.find((skill) => skill.name === newSkill);
 
     if (existingSkill) {
-      message.errort("VALIDATE.EXIST_SKILL");
+      message.error(t("VALIDATE.EXISTSKILL"));
       return;
     }
     const newEntry = {
@@ -133,7 +133,7 @@ const CreateEmployee = () => {
   //language and Framework
   const addToLangFrame = () => {
     if (!newLangFrame || !newLangExperience) {
-      message.error(t("VALIDATE.ERROR_LANGUAGE"));
+      message.error(t("VALIDATE.ERRORLANGUAGE"));
       return;
     }
     const existingLangFrame = newLangFrames.find(
@@ -141,7 +141,7 @@ const CreateEmployee = () => {
     );
 
     if (existingLangFrame) {
-      message.error("VALIDATE.EXIST_LANGFRAME");
+      message.error(t("VALIDATE.EXISTLANGUAGE"));
       return;
     }
     const newLangEntry = {
@@ -164,13 +164,13 @@ const CreateEmployee = () => {
   //Technology
   const addToTech = () => {
     if (!newTech || !newTechExperience) {
-      message.error(t("VALIDATE.TECHNOLOGY"));
+      message.error(t("VALIDATE.ERRORTECH"));
       return;
     }
     const existingTech = newTechs.find((tech) => tech.name === newTech);
 
     if (existingTech) {
-      message.error("VALIDATE.EXIST_TECHNOLOGY");
+      message.error(t("VALIDATE.EXISTTECHNOLOGY"));
       return;
     }
     const newTechEntry = {
@@ -218,7 +218,7 @@ const CreateEmployee = () => {
         ...formData,
       });
     } catch (error) {
-      message.error(t("VALIDATE.ERROR_EMPLOYEE"));
+      message.error(t("VALIDATE.ERROREMPLOYEE"));
     }
   };
 
@@ -388,6 +388,7 @@ const CreateEmployee = () => {
               <DatePicker
                 style={{ width: "100%" }}
                 value={moment(newDob)}
+                placeholder={t("EMPLOYEE.SELECTDOBDATE")}
                 onChange={(date) => {
                   setNewDob(date.format("DD/MM/YYYY"));
                   console.log(date);
@@ -489,6 +490,7 @@ const CreateEmployee = () => {
               <DatePicker
                 style={{ width: "100%" }}
                 value={moment(newJoinDate)}
+                placeholder={t("EMPLOYEE.SELECTJOINDATE")}
                 onChange={(e) => {
                   setNewJoinDate(e ? e.format("DD/MM/YYYY") : null);
                 }}

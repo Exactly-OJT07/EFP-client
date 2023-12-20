@@ -4,12 +4,14 @@ import { useParams } from "react-router";
 import { useGetOneEmployee } from "../../../hooks/useEmployee";
 import moment from "moment";
 import ReactApexChart from "react-apexcharts";
+import { Translation, useTranslation } from "react-i18next";
 
 const TrackingTable = ({ projects }) => {
+  const { t } = useTranslation();
   const projectSeries = projects.map((project) => ({
     data: [
       {
-        x: project.projectName,
+        x: `${project.projectName} (Role: ${project.role})`,
         y: [
           new Date(moment(project.joinDate).format("YYYY-MM-DD")).getTime(),
           new Date(moment(project.doneDate).format("YYYY-MM-DD")).getTime(),
@@ -41,7 +43,7 @@ const TrackingTable = ({ projects }) => {
         },
       },
       title: {
-        text: "Tracking history",
+        text: t("EMPLOYEE.TRACKING"),
       },
       fill: {
         type: "gradient",
