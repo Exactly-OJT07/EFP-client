@@ -2,6 +2,28 @@
   margin: 0;
   padding: 0;
 }
+
+.ant-menu {
+  background: #060606;
+  color: white;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 10px;
+}
+
+.ant-menu .ant-menu-item-selected {
+  border-radius: 24px;
+  background: #fff;
+  color: orange;
+}
+.ant-menu .ant-menu-item:active {
+  background: #fff;
+}
+.ant-menu .ant-menu-title-content {
+  font-weight: 600;
+}
+
 .logo-item {
   display: flex;
   flex-direction: row;
@@ -14,4 +36,9 @@
 .demo-logo-vertical {
   display: flex;
   justify-content: center;
+}
+
+.ant-menu-item-selected {
+  background-color: white;
+  color: #060606;
 }

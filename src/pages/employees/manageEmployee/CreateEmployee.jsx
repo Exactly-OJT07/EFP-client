@@ -261,12 +261,24 @@ const CreateEmployee = () => {
           <Typography.Title level={3}>{t("EMPLOYEE.PROFILE")}</Typography.Title>
           <div>
             <Button
-              style={{ marginRight: "10px" }}
+              style={{
+                marginRight: "10px",
+                borderRadius: "50px",
+                height: "35px",
+              }}
               onClick={() => navigate("/manageEmployees")}
             >
               {t("BACK")}
             </Button>
-            <Button type="primary" onClick={handleCreateOk}>
+            <Button
+              style={{
+                marginRight: "10px",
+                borderRadius: "50px",
+                height: "35px",
+              }}
+              type="primary"
+              onClick={handleCreateOk}
+            >
               {t("SAVE")}
             </Button>
           </div>
@@ -595,7 +607,11 @@ const CreateEmployee = () => {
               />
             </Form.Item>
             <Button
-              style={{ marginTop: "20px" }}
+              style={{
+                marginTop: "20px",
+                borderRadius: "50px",
+                height: "35px",
+              }}
               type="primary"
               onClick={() => {
                 addToLangFrame();
@@ -691,7 +707,11 @@ const CreateEmployee = () => {
               />
             </Form.Item>
             <Button
-              style={{ marginTop: "20px" }}
+              style={{
+                marginTop: "20px",
+                borderRadius: "50px",
+                height: "35px",
+              }}
               type="primary"
               onClick={() => {
                 addToTech();
@@ -774,7 +794,11 @@ const CreateEmployee = () => {
               />
             </Form.Item>
             <Button
-              style={{ marginTop: "20px" }}
+              style={{
+                marginTop: "20px",
+                borderRadius: "50px",
+                height: "35px",
+              }}
               type="primary"
               onClick={() => {
                 addToSkills();

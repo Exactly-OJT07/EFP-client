@@ -67,28 +67,30 @@ export const LayoutSider = ({ collapsed = true }) => {
 
   return (
     <Sider
-      theme="light"
       trigger={null}
       collapsible
       collapsed={collapsed}
-      style={{ borderRight: "1px solid #dcdcdc" }}
+      style={{
+        borderRight: "1px solid #dcdcdc",
+        background: "#060606",
+        padding: "0 10px 0px 10px",
+      }}
+      width={"14%"}
     >
       <div className="demo-logo-vertical" collapsible>
         <img
           src={
-            "https://res.cloudinary.com/dvm8fnczy/image/upload/v1702886027/zlsfcfdkmebldaw1htls.jpg"
+            "https://res.cloudinary.com/dtrwgtzzd/image/upload/v1703055739/cibenh2yfuzblszmcnq6.png"
           }
           alt=""
           style={{
-            width: 65,
-            height: 65,
-            margin: 10,
-            borderRadius: 10,
+            width: 70,
+            margin: "18px 10px 10px 10px",
           }}
         />
       </div>
       <Menu
-        theme="light"
+        theme="dark"
         mode="inline"
         items={menu}
         selectedKeys={[pathname.substring(1)]}

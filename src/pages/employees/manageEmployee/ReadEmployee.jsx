@@ -168,6 +168,7 @@ const ReadEmployee = ({ data }) => {
       columns={columns}
       dataSource={data?.data}
       pagination={false}
+      bac="custom-table"
     />
   );
 };

@@ -106,8 +106,18 @@ const CreateProject = ({ isModalOpen, setIsModalOpen, setIsAssign }) => {
       visible={isModalOpen}
       onOk={handleCreateOk}
       onCancel={handleCreateCancel}
-      okText={t("OK")}
-      cancelText={t("CANCEL")}
+      okButtonProps={{
+        style: {
+          borderRadius: "50px",
+          height: "35px",
+        },
+      }}
+      cancelButtonProps={{
+        style: {
+          borderRadius: "50px",
+          height: "35px",
+        },
+      }}
       confirmLoading={confirmLoading}
       width="1200px"
     >
