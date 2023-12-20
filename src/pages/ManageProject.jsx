@@ -32,7 +32,6 @@ import {
 } from "../hooks/useProject";
 import "../styles/ManageProject.css";
 import Circleprogress from "../components/circle-progress/Circleprogress";
-import ProjectDetail from "./ProjectDetail";
 import CreateProject from "./projects/components/createProject";
 import { Translation, useTranslation } from "react-i18next";
 import { Breadcrumb } from "../components/beadcrumb/Breadcrumb";

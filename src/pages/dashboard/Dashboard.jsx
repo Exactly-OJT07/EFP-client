@@ -45,7 +45,7 @@ const Dashboard = () => {
 
   const dates = Object.keys(projectCountJoin || {});
 
-  const [areaChartState, setAreaChartState] = useState({
+  const areaChartState = {
     series: [
       {
         name: "Projects",
@@ -61,10 +61,10 @@ const Dashboard = () => {
         height: 350,
         type: "area",
         toolbar: {
-          show: false, // Set to false to hide the toolbar
+          show: false,
         },
         zoom: {
-          enabled: false, // Set to false to disable zooming
+          enabled: false,
         },
       },
       dataLabels: {
@@ -87,7 +87,7 @@ const Dashboard = () => {
         align: "center",
       },
     },
-  });
+  };
 
   const circleChartState = {
     series: [

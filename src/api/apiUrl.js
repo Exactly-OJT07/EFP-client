@@ -15,6 +15,9 @@ export const getProjectApi = (params) => axios.get(API_URL.PROJECT, { params });
 export const getProjectDetailApi = (projectId, params) =>
   axios.get(`${API_URL.PROJECT}/${projectId}`, { params });
 
+export const editProjectDetailApi = (projectId, params) =>
+  axios.patch(`${API_URL.PROJECT}/${projectId}`, params);
+
 export const deleteProjectApi = (projectId) =>
   axios.delete(`${API_URL.PROJECT}/${projectId}`);
 
