@@ -336,15 +336,6 @@ const ManageProject = () => {
                               </Translation>
                             ),
                           },
-                          {
-                            value: "closed",
-                            label: (
-                              <Translation>
-                                {(t) => t("PROJECT.CLOSED")}
-                              </Translation>
-                            ),
-                            disabled: true,
-                          },
                         ]}
                       ></Select>
                     </Space>

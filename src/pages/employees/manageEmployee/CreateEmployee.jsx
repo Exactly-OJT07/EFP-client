@@ -75,7 +75,7 @@ const CreateEmployee = () => {
   ];
   const langFrames = [
     {
-      title: t("EMPLOYEE.LANGFRAME"),
+      title: t("EMPLOYEE.LANGUAGE"),
       dataIndex: "name",
       key: "name",
     },
@@ -277,6 +277,7 @@ const CreateEmployee = () => {
                 height: "35px",
               }}
               type="primary"
+              loading={confirmLoading}
               onClick={handleCreateOk}
             >
               {t("SAVE")}
@@ -353,7 +354,7 @@ const CreateEmployee = () => {
               rules={[
                 {
                   required: true,
-                  pattern: /^[0-9]{10}$/,
+                  pattern: /^0[0-9]{9}$/,
                   message: t("VALIDATE.PHONE"),
                 },
               ]}
@@ -410,11 +411,11 @@ const CreateEmployee = () => {
                 placeholder={t("EMPLOYEE.SELECTDOBDATE")}
                 onChange={(date) => {
                   setNewDob(date.format("DD/MM/YYYY"));
-                  console.log(date);
                 }}
                 format="DD/MM/YYYY"
                 disabledDate={(current) => {
-                  return current && current > moment().endOf("day");
+                  const eighteenYearsAgo = moment().subtract(18, "years");
+                  return current && current > eighteenYearsAgo.endOf("day");
                 }}
               />
             </Form.Item>
@@ -514,6 +515,9 @@ const CreateEmployee = () => {
                   setNewJoinDate(e ? e.format("DD/MM/YYYY") : null);
                 }}
                 format="DD/MM/YYYY"
+                disabledDate={(current) => {
+                  return current && current > moment().endOf("day");
+                }}
               />
             </Form.Item>
           </Col>

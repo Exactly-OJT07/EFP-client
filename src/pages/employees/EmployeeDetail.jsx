@@ -18,6 +18,7 @@ import {
   Radio,
   message,
   message as AntdMessage,
+  Space,
 } from "antd";
 import moment from "moment";
 import React, { useEffect, useState, useRef } from "react";
@@ -65,9 +66,10 @@ const EmployeeDetail = () => {
   const [loadingAvatar, setLoadingAvatar] = useState(false);
   const cld = new Cloudinary({ cloud: { cloudName: "dvm8fnczy" } });
   const fileInputRef = useRef();
+
   const langFrames = [
     {
-      title: t("EMPLOYEE.LANGFRAME"),
+      title: t("EMPLOYEE.LANGUAGE"),
       dataIndex: "name",
       key: "name",
     },
@@ -938,8 +940,9 @@ const EmployeeDetail = () => {
               </Col>
             </Row>
           </Card>
-          <Row style={{ display: "flex", justifyContent: "flex-end" }}>
-            <Form.Item>
+
+          <Form.Item>
+            <Space style={{ display: "flex", justifyContent: "flex-end" }}>
               <Button
                 type="primary"
                 htmlType="submit"
@@ -969,8 +972,8 @@ const EmployeeDetail = () => {
                 width="500px"
                 onCancel={handleCloseDeleteModal}
               />
-            </Form.Item>
-          </Row>
+            </Space>
+          </Form.Item>
         </Form>
       )}
     </>
