@@ -70,6 +70,7 @@
     "DEADLINE": "Execution Time",
     "MANAGERINFO": "Manager's Project",
     "DETAIL": "Project Detail",
+    "LANGFRAM": "Language",
 
     "NEW": "New Project",
     "CREATEON": "Created on: ",
@@ -84,7 +85,9 @@
     "ENDDATE": "End Date",
     "DES": "Description",
     "SPEC": "Specification",
-    "ASSIGN": "Assign Member"
+    "ASSIGN": "Assign Member",
+    "SOURCE": "Source",
+    "TARGET": "Target"
   },
   "BREADCRUMB": {
     "DASHBOARD": "Dashboard",
@@ -137,7 +140,15 @@
     "EXISTLANGUAGE": "Language and Frameworks already exists. Please choose a different language",
     "EXISTTECHNOLOGY": "Technology already exists. Please choose a different technology.",
     "EXISTSKILL": "Skill already exists. Please choose a different skill.",
-    "DATAINPUT": "Please input data for this field"
+    "DATAINPUTNAME": "Please input data for name field",
+    "DATAINPUTTECH": "Please input data for technology field",
+    "DATAINPUTLANG": "Please input data for language field",
+    "DATAINPUTMEM": "Please input data for member field",
+    "DATAINPUTSTART": "Please input data for start date field",
+    "DATAINPUTEND": "Please input data for end date field",
+    "DATAINPUTDES": "Please input data for description field",
+    "DATAINPUTSPEC": "Please input data for specification field",
+    "DATAINPUTMANAGER": "Please select data for manager field"
   },
   "EDIT": "Change",
   "DELETE": "Delete",

@@ -73,6 +73,7 @@
     "DEADLINE": "Thời gian tiến hành",
     "MANAGERINFO": "Quản lý dự án",
     "DETAIL": "Thông tin dự án",
+    "LANGFRAM": "Ngôn ngữ",
 
     "NEW": "Tạo dự án",
     "CREATEON": "Dự án được tạo vào ngày: ",
@@ -88,7 +89,9 @@
     "ENDDATE": "Ngày kết thúc",
     "DES": "Mô tả dự án",
     "SPEC": "Đặc điểm kỹ thuật",
-    "ASSIGN": "Thành viên dự án"
+    "ASSIGN": "Thành viên dự án",
+    "SOURCE": "Nhân viên",
+    "TARGET": "Tham gia"
   },
   "BREADCRUMB": {
     "DASHBOARD": "Trang chủ",
@@ -141,7 +144,15 @@
     "EXISTLANGUAGE": "Ngôn ngữ và Frameworks đã tồn tại. Vui lòng chọn một ngôn ngữ khác.",
     "EXISTTECHNOLOGY": "Công nghệ đã tồn tại. Vui lòng chọn một công nghệ khác.",
     "EXISTSKILL": "Kỹ năng đã tồn tại. Vui lòng chọn một kỹ năng khác.",
-    "DATAINPUT": "Vui lòng điền thông tin"
+    "DATAINPUTNAME": "Vui lòng điền tên dự án",
+    "DATAINPUTTECH": "Vui lòng chọn công nghệ",
+    "DATAINPUTLANG": "Vui lòng chọn ngôn ngữ",
+    "DATAINPUTMEM": "Vui lòng chọn nhân viên và chức năng",
+    "DATAINPUTSTART": "Vui lòng chọn ngày bắt đầu",
+    "DATAINPUTEND": "Vui lòng chọn ngày kết thúc",
+    "DATAINPUTDES": "Vui lòng điền mô tả",
+    "DATAINPUTSPEC": "Vui lòng điền lưu ý",
+    "DATAINPUTMANAGER": "Vui lòng chọn quản lý dự án"
   },
   "EDIT": "Thay Đổi",
   "DELETE": "Xóa",

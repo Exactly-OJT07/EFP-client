@@ -61,3 +61,13 @@ export const exportCv = async (id) =>
       link.click();
       document.body.removeChild(link);
     });
+export const getEmployeeNoPaginate = () =>
+  axios.get(`${API_URL.EMPLOYEE}${API_URL.NOPAGINATE}`);
+
+export const assignEmployee = (params) => axios.post("/assign", params);
+export const unassignEmployee = (params) => {
+  return axios.delete("/assign", { data: params });
+};
+
+export const updateProject = (id, params) =>
+  axios.patch(`/project/${id}`, params);

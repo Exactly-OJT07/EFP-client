@@ -11,6 +11,7 @@ export const API_URL = {
   MANAGER: "/employee/managers",
   EMPLOYEE_TOTAL: "/employee/total",
   PROJECT_TOTAL: "/project/total",
+  NOPAGINATE: "/noPaginate",
 };
 
 export const DATE_TIME = {

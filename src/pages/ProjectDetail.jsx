@@ -1,28 +1,31 @@
-import { useEffect, useState } from "react";
-import { MailOutlined, UserAddOutlined } from "@ant-design/icons";
+import { MailOutlined } from "@ant-design/icons";
 import {
-  Avatar,
   Button,
   Col,
   DatePicker,
   Form,
   Input,
   Row,
-  Tooltip,
+  Select,
+  Transfer,
   Typography,
 } from "antd";
 import dayjs from "dayjs";
 import moment from "moment";
+import { useEffect, useState } from "react";
 import Timeline, {
   DateHeader,
   SidebarHeader,
   TimelineHeaders,
 } from "react-calendar-timeline";
 import "react-calendar-timeline/lib/Timeline.css";
-import { useNavigate, useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
+import { useGetEmpNoPaginate } from "../hooks/useEmployee";
 import {
+  useAssignEmp,
   useGetProjectData,
-  useEditProjectDetailData,
+  useUnAssignEmp,
+  useUpdateProject,
 } from "../hooks/useProject";
 import "../styles/ProjectDetail.css";
 import { Translation, useTranslation } from "react-i18next";
@@ -31,60 +34,42 @@ const { RangePicker } = DatePicker;
 
 const ProjectDetail = () => {
   const { t } = useTranslation();
-  const [form] = Form.useForm();
-  const { id } = useParams();
-  const { data: project, isLoading, isError } = useGetProjectData(id);
   const navigate = useNavigate();
-  const projectUpdate = useEditProjectDetailData(id);
+  const { id } = useParams();
+  const [form] = Form.useForm();
+  const { data: project, isLoading, isError } = useGetProjectData(id);
+  const { mutate: assignEmp } = useAssignEmp();
+  const { mutate: unassign } = useUnAssignEmp();
+  const { mutate: updateProject } = useUpdateProject(id);
+  console.log(project);
+
   const initialValues = {
     name: project?.project.name,
     description: project?.project.description,
     managerProject: project?.project.managerProject,
     langFrame: project?.project.langFrame,
     technology: project?.project.technology,
+    startDate: dayjs(project?.project.startDate),
+    endDate: dayjs(project?.project.endDate),
     employee_project: project?.project.employee_project,
     tracking: project?.project.tracking,
-    Picker: {
-      startDate: dayjs(project?.project.startDate),
-      endDate: dayjs(project?.project.endDate),
-    },
+    employeeRoles: project?.project.employee_project.reduce((acc, item) => {
+      acc[item.employee.id] = item.roles;
+      return acc;
+    }, {}),
+    ...project?.project.employee_project.reduce((acc, item) => {
+      acc[item.employee.id] = item.roles;
+      return acc;
+    }, {}),
   };
 
-  useEffect(() => {
-    form.setFieldsValue({
-      Picker: {
-        startDate: dayjs(initialValues.Picker.startDate),
-        endDate: dayjs(initialValues.Picker.endDate),
-      },
-    });
-  }, [form, initialValues.Picker.startDate, initialValues.Picker.endDate]);
-
-  const onFinish = async (values) => {
-    try {
-      const { startDate, endDate, ...otherValues } = values.Picker;
-      await projectUpdate.mutateAsync({
-        projectId: id,
-        updatedData: { ...otherValues },
-        startDate: startDate?.format("YYYY-MM-DD"),
-        endDate: endDate?.format("YYYY-MM-DD"),
-      });
-    } catch (error) {
-      console.error("Error updating project status:", error);
-    }
-  };
-
-  const handleAssignClick = () => {
-    console.log("Assign button clicked");
-  };
-
-  const groups = project?.project.tracking?.member.map((item) => {
+  const groups = initialValues.tracking?.member.map((item) => {
     return { id: item.id, title: item.employeeName };
   });
 
-  const items = project?.project.tracking?.member.map((item) => {
+  const items = initialValues.tracking?.member.map((item) => {
     const id = item.id;
     const group = item.id;
-    console.log(item.joinDate);
     const start_time = moment(item.joinDate);
     const end_time = moment(item.doneDate ?? moment());
     const title = item.employeeName;
@@ -97,6 +82,90 @@ const ProjectDetail = () => {
     };
   });
 
+  const { data: empNoPagi } = useGetEmpNoPaginate();
+
+  const [dataSource, setDataSource] = useState([]);
+  const [targetKeys, setTargetKeys] = useState([]);
+  const [selectedKeys, setSelectedKeys] = useState([]);
+
+  useEffect(() => {
+    if (initialValues.employee_project) {
+      const newData = initialValues?.employee_project
+        .map((item) => {
+          return item;
+        })
+        .map((emp) => emp.employeeId);
+      setTargetKeys(newData);
+    }
+    if (empNoPagi) {
+      const newData = empNoPagi
+        .filter((item) => item.id !== project?.project.managerId)
+        .map((item) => {
+          return {
+            ...item,
+            key: item.id,
+          };
+        });
+      setDataSource(newData);
+    }
+  }, [initialValues.employee_project]);
+
+  // useEffect(() => {
+  //   form.setFieldsValue({
+  //     Picker: {
+  //       startDate: dayjs(initialValues.Picker.startDate),
+  //       endDate: dayjs(initialValues.Picker.endDate),
+  //     },
+  //   });
+  // }, [form, initialValues.Picker.startDate, initialValues.Picker.endDate]);
+
+  const onChange = (nextTargetKeys, direction, moveKeys) => {
+    const dataAssign = moveKeys.map((item) => {
+      return {
+        employeeId: item,
+        projectId: id,
+        roles: [],
+        joinDate: new Date(),
+      };
+    });
+    if (direction === "right") {
+      assignEmp(dataAssign);
+    }
+
+    if (direction === "left") {
+      unassign({ employeeIds: moveKeys, projectId: id });
+    }
+    setTargetKeys(nextTargetKeys);
+  };
+
+  const onSelectChange = (sourceSelectedKeys, targetSelectedKeys) => {
+    setSelectedKeys([...sourceSelectedKeys, ...targetSelectedKeys]);
+  };
+
+  const onFinish = (value) => {
+    const {
+      name,
+      description,
+      langFrame,
+      technology,
+      startDate,
+      endDate,
+      ...rest
+    } = value;
+    const newData = {
+      name,
+      description,
+      langFrame,
+      technology,
+      startDate,
+      endDate,
+      employeeRoles: rest,
+    };
+
+    console.log(newData);
+    updateProject(newData);
+  };
+
   return (
     <div className="projectDetail-Content">
       {project && (
@@ -107,15 +176,12 @@ const ProjectDetail = () => {
                 <Typography.Title level={3}>
                   {t("PROJECT.MANAGERINFO")}
                 </Typography.Title>
-                <img
-                  src={project.project.managerProject.avatar}
-                  alt={project.project.managerProject.name}
-                />
+                <img src={initialValues.managerProject.avatar} alt="" />
                 <Typography.Title level={5}>
-                  {project.project.managerProject.name}
+                  {initialValues.managerProject.name}
                 </Typography.Title>
                 <p>
-                  <MailOutlined /> {project.project.managerProject.email}
+                  <MailOutlined /> {initialValues.managerProject.email}
                 </p>
               </div>
             </Col>
@@ -126,20 +192,20 @@ const ProjectDetail = () => {
                 </Typography.Title>
                 <Form
                   form={form}
-                  initialValues={initialValues}
                   onFinish={onFinish}
+                  initialValues={initialValues}
                   labelCol={{
                     span: 5,
                   }}
                   wrapperCol={{
-                    span: 16,
+                    span: 24,
                   }}
                   layout="horizontal"
                   style={{
                     maxWidth: 700,
                   }}
                 >
-                  <Form.Item name="name" label={t("PROJECT.NAMEPROJECT")}>
+                  <Form.Item name="name" label={t("PROJECT.NAME")}>
                     <Input />
                   </Form.Item>
 
@@ -147,72 +213,116 @@ const ProjectDetail = () => {
                     <Input />
                   </Form.Item>
 
-                  <Form.Item label={t("PROJECT.LANGFRAME")}>
-                    <div className="langFrame-container">
-                      {project.project.langFrame.map((frame) => (
-                        <span key={frame} className="lang-frame-item">
-                          {frame}
-                        </span>
+                  <Form.Item name="langFrame" label={t("PROJECT.LANGFRAM")}>
+                    <Select
+                      mode="multiple"
+                      placeholder="Please select"
+                      style={{ width: "100%" }}
+                    >
+                      {[
+                        "Java",
+                        "JavaScript",
+                        "Python",
+                        "PHP",
+                        "C#",
+                        "C++",
+                        "Ruby",
+                        "Pascal",
+                        "Swift",
+                        "SQL",
+                      ].map((option) => (
+                        <Select.Option key={option} value={option}>
+                          {option}
+                        </Select.Option>
                       ))}
-                    </div>
+                    </Select>
                   </Form.Item>
 
-                  <Form.Item label={t("PROJECT.TECH")}>
-                    <div className="technology-container">
-                      {project.project.technology.map((tech) => (
-                        <span key={tech} className="technology-item">
-                          {tech}
-                        </span>
+                  <Form.Item name="technology" label={t("PROJECT.TECH")}>
+                    <Select
+                      mode="multiple"
+                      placeholder="Please select"
+                      style={{ width: "100%" }}
+                    >
+                      {[
+                        "IntelliJ IDEA",
+                        "Sublime Text",
+                        "Xcode",
+                        "Microsoft Visual Studio",
+                        "Visual Studio Code",
+                        "IDE",
+                        "Github",
+                        "Docker",
+                        "Postman",
+                      ].map((option) => (
+                        <Select.Option key={option} value={option}>
+                          {option}
+                        </Select.Option>
                       ))}
-                    </div>
+                    </Select>
                   </Form.Item>
 
                   <Form.Item label={t("PROJECT.ASSIGN")}>
-                    <Avatar.Group maxCount={2}>
-                      {project.project.employee_project.map((member) => (
-                        <Tooltip key={member.id}>
-                          <Avatar
-                            src={member.employee.avatar}
-                            style={{ backgroundColor: "#87D068" }}
-                          ></Avatar>
-                        </Tooltip>
-                      ))}
-                    </Avatar.Group>
+                    <Transfer
+                      dataSource={dataSource ?? dataSource}
+                      titles={[t("PROJECT.SOURCE"), t("PROJECT.TARGET")]}
+                      targetKeys={targetKeys}
+                      selectedKeys={selectedKeys}
+                      onChange={onChange}
+                      onSelectChange={onSelectChange}
+                      render={(item) => item.name}
+                    />
+                  </Form.Item>
 
-                    <Avatar.Group>
-                      <Avatar
-                        onClick={handleAssignClick}
-                        style={{ backgroundColor: "#87D068" }}
+                  {project.project.employee_project?.map((item) => (
+                    <Form.Item
+                      name={item.employee.id}
+                      label={item.employee.name}
+                    >
+                      <Select
+                        mode="multiple"
+                        placeholder="Roles"
+                        style={{ width: "100%" }}
                       >
-                        <UserAddOutlined />
-                      </Avatar>
-                    </Avatar.Group>
+                        {[
+                          "fe",
+                          "be",
+                          "ba",
+                          "qa",
+                          "ux_ui",
+                          "devops",
+                          "fullstack",
+                        ].map((option) => (
+                          <Select.Option key={option} value={option}>
+                            {option}
+                          </Select.Option>
+                        ))}
+                      </Select>
+                    </Form.Item>
+                  ))}
+
+                  <Form.Item name="startDate" label={t("PROJECT.STARTDATE")}>
+                    <DatePicker format="DD/MM/YYYY" />
                   </Form.Item>
 
-                  <Form.Item
-                    name={["Picker", "startDate"]}
-                    label={t("PROJECT.STARTDATE")}
-                  >
+                  <Form.Item name="endDate" label={t("PROJECT.ENDDATE")}>
                     <DatePicker
-                      defaultValue={dayjs(initialValues.Picker.startDate)}
+                      format="DD/MM/YYYY"
+                      disabledDate={(currentDate) =>
+                        currentDate &&
+                        currentDate.isBefore(
+                          dayjs(initialValues.startDate),
+                          "day",
+                        )
+                      }
                     />
                   </Form.Item>
-
-                  <Form.Item
-                    name={["Picker", "endDate"]}
-                    label={t("PROJECT.ENDDATE")}
-                  >
-                    <DatePicker
-                      defaultValue={dayjs(initialValues.Picker.endDate)}
-                    />
-                  </Form.Item>
-
-                  <Form.Item
-                    style={{ display: "flex", justifyContent: "flex-end" }}
-                  >
-                    <Button htmlType="submit" type="primary">
-                      {t("SUBMIT")}
-                    </Button>
+                  <Form.Item>
+                    <div className="button-container">
+                      <Button htmlType="submit" type="primary">
+                        {t("OK")}
+                      </Button>
+                    </div>
                   </Form.Item>
                 </Form>
               </div>
@@ -222,8 +332,8 @@ const ProjectDetail = () => {
             <Timeline
               groups={groups}
               items={items}
-              defaultTimeStart={moment(project?.project.tracking.joinDate)}
-              defaultTimeEnd={moment(project?.project.tracking.doneDate)}
+              defaultTimeStart={dayjs(initialValues?.tracking.joinDate)}
+              defaultTimeEnd={dayjs(initialValues?.tracking.fireDate)}
               canMove={false}
               canResize={false}
               canChangeGroup={false}
@@ -260,5 +370,4 @@ const ProjectDetail = () => {
     </div>
   );
 };
-
 export default ProjectDetail;
