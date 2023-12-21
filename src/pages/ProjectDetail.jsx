@@ -110,14 +110,17 @@ const ProjectDetail = () => {
     }
   }, [initialValues.employee_project]);
 
-  // useEffect(() => {
-  //   form.setFieldsValue({
-  //     Picker: {
-  //       startDate: dayjs(initialValues.Picker.startDate),
-  //       endDate: dayjs(initialValues.Picker.endDate),
-  //     },
-  //   });
-  // }, [form, initialValues.Picker.startDate, initialValues.Picker.endDate]);
+  useEffect(() => {
+    if (empNoPagi) {
+      const newData = empNoPagi
+        .filter((item) => item.id !== project?.project.managerId)
+        .map((item) => ({
+          ...item,
+          key: item.id,
+        }));
+      setDataSource(newData);
+    }
+  }, [empNoPagi, project?.project.managerId]);
 
   const onChange = (nextTargetKeys, direction, moveKeys) => {
     const dataAssign = moveKeys.map((item) => {

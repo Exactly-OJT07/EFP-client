@@ -287,7 +287,9 @@ const CreateProject = ({ isModalOpen, setIsModalOpen, setIsAssign }) => {
                 showTime={{ format: "HH:mm:ss" }}
                 format="DD/MM/YYYY HH:mm:ss"
                 disabledDate={(current) => {
-                  return current && current < moment(newStartDate);
+                  if (moment(newStartDate) < moment().endOf("day")) {
+                    return current && current < moment().endOf("day");
+                  } else return current && current < moment(newStartDate);
                 }}
                 placeholder={t("PROJECT.ENDDATE")}
               />
