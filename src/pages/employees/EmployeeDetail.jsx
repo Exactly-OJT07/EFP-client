@@ -35,6 +35,7 @@ import "../../styles/EmployeeDetail.css";
 import TrackingHistory from "./employeeDetail/TrackingHistory";
 import { edit } from "@cloudinary/url-gen/actions/animated";
 import DeleteEmployee from "./employeeDetail/DeleteEmployee";
+import dayjs from "dayjs";
 
 const { TextArea } = Input;
 
@@ -115,8 +116,8 @@ const EmployeeDetail = () => {
     phone: employee?.employee.phone ?? "",
     manager: employee?.employee.managerId ?? "",
     isManager: employee?.employee.isManager ?? "",
-    joinDate: moment(employee?.employee.joinDate),
-    dateOfBirth: moment(employee?.employee.dateOfBirth),
+    joinDate: dayjs(employee?.employee.joinDate),
+    dateOfBirth: dayjs(employee?.employee.dateOfBirth),
     gender: employee?.employee.gender,
     position: employee?.employee.position,
     status: employee?.employee.status,
